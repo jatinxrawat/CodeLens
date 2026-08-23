@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  code-intelligence:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: local-code-intelligence
+    ports:
+      - "8000:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - EMBEDDING_MODEL_NAME=sentence-transformers/all-MiniLM-L6-v2
+      - EMBEDDING_BATCH_SIZE=32
+      - EMBEDDING_DEVICE=cpu
+      - DEFAULT_HYBRID_ALPHA=0.6
+    volumes:
+      - ./data/repositories:/app/data/repositories
+      - ./data/indexes:/app/data/indexes
+    restart: unless-stopped

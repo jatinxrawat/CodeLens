@@ -1,0 +1,44 @@
+[
+  {
+    "query": "Where is user login and password verification handled?",
+    "expected_file": "auth.py",
+    "expected_symbol": "login_user",
+    "category": "authentication"
+  },
+  {
+    "query": "How is JSON Web Token JWT generated and decoded?",
+    "expected_file": "auth.py",
+    "expected_symbol": "verify_token",
+    "category": "authentication"
+  },
+  {
+    "query": "Where is user profile registration and email validation?",
+    "expected_file": "user.js",
+    "expected_symbol": "registerUser",
+    "category": "user-management"
+  },
+  {
+    "query": "How are credit card payments processed and validated?",
+    "expected_file": "payment.ts",
+    "expected_symbol": "PaymentGateway",
+    "category": "billing"
+  },
+  {
+    "query": "Where is the order checkout and inventory deduction logic?",
+    "expected_file": "OrderService.java",
+    "expected_symbol": "processOrder",
+    "category": "orders"
+  },
+  {
+    "query": "Where is LRU cache eviction and key lookup implemented?",
+    "expected_file": "cache.cpp",
+    "expected_symbol": "LRUCache",
+    "category": "caching"
+  },
+  {
+    "query": "Where is memory pool allocation and buffer deallocation?",
+    "expected_file": "memory.c",
+    "expected_symbol": "pool_allocate",
+    "category": "memory"
+  }
+]

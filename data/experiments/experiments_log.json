@@ -1,0 +1,173 @@
+[
+  {
+    "experiment_id": "exp_20260823_085020_4d632a",
+    "timestamp": "2026-08-23T08:50:20.411326+00:00",
+    "model_name": "retrieval_ranker",
+    "model_version": "v1",
+    "hyperparameters": {
+      "n_estimators": 100,
+      "learning_rate": 0.05,
+      "max_depth": 4,
+      "model_type": "hist_gbdt"
+    },
+    "dataset_info": {
+      "total_repositories": 3,
+      "total_queries": 2413,
+      "total_samples": 21910,
+      "positive_samples": 3665,
+      "weak_samples": 3585,
+      "negative_samples": 14660,
+      "languages": {
+        "javascript": 4023,
+        "java": 79,
+        "python": 17642,
+        "c": 50,
+        "typescript": 84,
+        "cpp": 32
+      },
+      "train_repo_count": 1,
+      "val_repo_count": 1,
+      "test_repo_count": 1
+    },
+    "metrics": {
+      "method": "hybrid_ml_ranker",
+      "total_queries": 58,
+      "recall_at_1": 0.3621,
+      "recall_at_3": 0.5862,
+      "recall_at_5": 0.7586,
+      "recall_at_10": 0.8448,
+      "mrr": 0.5104,
+      "ndcg_at_5": 0.5582,
+      "ndcg_at_10": 0.5863,
+      "avg_latency_ms": 802.6
+    },
+    "git_commit": "local_dev",
+    "notes": "GBDT Code Relevance Ranker"
+  },
+  {
+    "experiment_id": "exp_20260823_071945_0f2ecb",
+    "timestamp": "2026-08-23T07:19:45.044583+00:00",
+    "model_name": "maintainability",
+    "model_version": "v1",
+    "hyperparameters": {
+      "n_estimators": 100,
+      "learning_rate": 0.05,
+      "max_depth": 4
+    },
+    "dataset_info": {
+      "total_repositories": 3,
+      "total_samples": 3330,
+      "class_distribution": {
+        "LOW": 2022,
+        "MEDIUM": 984,
+        "HIGH": 324
+      },
+      "train_repo_count": 1,
+      "val_repo_count": 1,
+      "test_repo_count": 1
+    },
+    "metrics": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "confusion_matrix": [
+        [
+          19,
+          0,
+          0
+        ],
+        [
+          0,
+          11,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "class_metrics": {
+        "LOW": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0,
+          "support": 19
+        },
+        "MEDIUM": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0,
+          "support": 11
+        },
+        "HIGH": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1_score": 0.0,
+          "support": 0
+        }
+      },
+      "total_test_samples": 30,
+      "feature_importances": {
+        "loc": 0.0909,
+        "cyclomatic_complexity": 0.0909,
+        "nesting_depth": 0.0909,
+        "param_count": 0.0909,
+        "branch_count": 0.0909,
+        "loop_count": 0.0909,
+        "comment_ratio": 0.0909,
+        "return_count": 0.0909,
+        "error_blocks": 0.0909,
+        "has_docstring": 0.0909,
+        "avg_line_length": 0.0909
+      }
+    },
+    "git_commit": "local_dev",
+    "notes": "Multi-class Maintainability Risk GBDT Classifier"
+  },
+  {
+    "experiment_id": "exp_20260823_071704_179644",
+    "timestamp": "2026-08-23T07:17:04.630658+00:00",
+    "model_name": "retrieval_ranker",
+    "model_version": "v1",
+    "hyperparameters": {
+      "n_estimators": 100,
+      "learning_rate": 0.05,
+      "max_depth": 4
+    },
+    "dataset_info": {
+      "total_repositories": 3,
+      "total_queries": 2413,
+      "total_samples": 21910,
+      "positive_samples": 3665,
+      "weak_samples": 3585,
+      "negative_samples": 14660,
+      "languages": {
+        "javascript": 4023,
+        "java": 79,
+        "python": 17642,
+        "c": 50,
+        "typescript": 84,
+        "cpp": 32
+      },
+      "train_repo_count": 1,
+      "val_repo_count": 1,
+      "test_repo_count": 1
+    },
+    "metrics": {
+      "method": "hybrid_ml_ranker",
+      "total_queries": 58,
+      "recall_at_1": 0.3621,
+      "recall_at_3": 0.5862,
+      "recall_at_5": 0.7586,
+      "recall_at_10": 0.8448,
+      "mrr": 0.5104,
+      "ndcg_at_5": 0.5582,
+      "ndcg_at_10": 0.5863,
+      "avg_latency_ms": 468.57
+    },
+    "git_commit": "local_dev",
+    "notes": "GBDT Code Relevance Ranker with 13 features"
+  }
+]

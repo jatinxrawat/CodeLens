@@ -1,0 +1,39 @@
+[
+  {
+    "question": "How is user login and authentication handled?",
+    "expected_files": ["python/auth.py"],
+    "expected_symbols": ["login_user", "verify_token"],
+    "expected_facts": [
+      "Authenticates username and password against credentials store",
+      "Returns a signed token on successful validation",
+      "Raises authentication error on invalid credentials"
+    ]
+  },
+  {
+    "question": "How is memory buffer allocation managed in the memory pool?",
+    "expected_files": ["c/memory_pool.c"],
+    "expected_symbols": ["allocate_buffer", "create_memory_pool"],
+    "expected_facts": [
+      "Allocates pre-sized memory blocks from static pool",
+      "Avoids dynamic heap fragmentation"
+    ]
+  },
+  {
+    "question": "Where is the LRU cache key eviction mechanism implemented?",
+    "expected_files": ["cpp/lru_cache.cpp"],
+    "expected_symbols": ["LRUCache", "put", "get"],
+    "expected_facts": [
+      "Evicts least recently used node when capacity threshold is reached",
+      "Uses doubly linked list combined with hash map for O(1) operations"
+    ]
+  },
+  {
+    "question": "How are credit card charges and refunds processed?",
+    "expected_files": ["javascript/payment.js"],
+    "expected_symbols": ["processCardPayment", "refundPayment"],
+    "expected_facts": [
+      "Validates credit card number format and expiry",
+      "Processes transaction charges and generates receipt ID"
+    ]
+  }
+]

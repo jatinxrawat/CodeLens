@@ -1,0 +1,38 @@
+{
+  "model_type": "retrieval_ranker",
+  "version": "v1",
+  "saved_at": "2026-08-23T08:50:20.410598+00:00",
+  "metrics": {
+    "method": "hybrid_ml_ranker",
+    "total_queries": 58,
+    "recall_at_1": 0.3621,
+    "recall_at_3": 0.5862,
+    "recall_at_5": 0.7586,
+    "recall_at_10": 0.8448,
+    "mrr": 0.5104,
+    "ndcg_at_5": 0.5582,
+    "ndcg_at_10": 0.5863,
+    "avg_latency_ms": 802.6
+  },
+  "config": {
+    "n_estimators": 100,
+    "learning_rate": 0.05,
+    "max_depth": 4,
+    "model_type": "hist_gbdt"
+  },
+  "feature_names": [
+    "dense_cosine_similarity",
+    "query_len_words",
+    "code_loc",
+    "query_term_overlap_ratio",
+    "symbol_exact_match",
+    "symbol_subword_overlap",
+    "docstring_match_ratio",
+    "is_function",
+    "is_class",
+    "has_docstring",
+    "file_name_match",
+    "path_depth",
+    "code_avg_line_length"
+  ]
+}

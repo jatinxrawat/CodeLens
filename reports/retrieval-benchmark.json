@@ -1,0 +1,70 @@
+{
+  "benchmark_name": "Multi-Language Retrieval Benchmark",
+  "evaluation_date": "2026-08-23T07:20:00Z",
+  "dataset_split": "Repository-Level Partition",
+  "test_repositories": ["sample_repo"],
+  "total_queries": 58,
+  "metrics": [
+    {
+      "method": "BM25 Lexical",
+      "recall_at_1": 0.5172,
+      "recall_at_3": 0.6552,
+      "recall_at_5": 0.7586,
+      "recall_at_10": 0.7931,
+      "mrr": 0.6112,
+      "ndcg_at_5": 0.7066,
+      "ndcg_at_10": 0.7177,
+      "avg_latency_ms": 0.09
+    },
+    {
+      "method": "Vector (Dense)",
+      "recall_at_1": 0.4310,
+      "recall_at_3": 0.6379,
+      "recall_at_5": 0.7586,
+      "recall_at_10": 0.8448,
+      "mrr": 0.5677,
+      "ndcg_at_5": 0.6603,
+      "ndcg_at_10": 0.6868,
+      "avg_latency_ms": 13.87
+    },
+    {
+      "method": "Hybrid (No ML)",
+      "recall_at_1": 0.4828,
+      "recall_at_3": 0.6897,
+      "recall_at_5": 0.7586,
+      "recall_at_10": 0.8448,
+      "mrr": 0.6036,
+      "ndcg_at_5": 0.6308,
+      "ndcg_at_10": 0.6622,
+      "avg_latency_ms": 9.13
+    },
+    {
+      "method": "Hybrid + ML Ranker",
+      "recall_at_1": 0.3621,
+      "recall_at_3": 0.5862,
+      "recall_at_5": 0.7586,
+      "recall_at_10": 0.8448,
+      "mrr": 0.5104,
+      "ndcg_at_5": 0.5582,
+      "ndcg_at_10": 0.5901,
+      "avg_latency_ms": 324.67
+    }
+  ],
+  "by_language": {
+    "python": {
+      "queries": 38,
+      "recall_at_5": 0.7895,
+      "mrr": 0.6241
+    },
+    "javascript": {
+      "queries": 12,
+      "recall_at_5": 0.7500,
+      "mrr": 0.5833
+    },
+    "java": {
+      "queries": 8,
+      "recall_at_5": 0.6250,
+      "mrr": 0.5125
+    }
+  }
+}

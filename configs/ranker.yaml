@@ -1,0 +1,10 @@
+model_name: "retrieval_ranker"
+version: "v1"
+model_type: "hist_gbdt"
+n_estimators: 100
+learning_rate: 0.05
+max_depth: 4
+random_seed: 42
+negatives_per_positive: 4
+candidate_count: 20
+alpha: 0.60
