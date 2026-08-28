@@ -14,15 +14,20 @@ class EvaluationService:
     """Runs benchmark evaluation comparing retrieval modes against ground truth."""
 
     def __init__(self):
-        pass
+        self._cache: Dict[str, EvaluationResponse] = {}
 
     def run_evaluation(
         self,
         repo_name: str,
         custom_dataset_path: Optional[str] = None,
         top_k: int = 5,
+        force_refresh: bool = False,
     ) -> EvaluationResponse:
         """Evaluates BM25, Vector Search, and Hybrid Search on the specified repository."""
+        cache_key = f"{repo_name}_{top_k}"
+        if not force_refresh and cache_key in self._cache:
+            return self._cache[cache_key]
+
         index_dir = settings.INDEXES_DIR / repo_name
         if not index_dir.exists() or not (index_dir / "index.faiss").exists():
             raise FileNotFoundError(f"Repository '{repo_name}' is not indexed.")
@@ -37,6 +42,35 @@ class EvaluationService:
         with open(ds_path, "r", encoding="utf-8") as f:
             raw_queries = json.load(f)
         queries = [EvaluationQuery(**item) for item in raw_queries]
+
+        # Check if benchmark dataset files exist in this target repository
+        chunks_file = index_dir / "chunks.json"
+        if chunks_file.exists():
+            with open(chunks_file, "r", encoding="utf-8") as f:
+                c_data = json.load(f)
+            repo_file_names = set(Path(c.get("file_path", "")).name.lower() for c in c_data)
+            has_matching_files = any(q.expected_file.lower() in repo_file_names for q in queries)
+
+            if not has_matching_files:
+                # Synthesize 7 targeted benchmark queries directly from this repository's symbols
+                dyn_queries: List[EvaluationQuery] = []
+                seen_files = set()
+                for c in c_data:
+                    sym = c.get("symbol_name")
+                    fp = c.get("file_path", "")
+                    if sym and fp not in seen_files and len(c.get("code", "").splitlines()) >= 3:
+                        seen_files.add(fp)
+                        clean_sym = sym.replace("_", " ").replace("-", " ")
+                        dyn_queries.append(EvaluationQuery(
+                            query=f"Where is {clean_sym} implemented?",
+                            expected_file=Path(fp).name,
+                            expected_symbol=sym,
+                            category="core-logic"
+                        ))
+                    if len(dyn_queries) >= 7:
+                        break
+                if dyn_queries:
+                    queries = dyn_queries
 
         configs = [
             {"name": "BM25 (Keyword)", "mode": "keyword", "alpha": 0.0},
@@ -109,12 +143,14 @@ class EvaluationService:
                 "top_result": results[0].chunk.file_path if results else "none",
             })
 
-        return EvaluationResponse(
+        eval_resp = EvaluationResponse(
             repository_id=repo_name,
             total_queries=len(queries),
             comparisons=comparisons,
             query_breakdown=detailed_breakdown,
         )
+        self._cache[cache_key] = eval_resp
+        return eval_resp
 
 
 evaluation_service = EvaluationService()
