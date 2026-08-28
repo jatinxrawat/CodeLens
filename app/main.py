@@ -1,6 +1,12 @@
 """FastAPI application entrypoint for Local AI Code Intelligence Engine."""
 
 import os
+
+# Prevent OpenMP barrier spinlock and tokenizer fork deadlocks on macOS / multi-worker reload
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+
 from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
