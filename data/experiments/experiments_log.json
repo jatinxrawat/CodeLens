@@ -1,5 +1,140 @@
 [
   {
+    "experiment_id": "exp_20260828_184120_94a3b5",
+    "timestamp": "2026-08-28T18:41:20.822389+00:00",
+    "model_name": "retrieval_ranker",
+    "model_version": "v1",
+    "hyperparameters": {
+      "n_estimators": 100,
+      "learning_rate": 0.05,
+      "max_depth": 4,
+      "model_type": "hist_gbdt"
+    },
+    "dataset_info": {
+      "total_repositories": 3,
+      "total_queries": 2413,
+      "total_samples": 21910,
+      "positive_samples": 3665,
+      "weak_samples": 3585,
+      "negative_samples": 14660,
+      "languages": {
+        "javascript": 4023,
+        "java": 79,
+        "python": 17642,
+        "c": 50,
+        "typescript": 84,
+        "cpp": 32
+      },
+      "train_repo_count": 1,
+      "val_repo_count": 1,
+      "test_repo_count": 1
+    },
+    "metrics": {
+      "method": "hybrid_ml_ranker",
+      "total_queries": 58,
+      "recall_at_1": 0.3621,
+      "recall_at_3": 0.5862,
+      "recall_at_5": 0.7586,
+      "recall_at_10": 0.8448,
+      "mrr": 0.5104,
+      "ndcg_at_5": 0.5582,
+      "ndcg_at_10": 0.5863,
+      "avg_latency_ms": 324.53
+    },
+    "git_commit": "local_dev",
+    "notes": "GBDT Code Relevance Ranker"
+  },
+  {
+    "experiment_id": "exp_20260828_183543_d4d041",
+    "timestamp": "2026-08-28T18:35:43.215622+00:00",
+    "model_name": "retrieval_ranker",
+    "model_version": "v1",
+    "hyperparameters": {
+      "n_estimators": 100,
+      "learning_rate": 0.05,
+      "max_depth": 4,
+      "model_type": "hist_gbdt"
+    },
+    "dataset_info": {
+      "total_repositories": 3,
+      "total_queries": 2413,
+      "total_samples": 21910,
+      "positive_samples": 3665,
+      "weak_samples": 3585,
+      "negative_samples": 14660,
+      "languages": {
+        "javascript": 4023,
+        "java": 79,
+        "python": 17642,
+        "c": 50,
+        "typescript": 84,
+        "cpp": 32
+      },
+      "train_repo_count": 1,
+      "val_repo_count": 1,
+      "test_repo_count": 1
+    },
+    "metrics": {
+      "method": "hybrid_ml_ranker",
+      "total_queries": 58,
+      "recall_at_1": 0.3621,
+      "recall_at_3": 0.5862,
+      "recall_at_5": 0.7586,
+      "recall_at_10": 0.8448,
+      "mrr": 0.5104,
+      "ndcg_at_5": 0.5582,
+      "ndcg_at_10": 0.5863,
+      "avg_latency_ms": 782.65
+    },
+    "git_commit": "local_dev",
+    "notes": "GBDT Code Relevance Ranker"
+  },
+  {
+    "experiment_id": "exp_20260828_183209_557888",
+    "timestamp": "2026-08-28T18:32:09.934758+00:00",
+    "model_name": "retrieval_ranker",
+    "model_version": "v1",
+    "hyperparameters": {
+      "n_estimators": 100,
+      "learning_rate": 0.05,
+      "max_depth": 4,
+      "model_type": "hist_gbdt"
+    },
+    "dataset_info": {
+      "total_repositories": 3,
+      "total_queries": 2413,
+      "total_samples": 21910,
+      "positive_samples": 3665,
+      "weak_samples": 3585,
+      "negative_samples": 14660,
+      "languages": {
+        "javascript": 4023,
+        "java": 79,
+        "python": 17642,
+        "c": 50,
+        "typescript": 84,
+        "cpp": 32
+      },
+      "train_repo_count": 1,
+      "val_repo_count": 1,
+      "test_repo_count": 1
+    },
+    "metrics": {
+      "method": "hybrid_ml_ranker",
+      "total_queries": 58,
+      "recall_at_1": 0.3621,
+      "recall_at_3": 0.5862,
+      "recall_at_5": 0.7586,
+      "recall_at_10": 0.8448,
+      "mrr": 0.5104,
+      "ndcg_at_5": 0.5582,
+      "ndcg_at_10": 0.5863,
+      "avg_latency_ms": 1960.59
+    },
+    "git_commit": "local_dev",
+    "notes": "GBDT Code Relevance Ranker"
+  },
+  {
     "experiment_id": "exp_20260823_085020_4d632a",
     "timestamp": "2026-08-23T08:50:20.411326+00:00",
     "model_name": "retrieval_ranker",

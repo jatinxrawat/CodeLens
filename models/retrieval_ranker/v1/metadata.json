@@ -1,7 +1,7 @@
 {
   "model_type": "retrieval_ranker",
   "version": "v1",
-  "saved_at": "2026-08-23T08:50:20.410598+00:00",
+  "saved_at": "2026-08-28T18:41:20.821891+00:00",
   "metrics": {
     "method": "hybrid_ml_ranker",
     "total_queries": 58,
@@ -12,7 +12,7 @@
     "mrr": 0.5104,
     "ndcg_at_5": 0.5582,
     "ndcg_at_10": 0.5863,
-    "avg_latency_ms": 802.6
+    "avg_latency_ms": 324.53
   },
   "config": {
     "n_estimators": 100,
