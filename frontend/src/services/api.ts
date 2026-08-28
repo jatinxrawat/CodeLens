@@ -188,14 +188,16 @@ export async function fetchSecurityScan(repoId: string): Promise<SecurityScanRep
   return res.json();
 }
 
-export async function fetchReportData(repoId: string): Promise<Record<string, any>> {
-  const res = await fetch(`${API_BASE}/repositories/${encodeURIComponent(repoId)}/report`);
+export async function fetchReportData(repoId: string, refresh: boolean = false): Promise<Record<string, any>> {
+  const url = `${API_BASE}/repositories/${encodeURIComponent(repoId)}/report${refresh ? '?refresh=true' : ''}`;
+  const res = await fetch(url);
   if (!res.ok) throw new Error('Failed to load repository report');
   return res.json();
 }
 
-export async function fetchReportMarkdown(repoId: string): Promise<string> {
-  const res = await fetch(`${API_BASE}/repositories/${encodeURIComponent(repoId)}/report/markdown`);
+export async function fetchReportMarkdown(repoId: string, refresh: boolean = false): Promise<string> {
+  const url = `${API_BASE}/repositories/${encodeURIComponent(repoId)}/report/markdown${refresh ? '?refresh=true' : ''}`;
+  const res = await fetch(url);
   if (!res.ok) throw new Error('Failed to load markdown report');
   return res.text();
 }

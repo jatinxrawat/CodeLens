@@ -4,7 +4,7 @@ Compiles comprehensive intelligence reports including architecture, code metrics
 complexity hotspots, smell findings, and static security patterns.
 """
 
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from app.services.repository_service import repository_service
 from app.analysis.architecture_engine import ArchitectureEngine
 from app.analysis.quality_metrics import QualityMetricsCalculator
@@ -20,9 +20,23 @@ class ReportService:
         self.quality_calc = QualityMetricsCalculator()
         self.smell_detector = CodeSmellDetector()
         self.security_scanner = SecurityScanner()
+        self._report_cache: Dict[str, Dict[str, Any]] = {}
+        self._markdown_cache: Dict[str, str] = {}
 
-    def generate_report_data(self, repo_name: str) -> Dict[str, Any]:
+    def clear_cache(self, repo_name: Optional[str] = None):
+        """Clears report cache for a repository or all repositories."""
+        if repo_name:
+            self._report_cache.pop(repo_name, None)
+            self._markdown_cache.pop(repo_name, None)
+        else:
+            self._report_cache.clear()
+            self._markdown_cache.clear()
+
+    def generate_report_data(self, repo_name: str, force_refresh: bool = False) -> Dict[str, Any]:
         """Generates comprehensive analytical data for the repository."""
+        if not force_refresh and repo_name in self._report_cache:
+            return self._report_cache[repo_name]
+
         stats = repository_service.get_repository_stats(repo_name)
         arch = self.arch_engine.infer_architecture(repo_name)
         quality = self.quality_calc.analyze_repository(repo_name)
@@ -32,7 +46,7 @@ class ReportService:
         def _dump(m: Any) -> Dict[str, Any]:
             return m.model_dump() if hasattr(m, "model_dump") else m.dict()
 
-        return {
+        report_data = {
             "repository_id": repo_name,
             "source": stats.source,
             "indexed_at": stats.indexed_at,
@@ -42,10 +56,15 @@ class ReportService:
             "code_smells": _dump(smells),
             "security": _dump(security),
         }
+        self._report_cache[repo_name] = report_data
+        return report_data
 
-    def generate_markdown_report(self, repo_name: str) -> str:
+    def generate_markdown_report(self, repo_name: str, force_refresh: bool = False) -> str:
         """Formats the repository analysis report into a clean, GitHub-Flavored Markdown document."""
-        data = self.generate_report_data(repo_name)
+        if not force_refresh and repo_name in self._markdown_cache:
+            return self._markdown_cache[repo_name]
+
+        data = self.generate_report_data(repo_name, force_refresh=force_refresh)
         stats = data["stats"]
         arch = data["architecture"]
         quality = data["quality"]
@@ -157,7 +176,9 @@ class ReportService:
             "*Report generated 100% locally via Local AI Code Intelligence Engine without external API dependencies.*",
         ])
 
-        return "\n".join(md_lines)
+        result = "\n".join(md_lines)
+        self._markdown_cache[repo_name] = result
+        return result
 
 
 report_service = ReportService()
