@@ -1,39 +1,43 @@
 import React from 'react';
-import { Search, ShieldCheck } from 'lucide-react';
+import { Search, ShieldCheck, Sparkles } from 'lucide-react';
 
 interface NavbarProps {
   currentTab: string;
   selectedRepo: string;
   onQuickSearch: () => void;
+  onSelectTab?: (tab: string) => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentTab, selectedRepo, onQuickSearch }) => {
+export const Navbar: React.FC<NavbarProps> = ({ currentTab, selectedRepo, onQuickSearch, onSelectTab }) => {
   const titles: Record<string, string> = {
+    chat: 'CodeLens AI Search & Reasoning',
     dashboard: 'Repository Overview',
-    search: 'Hybrid & Semantic Retrieval',
-    ask: 'Evidence-Grounded Code Reasoning',
-    architecture: 'Inferred Architecture & Structural Layers',
+    health: 'Codebase Health & Security Audit',
+    architecture: 'Architecture & Dependency Graph',
+    explorer: 'Code Explorer & Flow Tracer',
     impact: 'Potential Impact & Blast Radius Analysis',
-    flow: 'Static Code Flow & Call Graph Tracer',
-    quality: 'Code Quality & Smell Detection',
-    security: 'Static Security Insights & Risk Patterns',
-    explorer: 'Code Explorer & AST Inspector',
-    graph: 'Dependency & Import Architecture',
     reports: 'Repository Analysis Reports',
     comparison: 'Repository Comparison Studio',
     repositories: 'Repository Ingestion & Storage',
-    evaluation: 'IR Evaluation & Model Comparison',
+    landing: 'Public Landing Page & Showcase',
+    // Legacy / Aliases:
+    search: 'CodeLens AI Search & Reasoning',
+    ask: 'CodeLens AI Search & Reasoning',
+    quality: 'Codebase Health & Security Audit',
+    security: 'Codebase Health & Security Audit',
+    graph: 'Architecture & Dependency Graph',
+    flow: 'Code Explorer & Flow Tracer',
   };
 
   return (
-    <header className="h-14 bg-[#0d1117]/80 backdrop-blur border-b border-[#30363d] px-6 flex items-center justify-between sticky top-0 z-10 select-none">
+    <header className="h-14 bg-[#050505]/90 backdrop-blur border-b border-[#18181b] px-6 flex items-center justify-between sticky top-0 z-10 select-none">
       <div className="flex items-center space-x-3">
-        <h2 className="text-sm font-semibold text-[#e6edf3]">
+        <h2 className="text-sm font-semibold text-[#f4f4f5]">
           {titles[currentTab] || currentTab}
         </h2>
         {selectedRepo && (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono bg-[#161b22] border border-[#30363d] text-[#8b949e]">
-            repo: <strong className="text-[#e6edf3] ml-1">{selectedRepo}</strong>
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono bg-[#0d0d10] border border-[#18181b] text-[#9ca3af]">
+            repo: <strong className="text-[#f4f4f5] ml-1">{selectedRepo}</strong>
           </span>
         )}
       </div>
@@ -42,15 +46,24 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, selectedRepo, onQuic
         {currentTab !== 'search' && (
           <button
             onClick={onQuickSearch}
-            className="flex items-center space-x-2 bg-[#161b22] hover:bg-[#21262d] border border-[#30363d] text-[#8b949e] hover:text-[#e6edf3] px-3 py-1.5 rounded-md text-xs transition-colors"
+            className="flex items-center space-x-2 bg-[#0d0d10] hover:bg-[#141418] border border-[#18181b] text-[#9ca3af] hover:text-[#f4f4f5] px-3 py-1.5 rounded-md text-xs transition-colors"
           >
             <Search className="w-3.5 h-3.5" />
             <span>Search codebase...</span>
-            <kbd className="text-[10px] bg-[#0d1117] border border-[#30363d] px-1.5 py-0.5 rounded font-mono text-[#8b949e]">
+            <kbd className="text-[10px] bg-[#050505] border border-[#18181b] px-1.5 py-0.5 rounded font-mono text-[#9ca3af]">
               /
             </kbd>
           </button>
         )}
+
+        <button
+          onClick={() => onSelectTab ? onSelectTab('landing') : (window.location.href = '/?tab=landing')}
+          className="flex items-center space-x-1.5 text-xs text-sky-400 bg-sky-950/30 hover:bg-sky-900/50 border border-sky-800/40 px-2.5 py-1 rounded-md transition-colors"
+          title="Open Landing Page"
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Landing Page</span>
+        </button>
 
         <div className="flex items-center space-x-1.5 text-xs text-emerald-400 bg-emerald-950/30 border border-emerald-800/40 px-2.5 py-1 rounded-md">
           <ShieldCheck className="w-3.5 h-3.5" />

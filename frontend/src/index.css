@@ -2,21 +2,21 @@
 
 @layer base {
   :root {
-    --background: #0d1117;
-    --foreground: #e6edf3;
-    --card: #161b22;
-    --card-foreground: #e6edf3;
-    --border: #30363d;
-    --primary: #238636;
+    --background: #000000;
+    --foreground: #f4f4f5;
+    --card: #09090b;
+    --card-foreground: #f4f4f5;
+    --border: #1c1c21;
+    --primary: #10b981;
     --primary-foreground: #ffffff;
-    --accent: #1f6feb;
-    --muted: #8b949e;
-    --muted-background: #21262d;
+    --accent: #38bdf8;
+    --muted: #9ca3af;
+    --muted-background: #121215;
   }
 
   body {
-    background-color: #0b0f14;
-    color: #e6edf3;
+    background-color: #000000;
+    color: #f4f4f5;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
@@ -34,14 +34,83 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b0f14;
+  background: #000000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #30363d;
+  background: #1c1c21;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #484f58;
+  background: #2e2e36;
 }
+
+/* ==========================================================================
+   PURE OLED DARK BLACK THEME (PLATFORM-WIDE, EXCLUDING LANDING PAGE)
+   ========================================================================== */
+
+/* Canvas / Backgrounds -> True Jet Black */
+.bg-\[\#0b0f14\],
+.bg-\[\#0d1117\],
+.bg-\[\#212121\] {
+  background-color: #000000 !important;
+}
+
+/* Translucent Headers / Navbars / Cards -> Pure Deep Obsidian Black */
+.bg-\[\#0d1117\]\/80 {
+  background-color: rgba(5, 5, 5, 0.88) !important;
+}
+
+.bg-\[\#161b22\],
+.bg-\[\#171717\],
+.bg-\[\#18191a\] {
+  background-color: #09090b !important;
+}
+
+/* Secondary Panels / Inputs / Pill Elements -> Deep Charcoal Black */
+.bg-\[\#21262d\],
+.bg-\[\#2f2f2f\],
+.bg-\[\#1f242c\] {
+  background-color: #121215 !important;
+}
+
+.bg-\[\#383838\],
+.bg-\[\#424242\] {
+  background-color: #1a1a20 !important;
+}
+
+/* Hover States -> Subtle Contrast Highlighting */
+.hover\:bg-\[\#161b22\]:hover {
+  background-color: #121215 !important;
+}
+
+.hover\:bg-\[\#21262d\]:hover,
+.hover\:bg-\[\#2f2f2f\]:hover {
+  background-color: #18181e !important;
+}
+
+.hover\:bg-\[\#383838\]:hover {
+  background-color: #22222a !important;
+}
+
+/* Borders -> Ultra-sleek Dark Neutral Borders */
+.border-\[\#30363d\],
+.border-\[\#2f2f2f\],
+.border-\[\#383838\] {
+  border-color: #1c1c21 !important;
+}
+
+.hover\:border-\[\#8b949e\]:hover {
+  border-color: #3f3f46 !important;
+}
+
+/* Crisp Text Contrast on OLED Black */
+.text-\[\#e6edf3\] {
+  color: #f4f4f5 !important;
+}
+
+.text-\[\#8b949e\] {
+  color: #9ca3af !important;
+}
+

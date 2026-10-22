@@ -15,7 +15,7 @@ async def ask_codebase(request: AskRequest):
 
     try:
         res = rag_pipeline.ask(
-            repo_name=request.repository_id,
+            repo_name=request.repository_id or "",
             query=request.query.strip(),
             top_k=request.top_k,
             alpha=request.alpha,

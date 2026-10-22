@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+  <title id="title">Career interests and personality</title>
+  <desc id="description">Eight bars for career interest areas next to Big Five trait letters, linked by lines to show that interests and personality overlap only partly.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101638"/>
+      <stop offset="1" stop-color="#263675"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#background)"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="77" y="104" width="603" height="467" rx="28" fill="#ffffff" fill-opacity=".08" stroke="#c3cdff" stroke-opacity=".26"/>
+    <g fill="#ffffff" fill-opacity=".14">
+      <rect x="127" y="150" width="503" height="30" rx="15"/>
+      <rect x="127" y="200" width="503" height="30" rx="15"/>
+      <rect x="127" y="250" width="503" height="30" rx="15"/>
+      <rect x="127" y="300" width="503" height="30" rx="15"/>
+      <rect x="127" y="350" width="503" height="30" rx="15"/>
+      <rect x="127" y="400" width="503" height="30" rx="15"/>
+      <rect x="127" y="450" width="503" height="30" rx="15"/>
+      <rect x="127" y="500" width="503" height="30" rx="15"/>
+    </g>
+    <g>
+      <rect x="127" y="150" width="400" height="30" rx="15" fill="#5b73ff"/>
+      <rect x="127" y="200" width="340" height="30" rx="15" fill="#5b73ff"/>
+      <rect x="127" y="250" width="300" height="30" rx="15" fill="#5b73ff"/>
+      <rect x="127" y="300" width="250" height="30" rx="15" fill="#8fa0ff"/>
+      <rect x="127" y="350" width="220" height="30" rx="15" fill="#8fa0ff"/>
+      <rect x="127" y="400" width="180" height="30" rx="15" fill="#8fa0ff"/>
+      <rect x="127" y="450" width="130" height="30" rx="15" fill="#8fa0ff"/>
+      <rect x="127" y="500" width="90" height="30" rx="15" fill="#8fa0ff"/>
+    </g>
+
+    <rect x="720" y="104" width="403" height="467" rx="28" fill="#ffffff" fill-opacity=".08" stroke="#c3cdff" stroke-opacity=".26"/>
+    <g stroke="#c3cdff" stroke-opacity=".5" stroke-width="4" stroke-dasharray="10 10" fill="none">
+      <path d="M 680 165 C 740 165 760 210 820 210"/>
+      <path d="M 680 265 C 740 265 760 337 820 337"/>
+      <path d="M 680 315 C 740 315 760 464 820 464"/>
+    </g>
+    <g font-size="44" font-weight="700" text-anchor="middle" fill="#0e1020">
+      <circle cx="860" cy="210" r="48" fill="#c3b4f3"/><text x="860" y="226">O</text>
+      <circle cx="860" cy="337" r="48" fill="#f1d79a"/><text x="860" y="353">E</text>
+      <circle cx="860" cy="464" r="48" fill="#f3bccd"/><text x="860" y="480">A</text>
+    </g>
+    <g fill="#ffffff" fill-opacity=".8" font-size="30" font-weight="700">
+      <text x="940" y="221">r ≈ .3–.6</text>
+      <text x="940" y="348">r ≈ .4</text>
+      <text x="940" y="475">r ≈ .4</text>
+    </g>
+  </g>
+</svg>

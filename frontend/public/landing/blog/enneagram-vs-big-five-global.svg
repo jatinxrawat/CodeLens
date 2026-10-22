@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+  <title id="title">Enneagram vs Big Five</title>
+  <desc id="description">The nine-pointed Enneagram figure next to five horizontal bars for the Big Five traits: nine types compared with five continuous scales.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101638"/>
+      <stop offset="1" stop-color="#263675"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#background)"/>
+  <circle cx="360" cy="338" r="190" fill="none" stroke="#c3cdff" stroke-opacity=".35" stroke-width="4"/>
+  <g fill="none" stroke-linejoin="round" stroke-width="4">
+    <path d="M360.0 148.0 L524.5 433.0 L195.5 433.0 Z" stroke="#8fa0ff"/>
+    <path d="M482.1 192.5 L425.0 516.5 L547.1 305.0 L237.9 192.5 L295.0 516.5 L172.9 305.0 Z" stroke="#ffffff" stroke-opacity=".55"/>
+  </g>
+  <g>
+    <circle cx="482.1" cy="192.5" r="14" fill="#5b73ff"/>
+    <circle cx="547.1" cy="305.0" r="14" fill="#ffffff"/>
+    <circle cx="524.5" cy="433.0" r="14" fill="#ffffff"/>
+    <circle cx="425.0" cy="516.5" r="14" fill="#ffffff"/>
+    <circle cx="295.0" cy="516.5" r="14" fill="#5b73ff"/>
+    <circle cx="195.5" cy="433.0" r="14" fill="#ffffff"/>
+    <circle cx="172.9" cy="305.0" r="14" fill="#5b73ff"/>
+    <circle cx="237.9" cy="192.5" r="14" fill="#ffffff"/>
+    <circle cx="360.0" cy="148.0" r="14" fill="#ffffff"/>
+  </g>
+  <g>
+    <rect x="700" y="208" width="400" height="22" rx="11" fill="#ffffff" fill-opacity=".12"/>
+    <rect x="700" y="208" width="288" height="22" rx="11" fill="#c3b4f3"/>
+    <rect x="700" y="266" width="400" height="22" rx="11" fill="#ffffff" fill-opacity=".12"/>
+    <rect x="700" y="266" width="180" height="22" rx="11" fill="#f3bccd"/>
+    <rect x="700" y="324" width="400" height="22" rx="11" fill="#ffffff" fill-opacity=".12"/>
+    <rect x="700" y="324" width="240" height="22" rx="11" fill="#afbdf6"/>
+    <rect x="700" y="382" width="400" height="22" rx="11" fill="#ffffff" fill-opacity=".12"/>
+    <rect x="700" y="382" width="332" height="22" rx="11" fill="#b2cfe9"/>
+    <rect x="700" y="440" width="400" height="22" rx="11" fill="#ffffff" fill-opacity=".12"/>
+    <rect x="700" y="440" width="140" height="22" rx="11" fill="#f1d79a"/>
+  </g>
+</svg>

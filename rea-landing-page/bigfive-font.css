@@ -1,0 +1,22 @@
+@font-face {
+  font-family: satoshi;
+  src: url('./fonts/Satoshi_Variable.woff2') format("woff2");
+  font-display: swap;
+  font-weight: 300 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: satoshi Fallback;
+  src: local(Arial);
+  ascent-override: 92.36%;
+  descent-override: 21.95%;
+  line-gap-override: 9.14%;
+  size-adjust: 109.35%;
+}
+.m4FU7a_className {
+  font-family: satoshi, satoshi Fallback;
+  font-style: normal;
+}
+.m4FU7a_variable {
+  --font-satoshi: "satoshi", "satoshi Fallback";
+}

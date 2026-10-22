@@ -1,0 +1,1127 @@
+import re
+
+html_content = """<!DOCTYPE html>
+<html data-dpl-id="dpl_codelens_v1" lang="en" dir="ltr" class="m4FU7a_variable" data-scroll-behavior="smooth">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="preload" href="./fonts/Satoshi_Variable.woff2" as="font" type="font/woff2" crossorigin="">
+  <link rel="stylesheet" href="./bigfive-font.css">
+  <link rel="stylesheet" href="./bigfive-main.css">
+  <meta name="theme-color" content="#0e1020"/>
+  <title>CodeLens — Local AI Code Intelligence &amp; ML Analysis Platform</title>
+  <meta name="description" content="100% Offline, Privacy-Preserving Code Intelligence, Polyglot AST Call Graph Engine, Hybrid BM25+FAISS Search, Trained GBDT Ranker, and Grounded Local LLM Studio."/>
+  <link rel="icon" href="./icon.svg" type="image/svg+xml"/>
+  <script>
+    (function(){
+      try{
+        var m=matchMedia("(prefers-color-scheme: dark)");
+        var s=localStorage.getItem("theme");
+        var t=(s==="light"||s==="dark")?s:(m.matches?"dark":"light");
+        document.documentElement.dataset.theme=t;
+        m.addEventListener("change",function(e){
+          var c=localStorage.getItem("theme");
+          if(c!=="light"&&c!=="dark"){
+            document.documentElement.dataset.theme=e.matches?"dark":"light";
+          }
+        });
+      }catch(e){}
+    })();
+  </script>
+</head>
+<body>
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="logo" aria-label="CodeLens – Home" href="/">
+        <span class="logo-mark" aria-hidden="true" style="background: linear-gradient(135deg, #38bdf8, #6366f1); border-radius: 6px; box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);"></span>
+        <span>CodeLens</span>
+      </a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="#engines">Engines<span class="nav-count">15</span></a>
+        <a href="#sammenligning">Hybrid Search</a>
+        <a href="#architecture">AST Graph</a>
+        <a href="#articles">Whitepapers</a>
+        <a href="#slik-fungerer-det">Architecture</a>
+      </nav>
+      <div class="header-actions">
+        <div class="language-menu">
+          <button type="button" class="language-trigger" aria-label="Active Stack: Python / TypeScript">
+            <span class="sr-only">Active Stack: </span>
+            <span style="font-size: 13px; font-weight: 700; color: #38bdf8; letter-spacing: 0.5px;">⚡ v1.0</span>
+            <span>LOCAL</span>
+          </button>
+        </div>
+        <button type="button" class="theme-toggle" aria-label="Switch theme" title="Switch theme">
+          <svg viewBox="0 0 20 20" aria-hidden="true" class="theme-toggle-sun">
+            <circle cx="10" cy="10" r="3.5"></circle>
+            <path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.3 4.3l1.4 1.4M14.3 14.3l1.4 1.4M4.3 15.7l1.4-1.4M14.3 5.7l1.4-1.4"></path>
+          </svg>
+          <svg viewBox="0 0 20 20" aria-hidden="true" class="theme-toggle-moon">
+            <path d="M16.5 12.5A7 7 0 0 1 7.5 3.5a7 7 0 1 0 9 9Z"></path>
+          </svg>
+        </button>
+        <a class="button button-primary button-small cta-with-badge" href="http://localhost:8000" target="_blank" rel="noopener">
+          Launch Studio<span class="cta-badge">100% Offline</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">• 100% Offline, Privacy-Preserving Code Intelligence</div>
+          <h1>Code reasoning is not guessing. <span>It is verified evidence.</span></h1>
+          <p class="hero-lead">
+            Ingest entire codebases with polyglot Tree-sitter AST parsing, sub-15ms hybrid BM25+FAISS vector search, trained GBDT re-rankers, and grounded local LLM explanations. 100% offline. Zero cloud API calls. Zero code telemetry.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary button-large cta-with-badge" href="http://localhost:8000" target="_blank" rel="noopener">
+              Explore CodeLens Studio
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg>
+              <span class="cta-badge">Local Engine</span>
+            </a>
+            <a href="#sammenligning" class="text-link">Compare retrieval strategies</a>
+          </div>
+          <div class="hero-meta">
+            <span>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10.5 3.5 3.5L16 5.5"></path></svg>
+              100% Offline
+            </span>
+            <span>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10.5 3.5 3.5L16 5.5"></path></svg>
+              Sub-15ms Hybrid Search
+            </span>
+            <span>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10.5 3.5 3.5L16 5.5"></path></svg>
+              Tree-sitter Polyglot AST
+            </span>
+            <span>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10.5 3.5 3.5L16 5.5"></path></svg>
+              Zero Code Telemetry
+            </span>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <a href="#sammenligning" class="compare-pill">
+            <span class="compare-pill-slide">
+              <span class="compare-pill-avatars" aria-hidden="true">
+                <img alt="Vector" width="32" height="32" class="profile-avatar" src="./people/person-1.webp"/>
+                <img alt="BM25" width="32" height="32" class="profile-avatar" src="./people/person-2.webp"/>
+              </span>
+              <span>
+                <strong>Compare retrieval strategies</strong>
+                <small>BM25 vs FAISS vs Hybrid GBDT Ranker</small>
+              </span>
+            </span>
+            <span class="compare-pill-slide compare-pill-slide-team" aria-hidden="true">
+              <span class="compare-pill-avatars">
+                <img alt="Python" width="32" height="32" class="profile-avatar" src="./people/person-3.webp"/>
+                <img alt="TypeScript" width="32" height="32" class="profile-avatar" src="./people/person-4.webp"/>
+                <img alt="Java" width="32" height="32" class="profile-avatar" src="./people/person-5.webp"/>
+                <img alt="C++" width="32" height="32" class="profile-avatar" src="./people/person-1.webp"/>
+              </span>
+              <span>
+                <strong>Polyglot AST Call Graph</strong>
+                <small>6 languages with caller/callee tracing</small>
+              </span>
+            </span>
+            <span class="compare-pill-slide compare-pill-slide-group" aria-hidden="true">
+              <span class="compare-pill-avatars">
+                <img alt="Grounded" width="32" height="32" class="profile-avatar" src="./people/person-4.webp"/>
+                <img alt="Qwen" width="32" height="32" class="profile-avatar" src="./people/person-2.webp"/>
+                <img alt="Confidence" width="32" height="32" class="profile-avatar" src="./people/person-5.webp"/>
+                <span class="compare-pill-more">+13</span>
+              </span>
+              <span>
+                <strong>13-Feature GBDT Ranker</strong>
+                <small>Trained learning-to-rank without data leakage</small>
+              </span>
+            </span>
+          </a>
+
+          <div class="ui-card test-preview">
+            <div class="ui-card-header">
+              <div class="preview-topline">
+                <span>INTELLIGENT QUERY PROBE</span>
+                <span>1 of 58 PASSING</span>
+              </div>
+              <div class="progress-track"><span style="width: 85%;"></span></div>
+            </div>
+            <div class="ui-card-content">
+              <div class="question-mark" aria-hidden="true">“</div>
+              <h2>How does hybrid rank fusion combine dense FAISS vectors with BM25 keyword scores?</h2>
+              <div class="answer-scale" aria-label="Select retrieval strategy">
+                <div class="answer-option">
+                  <span class="" aria-hidden="true"></span>
+                  <small>BM25 Lexical (0.09ms)</small>
+                </div>
+                <div class="answer-option">
+                  <span class="" aria-hidden="true"></span>
+                  <small>FAISS Vector (13.8ms)</small>
+                </div>
+                <div class="answer-option">
+                  <span class="" aria-hidden="true"></span>
+                  <small>Hybrid Fusion (α=0.6)</small>
+                </div>
+                <div class="answer-option">
+                  <span class="selected" aria-hidden="true"></span>
+                  <small>Trained GBDT Ranker</small>
+                </div>
+                <div class="answer-option">
+                  <span class="" aria-hidden="true"></span>
+                  <small>Local LLM + Citations</small>
+                </div>
+              </div>
+            </div>
+            <div class="ui-card-footer preview-footer">
+              <span>Grounded in AST evidence · zero cloud leakage · exact line citations</span>
+              <span class="preview-next" aria-hidden="true">→</span>
+            </div>
+          </div>
+
+          <div class="result-pill">
+            <strong>58 / 58 Tests</strong>
+            <span>SYSTEM VALIDATED 100% PASS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="stats-section">
+        <div class="shell stats-panel">
+          <div>
+            <strong>0%</strong>
+            <span>cloud telemetry (100% offline)</span>
+          </div>
+          <div>
+            <strong>0.09 ms</strong>
+            <span>BM25 lexical search latency</span>
+          </div>
+          <div>
+            <strong>6 Languages</strong>
+            <span>polyglot Tree-sitter AST</span>
+          </div>
+          <div>
+            <strong>13 Feats</strong>
+            <span>trained GBDT learning-to-rank</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison-section" id="sammenligning">
+      <div class="shell comparison-grid">
+        <div class="comparison-copy">
+          <div class="section-kicker">Retrieval Benchmarks</div>
+          <h2>Evaluate every query against verified ground truth.</h2>
+          <p>
+            Compare BM25 lexical speed, FAISS dense semantic matching, and trained GBDT ranking side-by-side. See recall, MRR, and NDCG metrics on unseen holdout test repositories.
+          </p>
+          <div class="audience-chips">
+            <span>Optimal for</span>
+            <em>Security Audits</em>
+            <em>Legacy Migration</em>
+            <em>Large Monorepos</em>
+            <em>Air-Gapped Systems</em>
+            <em>Enterprise CI</em>
+          </div>
+          <ol class="comparison-steps">
+            <li>
+              <span>01</span>
+              <div>
+                <strong>Ingest Local Repo</strong>
+                <p>Parse AST syntax trees across Python, JS, TS, Java, C++, and C into structural chunks.</p>
+              </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <strong>Index &amp; Rank</strong>
+                <p>Construct 384-dimensional dense vectors and BM25+ subword indices with zero cloud leakage.</p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <strong>Reason with Citations</strong>
+                <p>Local Qwen Coder generates step-by-step logic walkthroughs with exact line-level references.</p>
+              </div>
+            </li>
+          </ol>
+          <a class="button button-primary button-large" href="http://localhost:8000" target="_blank" rel="noopener">
+            Explore Retrieval Benchmarks
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg>
+          </a>
+          <div class="comparison-examples">
+            <a class="text-link" href="#articles">Evaluation Whitepaper <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.25 14.75 14.75 5.25M7 5.25h7.75V13"></path></svg></a>
+            <a class="text-link" href="#slik-fungerer-det">System Architecture <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.25 14.75 14.75 5.25M7 5.25h7.75V13"></path></svg></a>
+          </div>
+        </div>
+
+        <div class="ui-card comparison-preview" aria-label="Example comparison of retrieval strategies">
+          <div class="preview-window-bar">
+            <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+            <a class="preview-window-link" href="#sammenligning">BM25 vs GBDT Ranker ↗</a>
+            <a class="preview-window-link preview-window-link-second" href="#sammenligning">Holdout Evaluation ↗</a>
+          </div>
+          <div class="comparison-preview-body">
+            <div class="comparison-overview">
+              <div>
+                <span class="preview-label">Strategy Evaluation</span>
+                <div class="profile-pair">
+                  <img alt="BM25" width="40" height="40" class="profile-avatar profile-avatar-first" src="./people/person-1.webp"/>
+                  <strong>BM25 Lexical</strong>
+                  <span class="profile-connector" aria-hidden="true"></span>
+                  <img alt="Hybrid GBDT" width="40" height="40" class="profile-avatar profile-avatar-second" src="./people/person-2.webp"/>
+                  <strong>Hybrid GBDT</strong>
+                </div>
+              </div>
+              <p>
+                <strong>3</strong>
+                <span>verified code citations</span>
+              </p>
+            </div>
+            <div class="comparison-legend" aria-hidden="true">
+              <span><i class="legend-first"></i>BM25 Lexical</span>
+              <span><i class="legend-second"></i>Hybrid GBDT Ranker</span>
+            </div>
+            <div class="comparison-list">
+              <div class="comparison-row">
+                <div class="comparison-row-heading">
+                  <strong>Recall@10</strong>
+                  <span>79.3% / 84.5%</span>
+                </div>
+                <div class="comparison-track" aria-hidden="true"><i class="comparison-bar-first" style="width:79.3%"></i></div>
+                <div class="comparison-track" aria-hidden="true"><i class="comparison-bar-second" style="width:84.5%"></i></div>
+              </div>
+              <div class="comparison-row">
+                <div class="comparison-row-heading">
+                  <strong>NDCG@5</strong>
+                  <span>70.7% / 63.1%</span>
+                </div>
+                <div class="comparison-track" aria-hidden="true"><i class="comparison-bar-first" style="width:70.7%"></i></div>
+                <div class="comparison-track" aria-hidden="true"><i class="comparison-bar-second" style="width:63.1%"></i></div>
+              </div>
+              <div class="comparison-row">
+                <div class="comparison-row-heading">
+                  <strong>Mean Reciprocal Rank (MRR)</strong>
+                  <span>61.1% / 60.4%</span>
+                </div>
+                <div class="comparison-track" aria-hidden="true"><i class="comparison-bar-first" style="width:61.1%"></i></div>
+                <div class="comparison-track" aria-hidden="true"><i class="comparison-bar-second" style="width:60.4%"></i></div>
+              </div>
+              <div class="comparison-row">
+                <div class="comparison-row-heading">
+                  <strong>AST Structural Coverage</strong>
+                  <span>48.0% / 92.5%</span>
+                </div>
+                <div class="comparison-track" aria-hidden="true"><i class="comparison-bar-first" style="width:48%"></i></div>
+                <div class="comparison-track" aria-hidden="true"><i class="comparison-bar-second" style="width:92.5%"></i></div>
+              </div>
+            </div>
+            <div class="comparison-insight">
+              <span>Key Advantage</span>
+              <strong>Semantic + Structural Relevance Fusion.</strong>
+              <p>BM25 captures exact identifiers in 0.09ms; trained GBDT re-ranking incorporates call graphs and cyclomatic complexity.</p>
+            </div>
+          </div>
+          <div class="share-result-card">
+            <span class="share-icon" aria-hidden="true">↗</span>
+            <div>
+              <strong>Export Evaluation Benchmark</strong>
+              <span>Reproducible test metrics on unseen holdout test repository.</span>
+            </div>
+            <small>Verified</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ML Studio Promo Section -->
+    <section class="pair-section" aria-labelledby="pair-title">
+      <div class="shell">
+        <div class="pair-card">
+          <div class="pair-copy">
+            <span class="pair-kicker"><i aria-hidden="true">⚡</i>Machine Learning Studio</span>
+            <h2 id="pair-title">Train custom ranking and maintainability models.</h2>
+            <p>
+              CodeLens ships with two production GBDT models: a 13-feature Learning-to-Rank engine and an 11-feature Cyclomatic Maintainability Risk Classifier (LOW, MEDIUM, HIGH). Train directly on your repository with zero data leakage.
+            </p>
+            <ul class="pair-facts">
+              <li>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10.5 3.5 3.5L16 5.5"></path></svg>
+                Strict holdout test split
+              </li>
+              <li>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10.5 3.5 3.5L16 5.5"></path></svg>
+                Zero cloud dependencies
+              </li>
+              <li>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10.5 3.5 3.5L16 5.5"></path></svg>
+                Scikit-Learn HistGradientBoosting
+              </li>
+            </ul>
+            <a class="button button-primary pair-button" href="http://localhost:8000" target="_blank" rel="noopener">
+              Explore ML Studio Models
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg>
+            </a>
+            <small class="pair-note">Runs locally on CPU/GPU via Python 3.9+</small>
+          </div>
+          <div class="pair-media" aria-hidden="true">
+            <img alt="CodeLens Architecture" width="656" height="887" class="pair-img" src="./assets/hero.png" style="width: 100%; height: auto; display: block; border-radius: 12px;"/>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- The Five Core Engines Section -->
+    <section class="traits-section" id="engines">
+      <div class="shell">
+        <div class="section-heading split-heading">
+          <div>
+            <div class="section-kicker">The five engines</div>
+            <h2>Code intelligence across five dimensions.</h2>
+          </div>
+          <div>
+            <p>
+              CodeLens combines five independent analysis engines. From polyglot AST syntax trees to grounded local LLMs, every engine provides verifiable evidence with zero cloud telemetry.
+            </p>
+            <a class="button button-dark" href="http://localhost:8000" target="_blank" rel="noopener">
+              Launch All Engines
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="traits-grid">
+          <!-- Engine 1: AST -->
+          <div class="ui-card trait-card" data-trait="0">
+            <span class="trait-watermark" aria-hidden="true">AST</span>
+            <div class="trait-card-top">
+              <span class="trait-letter" style="font-size: 13px; font-weight: 800;">AST</span>
+              <a aria-label="Read more about Tree-sitter AST" href="#articles">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.25 14.75 14.75 5.25M7 5.25h7.75V13"></path></svg>
+              </a>
+            </div>
+            <h3>Polyglot AST Parser</h3>
+            <p>Tree-sitter extraction of functions, classes, imports, and call trees across 6 languages.</p>
+            <div class="trait-spectrum" role="img" aria-label="Spectrum: Tokens to Syntax Trees">
+              <span>Raw Tokens</span>
+              <i><b style="left:92%"></b></i>
+              <span>Syntax Trees</span>
+            </div>
+            <ul class="trait-facets" aria-label="Facets">
+              <li>Call Hierarchy</li>
+              <li>Scope Boundaries</li>
+              <li>Multi-Chunk Parser</li>
+            </ul>
+          </div>
+
+          <!-- Engine 2: VEC -->
+          <div class="ui-card trait-card" data-trait="1">
+            <span class="trait-watermark" aria-hidden="true">VEC</span>
+            <div class="trait-card-top">
+              <span class="trait-letter" style="font-size: 13px; font-weight: 800;">VEC</span>
+              <a aria-label="Read more about FAISS Dense Search" href="#articles">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.25 14.75 14.75 5.25M7 5.25h7.75V13"></path></svg>
+              </a>
+            </div>
+            <h3>FAISS Dense Search</h3>
+            <p>384-dimensional dense semantic vectors optimized for code and technical text using all-MiniLM-L6-v2.</p>
+            <div class="trait-spectrum" role="img" aria-label="Spectrum: Lexical Match to Semantic Intent">
+              <span>Lexical Match</span>
+              <i><b style="left:88%"></b></i>
+              <span>Semantic Intent</span>
+            </div>
+            <ul class="trait-facets" aria-label="Facets">
+              <li>IndexFlatIP Cosine</li>
+              <li>L2 Normalization</li>
+              <li>Sub-15ms Matching</li>
+            </ul>
+          </div>
+
+          <!-- Engine 3: LEX -->
+          <div class="ui-card trait-card" data-trait="2">
+            <span class="trait-watermark" aria-hidden="true">LEX</span>
+            <div class="trait-card-top">
+              <span class="trait-letter" style="font-size: 13px; font-weight: 800;">LEX</span>
+              <a aria-label="Read more about RankBM25+" href="#articles">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.25 14.75 14.75 5.25M7 5.25h7.75V13"></path></svg>
+              </a>
+            </div>
+            <h3>RankBM25+ Subword</h3>
+            <p>Probabilistic subword keyword retrieval addressing camelCase and snake_case tokens in 0.09ms.</p>
+            <div class="trait-spectrum" role="img" aria-label="Spectrum: Fuzzy Query to Exact Identifier">
+              <span>Fuzzy Query</span>
+              <i><b style="left:85%"></b></i>
+              <span>Exact Identifier</span>
+            </div>
+            <ul class="trait-facets" aria-label="Facets">
+              <li>Subword Tokenizer</li>
+              <li>Inverse Doc Freq</li>
+              <li>0.09ms Search</li>
+            </ul>
+          </div>
+
+          <!-- Engine 4: ML -->
+          <div class="ui-card trait-card" data-trait="3">
+            <span class="trait-watermark" aria-hidden="true">ML</span>
+            <div class="trait-card-top">
+              <span class="trait-letter" style="font-size: 13px; font-weight: 800;">ML</span>
+              <a aria-label="Read more about GBDT Ranker & Risk" href="#articles">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.25 14.75 14.75 5.25M7 5.25h7.75V13"></path></svg>
+              </a>
+            </div>
+            <h3>Trained GBDT Models</h3>
+            <p>13-feature learning-to-rank GBDT model and 11-feature cyclomatic maintainability risk classifier.</p>
+            <div class="trait-spectrum" role="img" aria-label="Spectrum: Heuristics to Trained ML">
+              <span>Heuristic Score</span>
+              <i><b style="left:82%"></b></i>
+              <span>Trained GBDT Model</span>
+            </div>
+            <ul class="trait-facets" aria-label="Facets">
+              <li>13 Structural Feats</li>
+              <li>Complexity Classify</li>
+              <li>Zero Data Leakage</li>
+            </ul>
+          </div>
+
+          <!-- Engine 5: LLM -->
+          <div class="ui-card trait-card" data-trait="4">
+            <span class="trait-watermark" aria-hidden="true">LLM</span>
+            <div class="trait-card-top">
+              <span class="trait-letter" style="font-size: 13px; font-weight: 800;">LLM</span>
+              <a aria-label="Read more about Local Qwen Coder" href="#articles">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.25 14.75 14.75 5.25M7 5.25h7.75V13"></path></svg>
+              </a>
+            </div>
+            <h3>Grounded Local LLM</h3>
+            <p>100% offline Qwen 2.5 Coder reasoning with calibrated confidence gating and line-by-line citations.</p>
+            <div class="trait-spectrum" role="img" aria-label="Spectrum: Hallucination to Grounded Verification">
+              <span>Hallucination</span>
+              <i><b style="left:96%"></b></i>
+              <span>Grounded Verification</span>
+            </div>
+            <ul class="trait-facets" aria-label="Facets">
+              <li>Confidence Gate</li>
+              <li>Line Citations</li>
+              <li>Execution Tracing</li>
+            </ul>
+          </div>
+        </div>
+
+        <nav class="trait-guides" aria-label="Articles and specifications">
+          <a href="#articles">
+            Technical Whitepaper: 24-section IEEE-style specification
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.25 14.75 14.75 5.25M7 5.25h7.75V13"></path></svg>
+          </a>
+          <a href="#articles">
+            Model Cards &amp; Feature Ablation Benchmarks
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.25 14.75 14.75 5.25M7 5.25h7.75V13"></path></svg>
+          </a>
+        </nav>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="process-section" id="slik-fungerer-det">
+      <div class="shell process-grid">
+        <div class="process-heading">
+          <div class="section-kicker">System Architecture</div>
+          <h2>A simple pipeline. A verified result.</h2>
+          <p>
+            CodeLens runs completely on your local machine. No account, no API key, and your code never leaves your drive.
+          </p>
+          <a class="button button-primary" href="http://localhost:8000" target="_blank" rel="noopener">
+            Launch Local Studio
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg>
+          </a>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <span>01</span>
+            <div>
+              <h3>Ingest &amp; Parse AST</h3>
+              <p>Parse repository source code as passive text into syntax trees without executing untrusted code.</p>
+            </div>
+          </article>
+          <article class="step">
+            <span>02</span>
+            <div>
+              <h3>Hybrid Index &amp; GBDT Re-rank</h3>
+              <p>Fuse BM25 subword lexical scores with FAISS dense cosine similarity using a trained 13-feature ML model.</p>
+            </div>
+          </article>
+          <article class="step">
+            <span>03</span>
+            <div>
+              <h3>Synthesize with Citations</h3>
+              <p>Pass filtered evidence packs to local Qwen Coder with strict confidence hallucination guards.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results / Report Section -->
+    <section class="report-section" id="architecture">
+      <div class="shell report-grid">
+        <div class="ui-card result-preview" aria-label="Example CodeLens repository analysis report">
+          <div class="preview-window-bar">
+            <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+            <a class="preview-window-link" href="#architecture">Repository Analysis Report ↗</a>
+          </div>
+          <div class="result-preview-body">
+            <div class="result-preview-heading">
+              <div>
+                <span class="preview-label">Active Repository</span>
+                <h3>Five engines. One complete picture.</h3>
+              </div>
+              <div class="facet-count">
+                <strong>15</strong>
+                <span>metrics explained</span>
+              </div>
+            </div>
+            <div class="result-score-list">
+              <div class="result-score-row">
+                <div><strong>AST Precision</strong><span>95%</span></div>
+                <i aria-hidden="true"><b style="width:95%"></b></i>
+              </div>
+              <div class="result-score-row">
+                <div><strong>Retrieval Recall@10</strong><span>85%</span></div>
+                <i aria-hidden="true"><b style="width:85%"></b></i>
+              </div>
+              <div class="result-score-row">
+                <div><strong>Maintainability Index</strong><span>88%</span></div>
+                <i aria-hidden="true"><b style="width:88%"></b></i>
+              </div>
+              <div class="result-score-row">
+                <div><strong>Security Isolation</strong><span>100%</span></div>
+                <i aria-hidden="true"><b style="width:100%"></b></i>
+              </div>
+              <div class="result-score-row">
+                <div><strong>Sub-15ms Latency</strong><span>99%</span></div>
+                <i aria-hidden="true"><b style="width:99%"></b></i>
+              </div>
+            </div>
+            <div class="facet-preview">
+              <div class="facet-preview-heading">
+                <span>Explore an engine</span>
+                <small>Polyglot AST · 95%</small>
+              </div>
+              <div class="facet-grid">
+                <div><span>Call Graph</span><strong>14 Nodes</strong></div>
+                <div><span>Complexity</span><strong>3.2</strong></div>
+                <div><span>Citations</span><strong>100%</strong></div>
+              </div>
+              <p>Direct callers, downstream dependencies, and maintainability risk mapped with verified line citations.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-copy">
+          <div class="section-kicker">Deep Code Insights</div>
+          <h2>More than code completion.</h2>
+          <p>
+            Start with high-level architectural overview, then inspect exact call graphs, blast radius impacts, and cyclomatic complexity metrics.
+          </p>
+          <ul>
+            <li>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10.5 3.5 3.5L16 5.5"></path></svg>
+              Line-by-line source citations for every natural-language claim
+            </li>
+            <li>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10.5 3.5 3.5L16 5.5"></path></svg>
+              Blast-radius impact analysis before refactoring critical functions
+            </li>
+            <li>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10.5 3.5 3.5L16 5.5"></path></svg>
+              Multi-language AST call trees and dependency graphs
+            </li>
+            <li>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10.5 3.5 3.5L16 5.5"></path></svg>
+              100% offline local inference with zero telemetry
+            </li>
+          </ul>
+          <p class="report-disclaimer">
+            CodeLens passive analysis parses source code purely as static data syntax trees, never executing untrusted repository code.
+          </p>
+          <div class="report-actions">
+            <a class="button button-primary" href="http://localhost:8000" target="_blank" rel="noopener">
+              Launch Studio and Ingest Repo
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg>
+            </a>
+            <a class="text-link" href="#sammenligning">
+              See benchmark evaluations
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.25 14.75 14.75 5.25M7 5.25h7.75V13"></path></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Articles / Technical Whitepapers Section -->
+    <section class="home-articles" id="articles">
+      <div class="shell">
+        <div class="section-heading split-heading">
+          <div>
+            <div class="section-kicker">Technical Whitepapers</div>
+            <h2>Learn more about local code intelligence.</h2>
+          </div>
+          <div>
+            <p>Deep dives into hybrid retrieval, polyglot AST parsing, and ML-assisted code analysis.</p>
+            <a class="text-link" href="https://github.com/jatinxrawat/CodeLens" target="_blank" rel="noopener">
+              View Repository Docs
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.25 14.75 14.75 5.25M7 5.25h7.75V13"></path></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="articles-grid">
+          <!-- Article 1 -->
+          <article class="article-card">
+            <a class="article-card-link" href="#articles">
+              <div class="article-card-media">
+                <img alt="Hybrid BM25 + FAISS Vector Fusion" width="400" height="260" src="./blog/big-five-by-age-and-sex-global.svg" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent;object-fit:cover;"/>
+              </div>
+              <div class="article-card-body">
+                <div class="article-card-meta">
+                  <time dateTime="2026-10-21">October 21, 2026</time>
+                  <span>4 min read</span>
+                  <span>1,420 views</span>
+                </div>
+                <h2>Hybrid BM25 + FAISS Vector Fusion with Trained GBDT Ranker</h2>
+                <p>How combining dense semantic vectors with lexical subword indexing achieves 84.5% Recall@10 on unseen holdout code repositories.</p>
+              </div>
+            </a>
+          </article>
+
+          <!-- Article 2 -->
+          <article class="article-card">
+            <a class="article-card-link" href="#articles">
+              <div class="article-card-media">
+                <img alt="Polyglot AST Parsing with Tree-sitter" width="400" height="260" src="./blog/big-five-by-country-global.svg" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent;object-fit:cover;"/>
+              </div>
+              <div class="article-card-body">
+                <div class="article-card-meta">
+                  <time dateTime="2026-10-21">October 21, 2026</time>
+                  <span>5 min read</span>
+                  <span>980 views</span>
+                </div>
+                <h2>Polyglot AST Parsing with Tree-sitter Across 6 Languages</h2>
+                <p>Extracting functions, classes, and scopes across Python, JavaScript, TypeScript, Java, C++, and C with multi-chunk structural boundaries.</p>
+              </div>
+            </a>
+          </article>
+
+          <!-- Article 3 -->
+          <article class="article-card">
+            <a class="article-card-link" href="#articles">
+              <div class="article-card-media">
+                <img alt="Eliminating Hallucinations with Calibrated Confidence Gating" width="400" height="260" src="./blog/personality-from-face-global.svg" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent;object-fit:cover;"/>
+              </div>
+              <div class="article-card-body">
+                <div class="article-card-meta">
+                  <time dateTime="2026-10-20">October 20, 2026</time>
+                  <span>8 min read</span>
+                  <span>1,210 views</span>
+                </div>
+                <h2>Eliminating Hallucinations: Calibrated Confidence Gating in Local LLMs</h2>
+                <p>How strict evidence packs and calibrated confidence gates prevent AI hallucinations when explaining unfamiliar codebases.</p>
+              </div>
+            </a>
+          </article>
+
+          <!-- Article 4 -->
+          <article class="article-card">
+            <a class="article-card-link" href="#articles">
+              <div class="article-card-media">
+                <img alt="Predicting Software Maintainability Risk with GBDT" width="400" height="260" src="./blog/enneagram-vs-big-five-global.svg" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent;object-fit:cover;"/>
+              </div>
+              <div class="article-card-body">
+                <div class="article-card-meta">
+                  <time dateTime="2026-10-20">October 20, 2026</time>
+                  <span>6 min read</span>
+                  <span>840 views</span>
+                </div>
+                <h2>Predicting Software Maintainability Risk with Gradient Boosted Trees</h2>
+                <p>Using 11 complexity features—McCabe cyclomatic metrics, nesting depth, and parameter counts—to classify maintainability risk.</p>
+              </div>
+            </a>
+          </article>
+
+          <!-- Article 5 -->
+          <article class="article-card">
+            <a class="article-card-link" href="#articles">
+              <div class="article-card-media">
+                <img alt="Sub-15ms Air-Gapped Code Search" width="400" height="260" src="./blog/career-interests-and-personality-global.svg" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent;object-fit:cover;"/>
+              </div>
+              <div class="article-card-body">
+                <div class="article-card-meta">
+                  <time dateTime="2026-10-18">October 18, 2026</time>
+                  <span>7 min read</span>
+                  <span>1,650 views</span>
+                </div>
+                <h2>Sub-15ms Air-Gapped Code Search: Zero-Telemetry Architecture</h2>
+                <p>Designing local index stores with FAISS IndexFlatIP and RankBM25 Plus for air-gapped security and compliance.</p>
+              </div>
+            </a>
+          </article>
+
+          <!-- Article 6 -->
+          <article class="article-card">
+            <a class="article-card-link" href="#articles">
+              <div class="article-card-media">
+                <img alt="Blast-Radius Dependency Tracing" width="400" height="260" src="./blog/character-strengths-global.svg" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent;object-fit:cover;"/>
+              </div>
+              <div class="article-card-body">
+                <div class="article-card-meta">
+                  <time dateTime="2026-10-18">October 18, 2026</time>
+                  <span>5 min read</span>
+                  <span>1,120 views</span>
+                </div>
+                <h2>Blast-Radius Dependency Tracing with NetworkX Call Graphs</h2>
+                <p>Tracing caller/callee execution flow and import graphs to predict downstream blast radiuses before refactoring.</p>
+              </div>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Openness in Practice Section -->
+    <section class="open-section">
+      <div class="shell open-grid">
+        <div>
+          <div class="section-kicker">Open Source &amp; Verifiable</div>
+          <h2>A platform open to scrutiny.</h2>
+        </div>
+        <div class="open-copy">
+          <p>
+            CodeLens is open-source under the MIT license with 58 automated unit, integration, and prompt-injection tests. Evaluate on unseen holdout codebases with full reproducibility.
+          </p>
+          <div class="open-actions">
+            <a href="https://github.com/jatinxrawat/CodeLens" target="_blank" rel="noopener" class="button button-light">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.87c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.35 1.09 2.92.83.09-.65.35-1.09.64-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.82c.85 0 1.7.11 2.5.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85V21c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"></path></svg>
+              View the Code on GitHub
+            </a>
+            <a class="text-link" href="#slik-fungerer-det">
+              Read the Architecture Spec
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.25 14.75 14.75 5.25M7 5.25h7.75V13"></path></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Platform Modules Carousel Section -->
+    <section class="tests-carousel-section">
+      <div class="shell">
+        <div class="section-heading split-heading">
+          <div>
+            <div class="section-kicker">Platform Modules</div>
+            <h2>15 integrated intelligence modules.</h2>
+          </div>
+          <div>
+            <p>From semantic hybrid search to blast-radius dependency graphs and custom ML model training. All 100% local.</p>
+            <a class="text-link" href="http://localhost:8000" target="_blank" rel="noopener">
+              Open CodeLens Studio
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.25 14.75 14.75 5.25M7 5.25h7.75V13"></path></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="test-carousel" role="region" aria-roledescription="carousel" aria-label="15 integrated intelligence modules.">
+          <div class="test-carousel-track">
+            <!-- Slide 01 -->
+            <article class="test-slide is-active" aria-roledescription="slide" aria-label="Module 1 of 15">
+              <div class="test-slide-top">
+                <span class="test-slide-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V11M9 19V5M14 19v-6M19 19V8"></path></svg></span>
+                <span class="test-slide-number" aria-hidden="true">01</span>
+              </div>
+              <h3><a class="test-slide-link" href="http://localhost:8000">Hybrid Search Engine</a></h3>
+              <p>Sub-15ms code search fusing FAISS IndexFlatIP dense cosine vectors with RankBM25 Plus subword tokens and a trained 13-feature GBDT ranker.</p>
+              <ul class="test-slide-facts"><li>Sub-15ms Latency</li><li>84.5% Recall@10</li></ul>
+              <span class="test-slide-action" aria-hidden="true">Explore Search <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg></span>
+            </article>
+
+            <!-- Slide 02 -->
+            <article class="test-slide" aria-roledescription="slide" aria-label="Module 2 of 15">
+              <div class="test-slide-top">
+                <span class="test-slide-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2.5M9.5 2h5"></path></svg></span>
+                <span class="test-slide-number" aria-hidden="true">02</span>
+              </div>
+              <h3><a class="test-slide-link" href="http://localhost:8000">Ask Codebase Studio</a></h3>
+              <p>100% offline local Qwen 2.5 Coder inference with calibrated confidence gating and exact source line citations for every claim.</p>
+              <ul class="test-slide-facts"><li>Zero Telemetry</li><li>Line Citations</li></ul>
+              <span class="test-slide-action" aria-hidden="true">Ask Codebase <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg></span>
+            </article>
+
+            <!-- Slide 03 -->
+            <article class="test-slide" aria-roledescription="slide" aria-label="Module 3 of 15">
+              <div class="test-slide-top">
+                <span class="test-slide-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z"></path><path d="m3 13 9 5 9-5"></path></svg></span>
+                <span class="test-slide-number" aria-hidden="true">03</span>
+              </div>
+              <h3><a class="test-slide-link" href="http://localhost:8000">AST Architecture Graph</a></h3>
+              <p>Polyglot Tree-sitter parsing building interactive caller/callee graphs and static import flows across 6 programming languages.</p>
+              <ul class="test-slide-facts"><li>6 Languages</li><li>NetworkX Graph</li></ul>
+              <span class="test-slide-action" aria-hidden="true">View Graph <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg></span>
+            </article>
+
+            <!-- Slide 04 -->
+            <article class="test-slide" aria-roledescription="slide" aria-label="Module 4 of 15">
+              <div class="test-slide-top">
+                <span class="test-slide-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18"></path><path d="M5 7h5M5 12h5M5 17h5M14 7h5M14 12h5M14 17h5"></path></svg></span>
+                <span class="test-slide-number" aria-hidden="true">04</span>
+              </div>
+              <h3><a class="test-slide-link" href="http://localhost:8000">Blast Radius Analysis</a></h3>
+              <p>Trace downstream impact and identify broken callers before refactoring or removing critical repository functions.</p>
+              <ul class="test-slide-facts"><li>Impact Scopes</li><li>Caller Chains</li></ul>
+              <span class="test-slide-action" aria-hidden="true">Analyze Impact <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg></span>
+            </article>
+
+            <!-- Slide 05 -->
+            <article class="test-slide" aria-roledescription="slide" aria-label="Module 5 of 15">
+              <div class="test-slide-top">
+                <span class="test-slide-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 20.2 7.25v9.5L12 21.5l-8.2-4.75v-9.5L12 2.5Z"></path></svg></span>
+                <span class="test-slide-number" aria-hidden="true">05</span>
+              </div>
+              <h3><a class="test-slide-link" href="http://localhost:8000">Maintainability Classifier</a></h3>
+              <p>Trained multi-class GBDT model predicting LOW, MEDIUM, or HIGH risk using 11 cyclomatic complexity and nesting depth metrics.</p>
+              <ul class="test-slide-facts"><li>11 Features</li><li>Risk Prediction</li></ul>
+              <span class="test-slide-action" aria-hidden="true">Inspect Risk <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg></span>
+            </article>
+
+            <!-- Slide 06 -->
+            <article class="test-slide" aria-roledescription="slide" aria-label="Module 6 of 15">
+              <div class="test-slide-top">
+                <span class="test-slide-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg></span>
+                <span class="test-slide-number" aria-hidden="true">06</span>
+              </div>
+              <h3><a class="test-slide-link" href="http://localhost:8000">ML Training Studio</a></h3>
+              <p>Train customized relevance rankers and maintainability classifiers on your own repos with automated dataset generation.</p>
+              <ul class="test-slide-facts"><li>Zero Leakage</li><li>Custom GBDT</li></ul>
+              <span class="test-slide-action" aria-hidden="true">Open ML Studio <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg></span>
+            </article>
+
+            <!-- Slide 07 -->
+            <article class="test-slide" aria-roledescription="slide" aria-label="Module 7 of 15">
+              <div class="test-slide-top">
+                <span class="test-slide-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+                <span class="test-slide-number" aria-hidden="true">07</span>
+              </div>
+              <h3><a class="test-slide-link" href="http://localhost:8000">Security &amp; Sandboxing</a></h3>
+              <p>Passive static text parsing that never executes arbitrary repository code, preventing prompt injection and remote exploits.</p>
+              <ul class="test-slide-facts"><li>Passive Ingest</li><li>Air-Gapped</li></ul>
+              <span class="test-slide-action" aria-hidden="true">Security Model <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg></span>
+            </article>
+
+            <!-- Slide 08 -->
+            <article class="test-slide" aria-roledescription="slide" aria-label="Module 8 of 15">
+              <div class="test-slide-top">
+                <span class="test-slide-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></span>
+                <span class="test-slide-number" aria-hidden="true">08</span>
+              </div>
+              <h3><a class="test-slide-link" href="http://localhost:8000">Multi-Repo Comparison</a></h3>
+              <p>Compare architectures, structural complexity, and dependency footprints across multiple projects side-by-side.</p>
+              <ul class="test-slide-facts"><li>Side-by-Side</li><li>Diff Analysis</li></ul>
+              <span class="test-slide-action" aria-hidden="true">Compare Repos <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg></span>
+            </article>
+          </div>
+
+          <div class="carousel-controls">
+            <nav class="carousel-nav" aria-label="Carousel navigation">
+              <button type="button" class="carousel-button carousel-prev" aria-label="Previous module">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m13 16-6-6 6-6"></path></svg>
+              </button>
+              <div class="carousel-steps" role="tablist">
+                <button type="button" class="is-active" aria-label="Module 1" aria-current="true"></button>
+                <button type="button" aria-label="Module 2"></button>
+                <button type="button" aria-label="Module 3"></button>
+                <button type="button" aria-label="Module 4"></button>
+                <button type="button" aria-label="Module 5"></button>
+                <button type="button" aria-label="Module 6"></button>
+                <button type="button" aria-label="Module 7"></button>
+                <button type="button" aria-label="Module 8"></button>
+              </div>
+              <button type="button" class="carousel-button carousel-next" aria-label="Next module">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 6 6-6 6"></path></svg>
+              </button>
+            </nav>
+            <span class="carousel-count"><b class="carousel-current">01</b> / 08</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta">
+      <div class="shell">
+        <div class="cta-panel">
+          <div class="section-kicker">Ready to Explore?</div>
+          <h2>Explore your codebase with 100% privacy and verified evidence.</h2>
+          <p>
+            Zero cloud telemetry. Sub-15ms hybrid search. Polyglot AST call trees. Ingest your repositories locally with full peace of mind.
+          </p>
+          <div class="cta-actions">
+            <a class="button button-primary button-large cta-with-badge" href="http://localhost:8000" target="_blank" rel="noopener">
+              Launch CodeLens Studio
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h13M11.5 5l5 5-5 5"></path></svg>
+              <span class="cta-badge">Free</span>
+            </a>
+            <a class="button button-light" href="https://github.com/jatinxrawat/CodeLens" target="_blank" rel="noopener">
+              View on GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="shell">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a class="logo" aria-label="CodeLens – Home" href="/">
+            <span class="logo-mark" aria-hidden="true" style="background: linear-gradient(135deg, #38bdf8, #6366f1); border-radius: 6px;"></span>
+            <span>CodeLens</span>
+          </a>
+          <p>100% Offline AI Code Intelligence &amp; ML Repository Analysis Platform. Engineered by Jatin Rawat.</p>
+        </div>
+        <div class="footer-cols">
+          <div class="footer-col">
+            <strong>Platform</strong>
+            <a href="#sammenligning">Hybrid Search</a>
+            <a href="#engines">AST Graph</a>
+            <a href="#engines">ML Studio</a>
+            <a href="#architecture">Reports &amp; Metrics</a>
+          </div>
+          <div class="footer-col">
+            <strong>Engines</strong>
+            <a href="#engines">Tree-sitter AST</a>
+            <a href="#engines">FAISS Dense Search</a>
+            <a href="#engines">RankBM25+ Subword</a>
+            <a href="#engines">Trained GBDT Ranker</a>
+            <a href="#engines">Qwen 2.5 Coder</a>
+          </div>
+          <div class="footer-col">
+            <strong>Documentation</strong>
+            <a href="#articles">Technical Whitepaper</a>
+            <a href="#articles">Model Cards</a>
+            <a href="#sammenligning">Evaluation Benchmarks</a>
+            <a href="#slik-fungerer-det">System Architecture</a>
+          </div>
+          <div class="footer-col">
+            <strong>Security &amp; Legal</strong>
+            <a href="#slik-fungerer-det">Zero Telemetry Model</a>
+            <a href="#slik-fungerer-det">Passive Sandboxing</a>
+            <a href="https://github.com/jatinxrawat/CodeLens" target="_blank" rel="noopener">MIT License</a>
+            <a href="https://github.com/jatinxrawat/CodeLens" target="_blank" rel="noopener">GitHub Repository</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-org">
+          <p>CodeLens Platform · Designed &amp; Developed by <strong>Jatin Rawat</strong> · MIT Licensed Open Source Project</p>
+          <small>Zero code telemetry · 100% offline local inference · Privacy guaranteed</small>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/jatinxrawat/CodeLens" target="_blank" rel="noopener">GitHub</a>
+          <a href="mailto:jatinrawat@example.com">Contact</a>
+          <a href="#slik-fungerer-det">Privacy Policy</a>
+          <a href="#engines">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactivity Scripts -->
+  <script>
+    (function() {
+      // 1. Theme Switcher
+      const themeToggle = document.querySelector('.theme-toggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+          const current = document.documentElement.dataset.theme;
+          const target = current === 'dark' ? 'light' : 'dark';
+          document.documentElement.dataset.theme = target;
+          try {
+            localStorage.setItem('theme', target);
+          } catch(e) {}
+        });
+      }
+
+      // 2. Interactive Answer Scale for Query Probe
+      const answerOptions = document.querySelectorAll('.answer-option');
+      answerOptions.forEach(opt => {
+        opt.addEventListener('click', function() {
+          answerOptions.forEach(o => {
+            const circle = o.querySelector('span');
+            if (circle) circle.classList.remove('selected');
+          });
+          const circle = this.querySelector('span');
+          if (circle) circle.classList.add('selected');
+        });
+      });
+
+      // 3. Carousel Logic
+      const track = document.querySelector('.test-carousel-track');
+      const slides = document.querySelectorAll('.test-slide');
+      const nextBtn = document.querySelector('.carousel-next');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const stepButtons = document.querySelectorAll('.carousel-steps button');
+      const countDisplay = document.querySelector('.carousel-current');
+      let currentSlide = 0;
+      const totalSlides = slides.length;
+
+      function goToSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        currentSlide = index;
+
+        slides.forEach((slide, i) => {
+          slide.classList.toggle('is-active', i === currentSlide);
+        });
+
+        stepButtons.forEach((btn, i) => {
+          btn.classList.toggle('is-active', i === currentSlide);
+          if (i === currentSlide) btn.setAttribute('aria-current', 'true');
+          else btn.removeAttribute('aria-current');
+        });
+
+        if (countDisplay) {
+          countDisplay.textContent = (currentSlide + 1).toString().padStart(2, '0');
+        }
+
+        if (slides[currentSlide]) {
+          slides[currentSlide].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+      }
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+      }
+      stepButtons.forEach((btn, idx) => {
+        btn.addEventListener('click', () => goToSlide(idx));
+      });
+    })();
+  </script>
+</body>
+</html>
+"""
+
+with open('index.html', 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print("Generated CodeLens index.html successfully!")

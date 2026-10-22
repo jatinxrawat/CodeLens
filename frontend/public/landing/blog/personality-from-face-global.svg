@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+  <title id="title">Personality from a face</title>
+  <desc id="description">Simple faces arranged inside a circle, grouped by how similar they seem, like the face-sorting task used in the study of first impressions.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101638"/>
+      <stop offset="1" stop-color="#263675"/>
+    </linearGradient>
+    <g id="face">
+      <circle r="52" fill="currentColor"/>
+      <circle cx="-17" cy="-10" r="6" fill="#101638"/>
+      <circle cx="17" cy="-10" r="6" fill="#101638"/>
+    </g>
+  </defs>
+  <rect width="1200" height="675" fill="url(#background)"/>
+  <circle cx="600" cy="338" r="280" fill="#ffffff" fill-opacity=".06" stroke="#c3cdff" stroke-opacity=".3" stroke-width="3"/>
+  <g stroke="#5b73ff" stroke-opacity=".7" stroke-width="3" stroke-dasharray="8 10" fill="none">
+    <path d="M445 255 L575 215"/>
+    <path d="M640 470 L770 425"/>
+    <path d="M575 215 L770 425"/>
+  </g>
+  <g>
+    <g transform="translate(445 255)" color="#afbdf6"><use href="#face"/><path d="M-20 18 Q0 34 20 18" stroke="#101638" stroke-width="6" fill="none" stroke-linecap="round"/></g>
+    <g transform="translate(575 215)" color="#c3b4f3"><use href="#face"/><path d="M-20 18 Q0 32 20 18" stroke="#101638" stroke-width="6" fill="none" stroke-linecap="round"/></g>
+    <g transform="translate(770 425)" color="#f3bccd"><use href="#face"/><path d="M-18 26 L18 26" stroke="#101638" stroke-width="6" stroke-linecap="round"/></g>
+    <g transform="translate(640 470)" color="#b2cfe9"><use href="#face"/><path d="M-20 30 Q0 16 20 30" stroke="#101638" stroke-width="6" fill="none" stroke-linecap="round"/></g>
+    <g transform="translate(470 420) scale(.8)" color="#f1d79a"><use href="#face"/><path d="M-18 24 L18 24" stroke="#101638" stroke-width="7" stroke-linecap="round"/></g>
+    <g transform="translate(745 255) scale(.8)" color="#ffffff"><use href="#face"/><path d="M-20 18 Q0 32 20 18" stroke="#101638" stroke-width="7" fill="none" stroke-linecap="round"/></g>
+  </g>
+</svg>
