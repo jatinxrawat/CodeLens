@@ -4,14 +4,14 @@
   :root {
     --background: #000000;
     --foreground: #f4f4f5;
-    --card: #09090b;
+    --card: #08080a;
     --card-foreground: #f4f4f5;
-    --border: #1c1c21;
-    --primary: #10b981;
-    --primary-foreground: #ffffff;
-    --accent: #38bdf8;
-    --muted: #9ca3af;
-    --muted-background: #121215;
+    --border: #18181b;
+    --primary: #ffffff;
+    --primary-foreground: #000000;
+    --accent: #27272a;
+    --muted: #71717a;
+    --muted-background: #000000;
   }
 
   body {
@@ -38,79 +38,121 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1c1c21;
+  background: #18181b;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2e2e36;
+  background: #27272a;
 }
 
 /* ==========================================================================
-   PURE OLED DARK BLACK THEME (PLATFORM-WIDE, EXCLUDING LANDING PAGE)
+   PURE LUXURY STEALTH BLACK THEME (PLATFORM-WIDE, EXCLUDING LANDING PAGE)
    ========================================================================== */
 
-/* Canvas / Backgrounds -> True Jet Black */
+/* Canvases & Viewport Backgrounds -> Pure OLED Pitch Black */
 .bg-\[\#0b0f14\],
 .bg-\[\#0d1117\],
+.bg-\[\#121215\],
+.bg-\[\#0a0a0f\],
+.bg-\[\#0f0f15\],
 .bg-\[\#212121\] {
   background-color: #000000 !important;
 }
 
-/* Translucent Headers / Navbars / Cards -> Pure Deep Obsidian Black */
-.bg-\[\#0d1117\]\/80 {
-  background-color: rgba(5, 5, 5, 0.88) !important;
+/* Translucent Headers / Navbars / Cards -> Pure Stealth Card Black */
+.bg-\[\#0d1117\]\/80,
+.bg-\[\#121215\]\/95 {
+  background-color: rgba(8, 8, 10, 0.95) !important;
 }
 
 .bg-\[\#161b22\],
 .bg-\[\#171717\],
-.bg-\[\#18191a\] {
-  background-color: #09090b !important;
+.bg-\[\#18191a\],
+.bg-\[\#181820\],
+.bg-\[\#181822\],
+.bg-\[\#181824\],
+.bg-\[\#14141d\],
+.bg-\[\#16161d\],
+.bg-\[\#1b1b22\],
+.bg-\[\#1b1b24\],
+.bg-\[\#1b1b26\] {
+  background-color: #08080a !important;
 }
 
-/* Secondary Panels / Inputs / Pill Elements -> Deep Charcoal Black */
+/* Secondary Panels / Inputs / Pill Elements -> Deep Onyx Black */
 .bg-\[\#21262d\],
 .bg-\[\#2f2f2f\],
-.bg-\[\#1f242c\] {
-  background-color: #121215 !important;
+.bg-\[\#1f242c\],
+.bg-\[\#1c1c24\],
+.bg-\[\#1c1c26\],
+.bg-\[\#20202d\],
+.bg-\[\#22222d\],
+.bg-\[\#262635\],
+.bg-\[\#28283a\] {
+  background-color: #000000 !important;
 }
 
 .bg-\[\#383838\],
-.bg-\[\#424242\] {
-  background-color: #1a1a20 !important;
-}
-
-/* Hover States -> Subtle Contrast Highlighting */
-.hover\:bg-\[\#161b22\]:hover {
+.bg-\[\#424242\],
+.bg-\[\#2e2e40\],
+.bg-\[\#323246\] {
   background-color: #121215 !important;
 }
 
+/* Hover States -> Subtle Stealth Contrast */
+.hover\:bg-\[\#161b22\]:hover,
+.hover\:bg-\[\#1d1d28\]:hover,
+.hover\:bg-\[\#13131c\]:hover {
+  background-color: #0c0c0e !important;
+}
+
 .hover\:bg-\[\#21262d\]:hover,
-.hover\:bg-\[\#2f2f2f\]:hover {
-  background-color: #18181e !important;
+.hover\:bg-\[\#2f2f2f\]:hover,
+.hover\:bg-\[\#262635\]:hover,
+.hover\:bg-\[\#28283a\]:hover,
+.hover\:bg-\[\#202029\]:hover,
+.hover\:bg-\[\#252535\]:hover {
+  background-color: #18181b !important;
 }
 
-.hover\:bg-\[\#383838\]:hover {
-  background-color: #22222a !important;
-}
-
-/* Borders -> Ultra-sleek Dark Neutral Borders */
+/* Borders -> Ultra-sleek Dark Graphite / Onyx Borders */
 .border-\[\#30363d\],
 .border-\[\#2f2f2f\],
-.border-\[\#383838\] {
-  border-color: #1c1c21 !important;
+.border-\[\#383838\],
+.border-\[\#262635\],
+.border-\[\#28283a\],
+.border-\[\#2d2d3a\],
+.border-\[\#2e2e40\],
+.border-\[\#2e2e42\],
+.border-\[\#252530\],
+.border-\[\#252532\],
+.border-\[\#29293b\],
+.border-\[\#2b2b3d\],
+.border-\[\#323244\],
+.border-\[\#323248\],
+.border-\[\#20202e\] {
+  border-color: #18181b !important;
 }
 
-.hover\:border-\[\#8b949e\]:hover {
-  border-color: #3f3f46 !important;
+.hover\:border-\[\#8b949e\]:hover,
+.hover\:border-\[\#38384d\]:hover,
+.hover\:border-\[\#44445c\]:hover {
+  border-color: #27272a !important;
 }
 
 /* Crisp Text Contrast on OLED Black */
-.text-\[\#e6edf3\] {
+.text-\[\#e6edf3\],
+.text-\[\#ececec\] {
   color: #f4f4f5 !important;
 }
 
-.text-\[\#8b949e\] {
-  color: #9ca3af !important;
+.text-\[\#8b949e\],
+.text-\[\#a1a1aa\] {
+  color: #a1a1aa !important;
 }
 
+.text-\[\#71717a\],
+.text-\[\#52525b\] {
+  color: #71717a !important;
+}

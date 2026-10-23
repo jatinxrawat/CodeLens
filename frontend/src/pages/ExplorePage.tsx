@@ -212,47 +212,35 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
     }
   };
 
-  const getGradeColor = (grade: string) => {
-    switch (grade) {
-      case 'A+':
-        return 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
-      case 'A':
-        return 'bg-teal-500/20 text-teal-300 border-teal-500/40';
-      case 'B':
-        return 'bg-sky-500/20 text-sky-300 border-sky-500/40';
-      case 'C':
-        return 'bg-amber-500/20 text-amber-300 border-amber-500/40';
-      default:
-        return 'bg-rose-500/20 text-rose-300 border-rose-500/40';
-    }
+  const getGradeColor = (_grade: string) => {
+    return 'bg-[#000000] text-zinc-300 border-[#1c1c21] hover:border-zinc-600 hover:text-white';
   };
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 text-[#f4f4f5] select-none font-sans">
       {/* Hero Header */}
-      <div className="bg-gradient-to-r from-[#121218] via-[#161622] to-[#121218] border border-[#222230] rounded-2xl p-6 shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-sky-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="bg-[#08080a] border border-[#18181b] rounded-2xl p-6 shadow-sm relative overflow-hidden">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1.5">
-            <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded-full bg-sky-950/60 border border-sky-800/50 text-[11px] font-mono text-sky-300">
-              <Compass className="w-3.5 h-3.5 text-sky-400" />
+            <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-[11px] font-mono text-zinc-300">
+              <Compass className="w-3.5 h-3.5 text-zinc-300" />
               <span>Explore Top Repositories</span>
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-white">
               Discover Open-Source Codebases
             </h1>
-            <p className="text-xs text-[#9ca3af] max-w-2xl leading-relaxed">
-              Explore leading repositories with calculated <strong className="text-sky-300">Contribution-Readiness Scores</strong>. Click <strong>Analyze in CodeLens</strong> on any project to clone, extract AST chunks, and index it locally with AST search and reasoning.
+            <p className="text-xs text-[#a1a1aa] max-w-2xl leading-relaxed">
+              Explore leading repositories with calculated <span className="text-zinc-200 font-medium">Contribution-Readiness Scores</span>. Click <strong className="text-white">Analyze in CodeLens</strong> on any project to clone, extract AST chunks, and index it locally with AST search and reasoning.
             </p>
           </div>
 
           <div className="flex items-center space-x-3 shrink-0">
             <button
               onClick={() => loadRepos(true)}
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#1d1d28] hover:bg-[#272738] border border-[#2e2e42] text-xs text-[#ececec] transition-colors cursor-pointer"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-[#000000] hover:bg-zinc-900 border border-[#1c1c21] text-xs text-[#ececec] transition-colors cursor-pointer"
               title="Refresh feed"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
+              <RotateCcw className="w-3.5 h-3.5 text-zinc-400" />
               <span>Refresh</span>
             </button>
           </div>
@@ -260,7 +248,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-[#0e0e14] border border-[#20202c] rounded-2xl p-4 shadow-sm space-y-3">
+      <div className="bg-[#08080a] border border-[#18181b] rounded-2xl p-4 shadow-sm space-y-3">
         <form onSubmit={handleSearchSubmit} className="flex flex-col sm:flex-row gap-2.5">
           <div className="relative flex-1">
             <Search className="w-4 h-4 text-[#71717a] absolute left-3.5 top-3" />
@@ -269,19 +257,19 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search repositories by name, keywords, or topics..."
-              className="w-full bg-[#161620] border border-[#29293a] rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-[#71717a] focus:outline-none focus:border-sky-500 font-sans"
+              className="w-full bg-[#000000] border border-[#1c1c21] rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-[#71717a] focus:outline-none focus:border-zinc-500 font-sans"
             />
           </div>
           <button
             type="submit"
-            className="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-semibold transition-all cursor-pointer shadow-md"
+            className="px-4 py-2 bg-white hover:bg-zinc-200 text-black rounded-xl text-xs font-semibold transition-all cursor-pointer shadow-sm"
           >
             Search Repos
           </button>
         </form>
 
         {/* Filter Pills */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-[#1a1a24] text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-[#18181b] text-xs">
           {/* Languages */}
           <div className="flex items-center space-x-1.5 overflow-x-auto py-1">
             <span className="text-[11px] font-mono text-[#71717a] uppercase mr-1">Lang:</span>
@@ -291,8 +279,8 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
                 onClick={() => setSelectedLanguage(lang)}
                 className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                   selectedLanguage === lang
-                    ? 'bg-sky-500 text-white shadow-sm'
-                    : 'bg-[#181822] text-[#9ca3af] hover:text-white hover:bg-[#20202e]'
+                    ? 'bg-white text-black font-semibold shadow-sm'
+                    : 'bg-[#000000] text-[#a1a1aa] hover:text-white hover:bg-zinc-900 border border-[#1c1c21]'
                 }`}
               >
                 {lang}
@@ -302,12 +290,12 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
 
           {/* Right: Stars & Active Toggle */}
           <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-1.5 text-xs text-[#9ca3af]">
+            <div className="flex items-center space-x-1.5 text-xs text-[#a1a1aa]">
               <span className="font-mono text-[11px]">Min Stars:</span>
               <select
                 value={minStars}
                 onChange={(e) => setMinStars(Number(e.target.value))}
-                className="bg-[#181822] border border-[#2b2b3d] text-white text-xs rounded-lg px-2 py-1 focus:outline-none focus:border-sky-500 cursor-pointer"
+                className="bg-[#000000] border border-[#1c1c21] text-white text-xs rounded-lg px-2 py-1 focus:outline-none focus:border-zinc-500 cursor-pointer"
               >
                 <option value={50}>50+ stars</option>
                 <option value={500}>500+ stars</option>
@@ -320,11 +308,11 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
               onClick={() => setRecentlyActive(!recentlyActive)}
               className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
                 recentlyActive
-                  ? 'bg-amber-950/40 text-amber-300 border-amber-600/40'
-                  : 'bg-[#181822] text-[#71717a] border-[#29293a]'
+                  ? 'bg-zinc-900 text-white border-zinc-700'
+                  : 'bg-[#000000] text-[#71717a] border-[#1c1c21]'
               }`}
             >
-              <Flame className={`w-3.5 h-3.5 ${recentlyActive ? 'text-amber-400' : 'text-[#71717a]'}`} />
+              <Flame className={`w-3.5 h-3.5 ${recentlyActive ? 'text-zinc-300' : 'text-[#71717a]'}`} />
               <span>Trending (Active)</span>
             </button>
           </div>
@@ -389,7 +377,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
             return (
               <div
                 key={repo.id}
-                className="bg-[#0f0f15] hover:bg-[#13131c] border border-[#20202e] hover:border-[#323248] rounded-2xl p-5 flex flex-col justify-between transition-all duration-200 shadow-md group relative"
+                className="bg-[#08080a] hover:bg-[#0d0d10] border border-[#18181b] hover:border-zinc-700 rounded-2xl p-5 flex flex-col justify-between transition-all duration-200 shadow-sm group relative"
               >
                 <div>
                   {/* Top Header: Avatar + Repo Name + External Link */}
@@ -398,10 +386,10 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
                       <img
                         src={repo.owner.avatar_url || 'https://github.com/github.png'}
                         alt={repo.owner.login}
-                        className="w-8 h-8 rounded-lg border border-[#28283a] object-cover shrink-0"
+                        className="w-8 h-8 rounded-lg border border-[#1c1c21] object-cover shrink-0"
                       />
                       <div className="min-w-0">
-                        <h3 className="text-sm font-semibold text-white truncate group-hover:text-sky-400 transition-colors">
+                        <h3 className="text-sm font-semibold text-white truncate group-hover:text-zinc-200 transition-colors">
                           {repo.name}
                         </h3>
                         <p className="text-[11px] text-[#71717a] truncate font-mono">
@@ -414,7 +402,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
                       href={repo.html_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-1.5 rounded-lg hover:bg-[#242436] text-[#71717a] hover:text-white transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-zinc-900 text-[#71717a] hover:text-white transition-colors"
                       title="View on GitHub"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -432,16 +420,16 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
                       <button
                         type="button"
                         onClick={() => setActiveReadinessRepo(repo)}
-                        className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl border text-xs cursor-pointer transition-all hover:scale-[1.01] ${getGradeColor(
+                        className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl border text-xs cursor-pointer transition-all ${getGradeColor(
                           readiness.grade
                         )}`}
                         title="Click to view full 6-factor readiness breakdown"
                       >
                         <div className="flex items-center space-x-1.5">
-                          <ShieldCheck className="w-4 h-4" />
-                          <span className="font-semibold">{readiness.score}/100 Readiness</span>
+                          <ShieldCheck className="w-4 h-4 text-zinc-300" />
+                          <span className="font-semibold text-zinc-200">{readiness.score}/100 Readiness</span>
                         </div>
-                        <span className="font-mono text-[11px] uppercase font-bold tracking-wider">
+                        <span className="font-mono text-[11px] uppercase font-bold tracking-wider text-zinc-400">
                           Grade {readiness.grade} →
                         </span>
                       </button>
@@ -451,15 +439,15 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
                   {/* Meta Stats: Stars, Forks, Language */}
                   <div className="flex flex-wrap items-center gap-3 text-xs text-[#8e8e99] mb-4">
                     <span className="flex items-center space-x-1">
-                      <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                      <span className="font-mono">{repo.stars.toLocaleString()}</span>
+                      <Star className="w-3.5 h-3.5 text-zinc-400 fill-zinc-400" />
+                      <span className="font-mono text-zinc-300">{repo.stars.toLocaleString()}</span>
                     </span>
                     <span className="flex items-center space-x-1">
                       <GitFork className="w-3.5 h-3.5 text-[#71717a]" />
-                      <span className="font-mono">{repo.forks.toLocaleString()}</span>
+                      <span className="font-mono text-zinc-400">{repo.forks.toLocaleString()}</span>
                     </span>
                     {repo.language && (
-                      <span className="px-2 py-0.5 rounded-md bg-[#1a1a24] text-[11px] font-mono text-[#c4c4d4]">
+                      <span className="px-2 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-[11px] font-mono text-zinc-300">
                         {repo.language}
                       </span>
                     )}
@@ -467,12 +455,12 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
                 </div>
 
                 {/* Bottom CTA: Analyze in CodeLens */}
-                <div className="pt-3 border-t border-[#1c1c28]">
+                <div className="pt-3 border-t border-[#18181b]">
                   <button
                     onClick={() => handleAnalyze(repo)}
-                    className="w-full flex items-center justify-center space-x-2 py-2 px-3 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white text-xs font-semibold shadow-md transition-all cursor-pointer group-hover:shadow-sky-500/20"
+                    className="w-full flex items-center justify-center space-x-2 py-2 px-3 rounded-xl bg-white hover:bg-zinc-200 text-black text-xs font-semibold shadow-sm transition-all cursor-pointer"
                   >
-                    <Sparkles className="w-3.5 h-3.5" />
+                    <Sparkles className="w-3.5 h-3.5 text-black" />
                     <span>Analyze in CodeLens</span>
                   </button>
                 </div>
@@ -487,7 +475,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
         <div className="text-center pt-4">
           <button
             onClick={handleLoadMore}
-            className="px-6 py-2.5 rounded-xl bg-[#161622] hover:bg-[#202030] border border-[#2b2b3d] text-xs font-medium text-white transition-colors cursor-pointer shadow-sm"
+            className="px-6 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-medium text-white transition-colors cursor-pointer shadow-sm"
           >
             Load More Repositories
           </button>
@@ -519,13 +507,13 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
             </div>
 
             {/* Score Callout */}
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-[#181824] border border-[#2a2a3e]">
+            <div className="flex items-center justify-between p-4 rounded-2xl bg-[#000000] border border-[#1c1c21]">
               <div>
                 <span className="text-3xl font-extrabold text-white">
                   {activeReadinessRepo.readiness.score}
                 </span>
                 <span className="text-xs text-[#71717a] ml-1">/ 100</span>
-                <p className="text-xs text-[#9ca3af] mt-0.5">
+                <p className="text-xs text-[#a1a1aa] mt-0.5">
                   Overall Score: Grade {activeReadinessRepo.readiness.grade}
                 </p>
               </div>
@@ -540,7 +528,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
 
             {/* Factor Bars */}
             <div className="space-y-3">
-              <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#71717a]">
+              <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#71717a] font-mono">
                 Factor Breakdown
               </h4>
               {[
@@ -586,13 +574,13 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
                 <div key={idx} className="space-y-1">
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-[#ececec] font-medium">{f.label}</span>
-                    <span className="font-mono text-sky-400">
+                    <span className="font-mono text-zinc-300">
                       {f.score} / {f.max} pts
                     </span>
                   </div>
-                  <div className="h-1.5 bg-[#1f1f2e] rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-[#141417] rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-sky-500 to-emerald-500 rounded-full"
+                      className="h-full bg-white rounded-full"
                       style={{ width: `${(f.score / f.max) * 100}%` }}
                     />
                   </div>
@@ -608,7 +596,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
                   setActiveReadinessRepo(null);
                   handleAnalyze(r);
                 }}
-                className="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-semibold cursor-pointer shadow-md"
+                className="px-4 py-2 bg-white hover:bg-zinc-200 text-black rounded-xl text-xs font-semibold cursor-pointer shadow-sm transition-all"
               >
                 Analyze this Repo in CodeLens
               </button>
@@ -619,12 +607,12 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
 
       {/* Ingestion Progress Modal */}
       {analyzingRepoUrl && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#121218] border border-[#2e2e42] rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5 text-center animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[#08080a] border border-[#222226] rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5 text-center animate-in zoom-in-95 duration-200">
             <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mx-auto border ${
               analysisError
-                ? 'bg-rose-500/20 border-rose-500/40 text-rose-400'
-                : 'bg-sky-500/20 border-sky-500/40 text-sky-400'
+                ? 'bg-rose-950/40 border-rose-800 text-rose-300'
+                : 'bg-zinc-900 border-zinc-700 text-white'
             }`}>
               {analysisError ? (
                 <AlertCircle className="w-6 h-6" />
@@ -637,37 +625,37 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
               <h3 className="text-base font-bold text-white">
                 Analyzing {analyzingRepoName}
               </h3>
-              <p className="text-xs text-sky-400 font-semibold mt-1">
+              <p className="text-xs text-zinc-300 font-semibold mt-1">
                 Stage: {analysisStage}
               </p>
             </div>
 
             {/* Progress Bar */}
             <div className="space-y-1.5">
-              <div className="h-2.5 bg-[#1b1b26] rounded-full overflow-hidden border border-[#2b2b3d]">
+              <div className="h-2.5 bg-[#141417] rounded-full overflow-hidden border border-[#222226]">
                 <div
                   className={`h-full rounded-full transition-all duration-300 ${
                     analysisError
-                      ? 'bg-rose-500'
-                      : 'bg-gradient-to-r from-sky-500 to-emerald-400'
+                      ? 'bg-rose-600'
+                      : 'bg-white'
                   }`}
                   style={{ width: `${Math.max(0, Math.min(100, analysisProgress))}%` }}
                 />
               </div>
               <div className="flex justify-between text-[11px] font-mono text-[#71717a]">
                 <span className="text-[#a1a1aa] font-medium">{analysisStage}</span>
-                <span className="text-sky-400 font-semibold">{analysisProgress}%</span>
+                <span className="text-white font-semibold">{analysisProgress}%</span>
               </div>
             </div>
 
             {/* Message or Explanatory Text */}
-            <p className="text-xs text-[#9ca3af] leading-relaxed bg-[#181822] p-2.5 rounded-xl border border-[#262638]">
+            <p className="text-xs text-[#a1a1aa] leading-relaxed bg-[#000000] p-3 rounded-xl border border-[#1c1c21]">
               {analysisMessage}
             </p>
 
             {analysisError ? (
               <div className="space-y-3 pt-2">
-                <div className="p-3 bg-rose-950/40 border border-rose-800/50 rounded-xl text-xs text-rose-300 text-left leading-relaxed">
+                <div className="p-3 bg-[#130707] border border-[#3b1212] rounded-xl text-xs text-rose-300 text-left leading-relaxed">
                   {analysisError}
                 </div>
                 <div className="flex gap-2">
@@ -680,7 +668,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
                       setAnalyzingRepoUrl(null);
                       setAnalysisError(null);
                     }}
-                    className="flex-1 py-2 bg-[#1f1f2e] hover:bg-[#2a2a3e] text-[#a1a1aa] hover:text-white rounded-xl text-xs font-semibold transition"
+                    className="flex-1 py-2 bg-[#121215] hover:bg-[#18181c] text-[#a1a1aa] hover:text-white rounded-xl text-xs font-semibold border border-[#222226] transition"
                   >
                     Dismiss
                   </button>
@@ -690,7 +678,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({
                         handleAnalyze(analyzingItem);
                       }
                     }}
-                    className="flex-1 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition shadow-lg shadow-sky-600/30"
+                    className="flex-1 py-2 bg-white hover:bg-zinc-200 text-black rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition shadow-sm"
                   >
                     <RefreshCw className="w-3.5 h-3.5" />
                     <span>Retry Analysis</span>

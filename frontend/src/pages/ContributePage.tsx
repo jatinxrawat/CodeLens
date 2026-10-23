@@ -301,38 +301,38 @@ export const ContributePage: React.FC<ContributePageProps> = ({
   const getDifficultyBadge = (diff: string) => {
     switch (diff.toLowerCase()) {
       case 'easy':
-        return 'bg-emerald-950/60 text-emerald-400 border-emerald-600/50';
+        return 'bg-[#000000] text-zinc-200 border-[#1c1c21]';
       case 'medium':
-        return 'bg-amber-950/60 text-amber-300 border-amber-600/50';
+        return 'bg-[#000000] text-zinc-300 border-[#1c1c21]';
       default:
-        return 'bg-rose-950/60 text-rose-300 border-rose-600/50';
+        return 'bg-[#000000] text-zinc-400 border-[#1c1c21]';
     }
   };
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 text-[#f4f4f5] select-none font-sans">
-      {/* Seasonal Banner Slot (Driven by Config / Hacktoberfest / Student Season) */}
+      {/* Seasonal Banner Slot */}
       {showBanner && (
-        <div className="bg-gradient-to-r from-purple-950/70 via-indigo-950/70 to-sky-950/70 border border-purple-500/40 rounded-2xl p-4 shadow-lg flex items-center justify-between animate-in fade-in duration-300">
+        <div className="bg-[#08080a] border border-[#18181b] rounded-2xl p-4 shadow-sm flex items-center justify-between animate-in fade-in duration-300">
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-300">
-              <Award className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-200">
+              <Award className="w-5 h-5 text-white" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-purple-300 bg-purple-900/60 px-2 py-0.5 rounded-full border border-purple-500/30">
+                <span className="text-xs font-bold uppercase tracking-wider text-zinc-200 bg-zinc-900 px-2 py-0.5 rounded-md border border-zinc-800 font-mono">
                   Student Open-Source Challenge
                 </span>
-                <span className="text-[11px] text-purple-200/80">Active Season</span>
+                <span className="text-[11px] text-[#71717a] font-mono">Active Season</span>
               </div>
-              <p className="text-xs text-white mt-0.5">
-                Pick a <strong>Good First Issue</strong> below, click <strong>Analyze in CodeLens</strong> to inspect likely files with AST search, and submit your PR!
+              <p className="text-xs text-[#a1a1aa] mt-0.5">
+                Pick a <strong className="text-white">Good First Issue</strong> below, click <strong className="text-white">Analyze</strong> to inspect likely files with AST search, and submit your PR!
               </p>
             </div>
           </div>
           <button
             onClick={() => setShowBanner(false)}
-            className="p-1.5 rounded-lg hover:bg-white/10 text-white/60 hover:text-white"
+            className="p-1.5 rounded-lg hover:bg-zinc-900 text-[#71717a] hover:text-white transition-colors"
             title="Dismiss banner"
           >
             <X className="w-4 h-4" />
@@ -343,26 +343,26 @@ export const ContributePage: React.FC<ContributePageProps> = ({
       {/* Main Header & View Mode Switcher */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-800/50 text-[11px] font-mono text-emerald-300 mb-1">
-            <GitPullRequest className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-[11px] font-mono text-zinc-300 mb-1">
+            <GitPullRequest className="w-3.5 h-3.5 text-zinc-300" />
             <span>Open-Source Contribution Hub</span>
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-white">
             Find Good First Issues & Start Contributing
           </h1>
-          <p className="text-xs text-[#9ca3af] mt-1 max-w-2xl">
+          <p className="text-xs text-[#a1a1aa] mt-1 max-w-2xl leading-relaxed">
             Curated beginner-friendly issues enriched with Gemini summaries, required skills, and likely code files to inspect.
           </p>
         </div>
 
         {/* Tab switcher: All Issues vs My Contributions */}
-        <div className="flex items-center bg-[#101016] border border-[#20202e] rounded-xl p-1 text-xs">
+        <div className="flex items-center bg-[#000000] border border-[#1c1c21] rounded-xl p-1 text-xs">
           <button
             onClick={() => setActiveTab('all')}
             className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
               activeTab === 'all'
-                ? 'bg-sky-600 text-white shadow-sm'
-                : 'text-[#9ca3af] hover:text-white'
+                ? 'bg-white text-black font-semibold shadow-sm'
+                : 'text-[#a1a1aa] hover:text-white'
             }`}
           >
             Browse Issues ({issues.length})
@@ -371,14 +371,14 @@ export const ContributePage: React.FC<ContributePageProps> = ({
             onClick={() => setActiveTab('my_contributions')}
             className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer flex items-center space-x-1.5 ${
               activeTab === 'my_contributions'
-                ? 'bg-sky-600 text-white shadow-sm'
-                : 'text-[#9ca3af] hover:text-white'
+                ? 'bg-white text-black font-semibold shadow-sm'
+                : 'text-[#a1a1aa] hover:text-white'
             }`}
           >
             <Bookmark className="w-3.5 h-3.5" />
             <span>My Contributions</span>
             {(bookmarkedIds.size > 0 || workingIds.size > 0) && (
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span className="w-1.5 h-1.5 rounded-full bg-white" />
             )}
           </button>
         </div>
@@ -386,7 +386,7 @@ export const ContributePage: React.FC<ContributePageProps> = ({
 
       {/* Filter and Search Bar (only for All Issues tab) */}
       {activeTab === 'all' && (
-        <div className="bg-[#0e0e14] border border-[#20202c] rounded-2xl p-4 shadow-sm space-y-3">
+        <div className="bg-[#08080a] border border-[#18181b] rounded-2xl p-4 shadow-sm space-y-3">
           <form onSubmit={handleSearchSubmit} className="flex flex-col sm:flex-row gap-2.5">
             <div className="relative flex-1">
               <Search className="w-4 h-4 text-[#71717a] absolute left-3.5 top-3" />
@@ -395,19 +395,19 @@ export const ContributePage: React.FC<ContributePageProps> = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search issues by title, keywords, or labels..."
-                className="w-full bg-[#161620] border border-[#29293a] rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-[#71717a] focus:outline-none focus:border-sky-500 font-sans"
+                className="w-full bg-[#000000] border border-[#1c1c21] rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-[#71717a] focus:outline-none focus:border-zinc-500 font-sans"
               />
             </div>
             <button
               type="submit"
-              className="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-semibold transition-all cursor-pointer shadow-md"
+              className="px-4 py-2 bg-white hover:bg-zinc-200 text-black rounded-xl text-xs font-semibold transition-all cursor-pointer shadow-sm"
             >
               Search Issues
             </button>
           </form>
 
           {/* Filter Pills */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-[#1a1a24] text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-[#18181b] text-xs">
             {/* Languages */}
             <div className="flex items-center space-x-1.5 overflow-x-auto py-1">
               <span className="text-[11px] font-mono text-[#71717a] uppercase mr-1">Lang:</span>
@@ -417,8 +417,8 @@ export const ContributePage: React.FC<ContributePageProps> = ({
                   onClick={() => setSelectedLanguage(lang)}
                   className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                     selectedLanguage === lang
-                      ? 'bg-sky-500 text-white shadow-sm'
-                      : 'bg-[#181822] text-[#9ca3af] hover:text-white hover:bg-[#20202e]'
+                      ? 'bg-white text-black font-semibold shadow-sm'
+                      : 'bg-[#000000] text-[#a1a1aa] hover:text-white hover:bg-zinc-900 border border-[#1c1c21]'
                   }`}
                 >
                   {lang}
@@ -433,7 +433,7 @@ export const ContributePage: React.FC<ContributePageProps> = ({
                 <select
                   value={selectedDomain}
                   onChange={(e) => setSelectedDomain(e.target.value)}
-                  className="bg-[#181822] border border-[#2b2b3d] text-white text-xs rounded-lg px-2 py-1 focus:outline-none focus:border-sky-500 cursor-pointer"
+                  className="bg-[#000000] border border-[#1c1c21] text-white text-xs rounded-lg px-2 py-1 focus:outline-none focus:border-zinc-500 cursor-pointer"
                 >
                   {domains.map((d) => (
                     <option key={d} value={d}>
@@ -448,7 +448,7 @@ export const ContributePage: React.FC<ContributePageProps> = ({
                 <select
                   value={selectedDifficulty}
                   onChange={(e) => setSelectedDifficulty(e.target.value)}
-                  className="bg-[#181822] border border-[#2b2b3d] text-white text-xs rounded-lg px-2 py-1 focus:outline-none focus:border-sky-500 cursor-pointer"
+                  className="bg-[#000000] border border-[#1c1c21] text-white text-xs rounded-lg px-2 py-1 focus:outline-none focus:border-zinc-500 cursor-pointer"
                 >
                   {difficulties.map((diff) => (
                     <option key={diff} value={diff}>
@@ -645,22 +645,22 @@ export const ContributePage: React.FC<ContributePageProps> = ({
               <div
                 key={issue.id}
                 onClick={() => setSelectedIssue(issue)}
-                className="bg-[#0f0f15] hover:bg-[#13131c] border border-[#20202e] hover:border-[#323248] rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-200 cursor-pointer shadow-sm group"
+                className="bg-[#08080a] hover:bg-[#0c0c0e] border border-[#18181b] hover:border-[#27272a] rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-200 cursor-pointer shadow-sm group"
               >
                 {/* Left Meta & Title */}
                 <div className="space-y-1.5 flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2 text-xs">
-                    <span className="font-mono text-sky-400 font-semibold truncate max-w-xs">
+                    <span className="font-mono text-zinc-200 font-semibold truncate max-w-xs">
                       {issue.repository}
                     </span>
-                    <span className="text-[#52525b]">•</span>
-                    <span className="text-[11px] font-mono text-[#71717a]">
+                    <span className="text-zinc-600">•</span>
+                    <span className="text-[11px] font-mono text-zinc-400">
                       #{issue.number}
                     </span>
 
                     {/* Difficulty Chip */}
                     <span
-                      className={`px-2 py-0.2 rounded-full text-[10px] font-mono uppercase font-bold border ${getDifficultyBadge(
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-mono uppercase font-bold border ${getDifficultyBadge(
                         issue.difficulty
                       )}`}
                     >
@@ -669,13 +669,13 @@ export const ContributePage: React.FC<ContributePageProps> = ({
 
                     {/* Readiness Badge */}
                     {issue.readiness && (
-                      <span className="px-2 py-0.2 rounded-full text-[10px] font-mono bg-sky-950/50 border border-sky-800/40 text-sky-300">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#000000] border border-[#1c1c21] text-zinc-300">
                         {issue.readiness.score}/100 readiness
                       </span>
                     )}
                   </div>
 
-                  <h3 className="text-sm font-semibold text-white group-hover:text-sky-300 transition-colors leading-snug line-clamp-1">
+                  <h3 className="text-sm font-semibold text-white group-hover:text-zinc-200 transition-colors leading-snug line-clamp-1">
                     {issue.title}
                   </h3>
 
@@ -684,7 +684,7 @@ export const ContributePage: React.FC<ContributePageProps> = ({
                     {issue.skills.map((skill, sIdx) => (
                       <span
                         key={sIdx}
-                        className="px-2 py-0.5 rounded-md bg-[#181824] border border-[#28283a] text-[10px] font-mono text-[#a1a1aa]"
+                        className="px-2 py-0.5 rounded-md bg-[#000000] border border-[#1c1c21] text-[10px] font-mono text-zinc-400"
                       >
                         {skill}
                       </span>
@@ -692,7 +692,7 @@ export const ContributePage: React.FC<ContributePageProps> = ({
                     {issue.labels.slice(0, 2).map((label, lIdx) => (
                       <span
                         key={lIdx}
-                        className="px-2 py-0.5 rounded-md bg-[#1d1d2b] text-[10px] font-mono text-[#818cf8]"
+                        className="px-2 py-0.5 rounded-md bg-[#000000] border border-[#1c1c21] text-[10px] font-mono text-zinc-300"
                       >
                         {label}
                       </span>
@@ -701,14 +701,14 @@ export const ContributePage: React.FC<ContributePageProps> = ({
                 </div>
 
                 {/* Right Action Icons & Analyze Button */}
-                <div className="flex items-center space-x-2 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-[#1c1c28]">
+                <div className="flex items-center space-x-2 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-[#18181b]">
                   {/* Bookmark Button */}
                   <button
                     onClick={(e) => handleToggleBookmark(e, issue)}
                     className={`p-2 rounded-xl border transition-colors cursor-pointer ${
                       isBookmarked
-                        ? 'bg-amber-950/60 border-amber-500/50 text-amber-300'
-                        : 'bg-[#181824] hover:bg-[#222232] border-[#29293a] text-[#71717a] hover:text-white'
+                        ? 'bg-zinc-800 border-zinc-600 text-white'
+                        : 'bg-[#000000] hover:bg-zinc-900 border-[#1c1c21] text-zinc-400 hover:text-white'
                     }`}
                     title={isBookmarked ? 'Remove bookmark' : 'Bookmark this issue'}
                   >
@@ -720,8 +720,8 @@ export const ContributePage: React.FC<ContributePageProps> = ({
                     onClick={(e) => handleToggleWorking(e, issue)}
                     className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-xl border text-xs font-medium transition-colors cursor-pointer ${
                       isWorking
-                        ? 'bg-emerald-950/70 border-emerald-500/60 text-emerald-300'
-                        : 'bg-[#181824] hover:bg-[#222232] border-[#29293a] text-[#71717a] hover:text-white'
+                        ? 'bg-zinc-800 border-zinc-600 text-white'
+                        : 'bg-[#000000] hover:bg-zinc-900 border-[#1c1c21] text-zinc-400 hover:text-white'
                     }`}
                     title={isWorking ? 'Stop working on this' : "Mark as I'm working on this"}
                   >
@@ -735,7 +735,7 @@ export const ContributePage: React.FC<ContributePageProps> = ({
                       e.stopPropagation();
                       handleAnalyze(issue);
                     }}
-                    className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white text-xs font-semibold shadow-md transition-all cursor-pointer"
+                    className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-zinc-200 text-black text-xs font-semibold shadow-sm transition-all cursor-pointer"
                   >
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>Analyze</span>
@@ -752,7 +752,7 @@ export const ContributePage: React.FC<ContributePageProps> = ({
         <div className="text-center pt-4">
           <button
             onClick={handleLoadMore}
-            className="px-6 py-2.5 rounded-xl bg-[#161622] hover:bg-[#202030] border border-[#2b2b3d] text-xs font-medium text-white transition-colors cursor-pointer shadow-sm"
+            className="px-6 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 text-xs font-medium text-white transition-colors cursor-pointer shadow-sm"
           >
             Load More Issues
           </button>
@@ -761,21 +761,21 @@ export const ContributePage: React.FC<ContributePageProps> = ({
 
       {/* Issue Detail Drawer (Slide-out Right Drawer) */}
       {selectedIssue && (
-        <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex justify-end animate-in fade-in duration-200">
-          <div className="w-full max-w-xl bg-[#121218] border-l border-[#2e2e42] h-full flex flex-col justify-between shadow-2xl p-6 overflow-y-auto animate-in slide-in-from-right duration-300 space-y-6">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex justify-end animate-in fade-in duration-200">
+          <div className="w-full max-w-xl bg-[#08080a] border-l border-[#18181b] h-full flex flex-col justify-between shadow-2xl p-6 overflow-y-auto animate-in slide-in-from-right duration-300 space-y-6">
             <div className="space-y-5">
               {/* Drawer Header */}
-              <div className="flex items-start justify-between border-b border-[#222232] pb-4">
+              <div className="flex items-start justify-between border-b border-[#18181b] pb-4">
                 <div className="space-y-1">
                   <div className="flex items-center space-x-2">
-                    <span className="text-xs font-mono text-sky-400 font-bold">
+                    <span className="text-xs font-mono text-white font-bold">
                       {selectedIssue.repository}
                     </span>
-                    <span className="text-[11px] text-[#71717a] font-mono">
+                    <span className="text-[11px] text-zinc-400 font-mono">
                       #{selectedIssue.number}
                     </span>
                     <span
-                      className={`px-2 py-0.2 rounded-full text-[10px] font-mono uppercase font-bold border ${getDifficultyBadge(
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-mono uppercase font-bold border ${getDifficultyBadge(
                         selectedIssue.difficulty
                       )}`}
                     >
@@ -788,19 +788,19 @@ export const ContributePage: React.FC<ContributePageProps> = ({
                 </div>
                 <button
                   onClick={() => setSelectedIssue(null)}
-                  className="p-1.5 rounded-lg hover:bg-[#222232] text-[#71717a] hover:text-white"
+                  className="p-1.5 rounded-lg hover:bg-zinc-900 text-zinc-400 hover:text-white"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
               {/* Gemini AI Summary Box */}
-              <div className="bg-gradient-to-br from-sky-950/40 to-indigo-950/40 border border-sky-500/30 rounded-2xl p-4 space-y-2">
-                <div className="flex items-center space-x-1.5 text-sky-300 text-xs font-semibold">
-                  <Sparkles className="w-3.5 h-3.5 text-sky-400" />
-                  <span>Gemini AI Mentor Summary</span>
+              <div className="bg-[#000000] border border-[#18181b] rounded-2xl p-4 space-y-2">
+                <div className="flex items-center space-x-1.5 text-zinc-200 text-xs font-semibold">
+                  <Sparkles className="w-3.5 h-3.5 text-zinc-400" />
+                  <span>AI Mentor Summary</span>
                 </div>
-                <p className="text-xs text-[#ececec] leading-relaxed">
+                <p className="text-xs text-zinc-300 leading-relaxed">
                   {selectedIssue.summary ||
                     'Analyze the issue description, identify key routines to patch, and add unit test coverage.'}
                 </p>
@@ -809,15 +809,15 @@ export const ContributePage: React.FC<ContributePageProps> = ({
               {/* Likely Files to Inspect */}
               {selectedIssue.likely_files && selectedIssue.likely_files.length > 0 && (
                 <div className="space-y-2">
-                  <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#71717a] flex items-center space-x-1.5">
-                    <FileCode className="w-3.5 h-3.5 text-sky-400" />
+                  <h4 className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 flex items-center space-x-1.5">
+                    <FileCode className="w-3.5 h-3.5 text-zinc-300" />
                     <span>Likely Files to Inspect</span>
                   </h4>
                   <div className="space-y-1.5">
                     {selectedIssue.likely_files.map((file, fIdx) => (
                       <div
                         key={fIdx}
-                        className="px-3 py-2 bg-[#181824] border border-[#28283a] rounded-xl text-xs font-mono text-emerald-300 truncate"
+                        className="px-3 py-2 bg-[#000000] border border-[#18181b] rounded-xl text-xs font-mono text-zinc-200 truncate"
                       >
                         {file}
                       </div>
@@ -829,15 +829,15 @@ export const ContributePage: React.FC<ContributePageProps> = ({
               {/* Required Skills & Concepts */}
               {selectedIssue.skills && selectedIssue.skills.length > 0 && (
                 <div className="space-y-2">
-                  <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#71717a] flex items-center space-x-1.5">
-                    <Tag className="w-3.5 h-3.5 text-purple-400" />
+                  <h4 className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 flex items-center space-x-1.5">
+                    <Tag className="w-3.5 h-3.5 text-zinc-300" />
                     <span>Skills & Technologies</span>
                   </h4>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedIssue.skills.map((skill, sIdx) => (
                       <span
                         key={sIdx}
-                        className="px-2.5 py-1 rounded-lg bg-[#181824] border border-[#2a2a3e] text-xs font-mono text-purple-300"
+                        className="px-2.5 py-1 rounded-lg bg-[#000000] border border-[#18181b] text-xs font-mono text-zinc-300"
                       >
                         {skill}
                       </span>
@@ -848,14 +848,14 @@ export const ContributePage: React.FC<ContributePageProps> = ({
 
               {/* Repository Readiness Score */}
               {selectedIssue.readiness && (
-                <div className="p-4 bg-[#181824] border border-[#2a2a3e] rounded-2xl flex items-center justify-between">
+                <div className="p-4 bg-[#000000] border border-[#18181b] rounded-2xl flex items-center justify-between">
                   <div className="flex items-center space-x-2.5">
-                    <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                    <ShieldCheck className="w-5 h-5 text-zinc-300" />
                     <div>
                       <h4 className="text-xs font-semibold text-white">
                         Repo Readiness: {selectedIssue.readiness.score}/100
                       </h4>
-                      <p className="text-[10px] text-[#71717a]">
+                      <p className="text-[10px] text-zinc-400">
                         Grade {selectedIssue.readiness.grade} • Active maintainers & beginner friendly
                       </p>
                     </div>
@@ -869,7 +869,7 @@ export const ContributePage: React.FC<ContributePageProps> = ({
                   href={selectedIssue.html_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-2 text-xs text-sky-400 hover:underline"
+                  className="inline-flex items-center space-x-2 text-xs text-zinc-300 hover:text-white hover:underline"
                 >
                   <span>Open original issue on GitHub</span>
                   <ExternalLink className="w-3 h-3" />
@@ -878,10 +878,10 @@ export const ContributePage: React.FC<ContributePageProps> = ({
             </div>
 
             {/* Drawer Bottom Actions */}
-            <div className="pt-4 border-t border-[#222232] flex items-center space-x-3">
+            <div className="pt-4 border-t border-[#18181b] flex items-center space-x-3">
               <button
                 onClick={() => handleAnalyze(selectedIssue)}
-                className="flex-1 py-2.5 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white rounded-xl text-xs font-semibold shadow-md flex items-center justify-center space-x-2 cursor-pointer"
+                className="flex-1 py-2.5 bg-white hover:bg-zinc-200 text-black rounded-xl text-xs font-semibold shadow-sm flex items-center justify-center space-x-2 cursor-pointer transition-all"
               >
                 <Sparkles className="w-4 h-4" />
                 <span>Analyze in CodeLens</span>
@@ -894,11 +894,11 @@ export const ContributePage: React.FC<ContributePageProps> = ({
       {/* Ingestion Progress Modal */}
       {analyzingRepoUrl && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#121218] border border-[#2e2e42] rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5 text-center animate-in zoom-in-95 duration-200">
+          <div className="bg-[#08080a] border border-[#18181b] rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5 text-center animate-in zoom-in-95 duration-200">
             <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mx-auto border ${
               analysisError
-                ? 'bg-rose-500/20 border-rose-500/40 text-rose-400'
-                : 'bg-sky-500/20 border-sky-500/40 text-sky-400'
+                ? 'bg-zinc-900 border-zinc-700 text-rose-400'
+                : 'bg-zinc-900 border-zinc-700 text-white'
             }`}>
               {analysisError ? (
                 <AlertCircle className="w-6 h-6" />
@@ -911,36 +911,36 @@ export const ContributePage: React.FC<ContributePageProps> = ({
               <h3 className="text-base font-bold text-white">
                 Analyzing {analyzingRepoName}
               </h3>
-              <p className="text-xs text-sky-400 font-semibold mt-1">
+              <p className="text-xs text-zinc-400 font-semibold mt-1">
                 Stage: {analysisStage}
               </p>
             </div>
 
             <div className="space-y-1.5">
-              <div className="h-2.5 bg-[#1b1b26] rounded-full overflow-hidden border border-[#2b2b3d]">
+              <div className="h-2 bg-[#000000] rounded-full overflow-hidden border border-[#18181b]">
                 <div
                   className={`h-full rounded-full transition-all duration-300 ${
                     analysisError
                       ? 'bg-rose-500'
-                      : 'bg-gradient-to-r from-sky-500 to-emerald-400'
+                      : 'bg-white'
                   }`}
                   style={{ width: `${Math.max(0, Math.min(100, analysisProgress))}%` }}
                 />
               </div>
-              <div className="flex justify-between text-[11px] font-mono text-[#71717a]">
-                <span className="text-[#a1a1aa] font-medium">{analysisStage}</span>
-                <span className="text-sky-400 font-semibold">{analysisProgress}%</span>
+              <div className="flex justify-between text-[11px] font-mono text-zinc-500">
+                <span className="text-zinc-400 font-medium">{analysisStage}</span>
+                <span className="text-white font-semibold">{analysisProgress}%</span>
               </div>
             </div>
 
             {/* Message or Explanatory Text */}
-            <p className="text-xs text-[#9ca3af] leading-relaxed bg-[#181822] p-2.5 rounded-xl border border-[#262638]">
+            <p className="text-xs text-zinc-400 leading-relaxed bg-[#000000] p-2.5 rounded-xl border border-[#18181b]">
               {analysisMessage}
             </p>
 
             {analysisError ? (
               <div className="space-y-3 pt-2">
-                <div className="p-3 bg-rose-950/40 border border-rose-800/50 rounded-xl text-xs text-rose-300 text-left leading-relaxed">
+                <div className="p-3 bg-zinc-900 border border-zinc-700 rounded-xl text-xs text-rose-400 text-left leading-relaxed">
                   {analysisError}
                 </div>
                 <div className="flex gap-2">
@@ -953,7 +953,7 @@ export const ContributePage: React.FC<ContributePageProps> = ({
                       setAnalyzingRepoUrl(null);
                       setAnalysisError(null);
                     }}
-                    className="flex-1 py-2 bg-[#1f1f2e] hover:bg-[#2a2a3e] text-[#a1a1aa] hover:text-white rounded-xl text-xs font-semibold transition"
+                    className="flex-1 py-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white rounded-xl text-xs font-semibold transition border border-zinc-700"
                   >
                     Dismiss
                   </button>
@@ -963,7 +963,7 @@ export const ContributePage: React.FC<ContributePageProps> = ({
                         handleAnalyze(analyzingIssue);
                       }
                     }}
-                    className="flex-1 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition shadow-lg shadow-sky-600/30"
+                    className="flex-1 py-2 bg-white hover:bg-zinc-200 text-black rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition shadow-sm"
                   >
                     <RefreshCw className="w-3.5 h-3.5" />
                     <span>Retry Analysis</span>
@@ -971,7 +971,7 @@ export const ContributePage: React.FC<ContributePageProps> = ({
                 </div>
               </div>
             ) : (
-              <p className="text-[11px] text-[#71717a]">
+              <p className="text-[11px] text-zinc-500">
                 Extracting AST symbols, computing vectors, and setting up workspace...
               </p>
             )}

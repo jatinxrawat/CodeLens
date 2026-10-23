@@ -45,13 +45,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, selectedRepo, onQuic
   const isGemini = providerStatus?.active_provider === 'gemini';
 
   return (
-    <header className="h-14 bg-[#050505]/90 backdrop-blur border-b border-[#18181b] px-6 flex items-center justify-between sticky top-0 z-10 select-none">
+    <header className="h-14 bg-[#000000]/90 backdrop-blur border-b border-[#18181b] px-6 flex items-center justify-between sticky top-0 z-10 select-none">
       <div className="flex items-center space-x-3">
         <h2 className="text-sm font-semibold text-[#f4f4f5]">
           {titles[currentTab] || currentTab}
         </h2>
         {selectedRepo && (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono bg-[#0d0d10] border border-[#18181b] text-[#9ca3af]">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-mono bg-[#09090b] border border-[#1c1c21] text-[#a1a1aa]">
             repo: <strong className="text-[#f4f4f5] ml-1">{selectedRepo}</strong>
           </span>
         )}
@@ -61,11 +61,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, selectedRepo, onQuic
         {currentTab !== 'chat' && currentTab !== 'search' && (
           <button
             onClick={onQuickSearch}
-            className="flex items-center space-x-2 bg-[#0d0d10] hover:bg-[#141418] border border-[#18181b] text-[#9ca3af] hover:text-[#f4f4f5] px-3 py-1.5 rounded-md text-xs transition-colors cursor-pointer"
+            className="flex items-center space-x-2 bg-[#09090b] hover:bg-[#111114] border border-[#1c1c21] text-[#a1a1aa] hover:text-[#f4f4f5] px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer"
           >
-            <Search className="w-3.5 h-3.5" />
+            <Search className="w-3.5 h-3.5 text-[#71717a]" />
             <span>Search codebase...</span>
-            <kbd className="text-[10px] bg-[#050505] border border-[#18181b] px-1.5 py-0.5 rounded font-mono text-[#9ca3af]">
+            <kbd className="text-[10px] bg-[#000000] border border-[#1c1c21] px-1.5 py-0.5 rounded font-mono text-[#71717a]">
               /
             </kbd>
           </button>
@@ -73,25 +73,24 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, selectedRepo, onQuic
 
         <button
           onClick={() => onSelectTab ? onSelectTab('landing') : (window.location.href = '/?tab=landing')}
-          className="flex items-center space-x-1.5 text-xs text-sky-400 bg-sky-950/30 hover:bg-sky-900/50 border border-sky-800/40 px-2.5 py-1 rounded-md transition-colors cursor-pointer"
+          className="flex items-center space-x-1.5 text-xs text-zinc-200 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
           title="Open Landing Page"
         >
-          <Sparkles className="w-3.5 h-3.5" />
+          <Sparkles className="w-3.5 h-3.5 text-zinc-300" />
           <span>Landing Page</span>
         </button>
 
         {/* Provider Indicator */}
-        {isGemini ? (
-          <div className="flex items-center space-x-1.5 text-xs text-sky-300 bg-sky-950/40 border border-sky-800/50 px-2.5 py-1 rounded-md">
-            <Sparkles className="w-3.5 h-3.5 text-sky-400" />
-            <span className="font-mono text-[11px]">Provider: Gemini</span>
-          </div>
-        ) : (
-          <div className="flex items-center space-x-1.5 text-xs text-emerald-400 bg-emerald-950/40 border border-emerald-800/50 px-2.5 py-1 rounded-md">
-            <Cpu className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="font-mono text-[11px]">Provider: Local ML</span>
-          </div>
-        )}
+        <div className="flex items-center space-x-1.5 text-xs text-zinc-300 bg-zinc-950 border border-zinc-800 px-2.5 py-1 rounded-lg">
+          {isGemini ? (
+            <Sparkles className="w-3.5 h-3.5 text-zinc-400" />
+          ) : (
+            <Cpu className="w-3.5 h-3.5 text-zinc-400" />
+          )}
+          <span className="font-mono text-[11px] text-zinc-400">
+            AI: <span className="text-zinc-200 font-medium">{isGemini ? 'Gemini' : 'Local'}</span>
+          </span>
+        </div>
       </div>
     </header>
   );

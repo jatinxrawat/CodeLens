@@ -26,8 +26,8 @@ class IngestJobResponse(BaseModel):
 
 class RepositoryStatusResponse(BaseModel):
     repository_id: str
-    repository_name: str
-    source: str
+    repository_name: str = ""
+    source: str = ""
     status: str = Field(..., description="'ready', 'ingesting', 'failed', 'not_found'")
     stage: str = Field(default="Ready", description="Human-readable pipeline stage name")
     current_step: Optional[str] = "ready"  # 'queued', 'cloning', 'parsing', 'embedding', 'indexing', 'ready', 'failed'

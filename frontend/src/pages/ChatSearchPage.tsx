@@ -97,9 +97,9 @@ const GithubIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' })
 // CodeLens AI Official Icon
 const CodeLensAIIcon: React.FC<{ className?: string }> = ({ className = 'w-7 h-7' }) => (
   <div
-    className={`rounded-full bg-gradient-to-br from-sky-500 via-indigo-500 to-purple-600 flex items-center justify-center text-white shrink-0 shadow-md ${className}`}
+    className={`rounded-full bg-zinc-900 border border-zinc-700/80 flex items-center justify-center text-white shrink-0 shadow-sm ${className}`}
   >
-    <Sparkles className="w-4 h-4 text-white" />
+    <Sparkles className="w-3.5 h-3.5 text-zinc-200" />
   </div>
 );
 
@@ -118,19 +118,19 @@ const CodeBlock: React.FC<{ children: React.ReactNode; className?: string }> = (
   };
 
   return (
-    <div className="my-3 rounded-xl overflow-hidden border border-[#383838] bg-[#141414] shadow-lg">
-      <div className="flex items-center justify-between px-3.5 py-1.5 bg-[#1f1f1f] border-b border-[#333333] text-[11px] font-mono text-[#b4b4b4]">
-        <span className="uppercase font-semibold tracking-wider text-sky-400">
+    <div className="my-3 rounded-xl overflow-hidden border border-[#18181b] bg-[#000000] shadow-md">
+      <div className="flex items-center justify-between px-3.5 py-1.5 bg-[#08080a] border-b border-[#18181b] text-[11px] font-mono text-zinc-400">
+        <span className="uppercase font-semibold tracking-wider text-zinc-200">
           {language || 'code'}
         </span>
         <button
           onClick={handleCopy}
-          className="flex items-center space-x-1.5 px-2 py-0.5 rounded hover:bg-[#2f2f2f] text-[#b4b4b4] hover:text-[#ececec] transition-colors cursor-pointer"
+          className="flex items-center space-x-1.5 px-2 py-0.5 rounded hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer"
         >
           {copied ? (
             <>
-              <Check className="w-3 h-3 text-emerald-400" />
-              <span className="text-emerald-400">Copied</span>
+              <Check className="w-3 h-3 text-white" />
+              <span className="text-white">Copied</span>
             </>
           ) : (
             <>
@@ -140,7 +140,7 @@ const CodeBlock: React.FC<{ children: React.ReactNode; className?: string }> = (
           )}
         </button>
       </div>
-      <pre className="p-4 text-xs font-mono text-[#ececec] overflow-x-auto leading-relaxed max-h-96">
+      <pre className="p-4 text-xs font-mono text-zinc-200 overflow-x-auto leading-relaxed max-h-96">
         <code>{codeText}</code>
       </pre>
     </div>
@@ -608,25 +608,25 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
   const isAnyLoading = turns.some((t) => t.isLoading);
 
   return (
-    <div className="flex h-full bg-[#121215] text-[#ececec] font-sans overflow-hidden select-none">
+    <div className="flex h-full bg-[#000000] text-[#ececec] font-sans overflow-hidden select-none">
       {/* Main Conversation & Search Canvas */}
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
         {/* Top Header Bar */}
-        <header className="h-12 px-4 flex items-center justify-between border-b border-[#252530] bg-[#121215] shrink-0 z-20">
+        <header className="h-12 px-4 flex items-center justify-between border-b border-[#18181b] bg-[#000000] shrink-0 z-20">
           <div className="flex items-center space-x-2">
             {/* Model Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setModelDropdownOpen(!modelDropdownOpen)}
-                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl hover:bg-[#1c1c24] text-sm font-semibold text-[#ececec] transition-colors cursor-pointer border border-transparent hover:border-[#2f2f3d]"
+                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl hover:bg-zinc-900 text-sm font-semibold text-white transition-colors cursor-pointer border border-transparent hover:border-zinc-800"
               >
                 <span>{selectedModel}</span>
-                <ChevronDown className="w-3.5 h-3.5 text-[#a1a1aa]" />
+                <ChevronDown className="w-3.5 h-3.5 text-zinc-400" />
               </button>
 
               {modelDropdownOpen && (
-                <div className="absolute top-10 left-0 w-64 bg-[#18181f] border border-[#2d2d3d] rounded-2xl shadow-2xl p-1.5 z-50 text-xs">
-                  <div className="px-3 py-1.5 text-[11px] font-semibold text-[#a1a1aa] uppercase tracking-wider">
+                <div className="absolute top-10 left-0 w-64 bg-[#08080a] border border-[#18181b] rounded-2xl shadow-2xl p-1.5 z-50 text-xs">
+                  <div className="px-3 py-1.5 text-[11px] font-semibold text-zinc-400 uppercase tracking-wider">
                     Model Engine
                   </div>
                   {[
@@ -639,12 +639,12 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                         setSelectedModel(m.id);
                         setModelDropdownOpen(false);
                       }}
-                      className={`w-full text-left px-3 py-2 rounded-xl hover:bg-[#252535] transition-colors flex flex-col cursor-pointer ${
-                        selectedModel === m.id ? 'bg-[#252535]' : ''
+                      className={`w-full text-left px-3 py-2 rounded-xl hover:bg-zinc-900 transition-colors flex flex-col cursor-pointer ${
+                        selectedModel === m.id ? 'bg-zinc-900 text-white' : 'text-zinc-300'
                       }`}
                     >
-                      <span className="font-medium text-[#ececec]">{m.id}</span>
-                      <span className="text-[11px] text-[#a1a1aa]">{m.desc}</span>
+                      <span className="font-medium text-white">{m.id}</span>
+                      <span className="text-[11px] text-zinc-500">{m.desc}</span>
                     </button>
                   ))}
                 </div>
@@ -655,23 +655,23 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
             {selectedRepo ? (
               <button
                 onClick={() => setIsAttachModalOpen(true)}
-                className="flex items-center space-x-1.5 text-xs text-sky-300 font-mono px-2.5 py-1 bg-sky-950/40 hover:bg-sky-900/50 rounded-lg border border-sky-800/50 transition-colors cursor-pointer"
+                className="flex items-center space-x-1.5 text-xs text-zinc-200 font-mono px-2.5 py-1 bg-[#08080a] hover:bg-zinc-900 rounded-lg border border-[#18181b] transition-colors cursor-pointer"
                 title="Change or attach another repository"
               >
-                <GithubIcon className="w-3.5 h-3.5 text-sky-400" />
+                <GithubIcon className="w-3.5 h-3.5 text-zinc-400" />
                 <span>repo:</span>
                 <strong className="text-white">{selectedRepo}</strong>
-                <ChevronDown className="w-3 h-3 text-sky-400 opacity-70" />
+                <ChevronDown className="w-3 h-3 text-zinc-400 opacity-70" />
               </button>
             ) : (
               <button
                 onClick={() => setIsAttachModalOpen(true)}
-                className="flex items-center space-x-1.5 text-xs text-indigo-300 px-2.5 py-1 bg-indigo-950/40 hover:bg-indigo-900/50 rounded-lg border border-indigo-800/50 transition-colors cursor-pointer animate-pulse"
+                className="flex items-center space-x-1.5 text-xs text-zinc-300 px-2.5 py-1 bg-[#08080a] hover:bg-zinc-900 rounded-lg border border-[#18181b] transition-colors cursor-pointer"
                 title="Attach a GitHub repository"
               >
-                <GithubIcon className="w-3.5 h-3.5 text-indigo-400" />
+                <GithubIcon className="w-3.5 h-3.5 text-zinc-400" />
                 <span>Attach GitHub Repo</span>
-                <Plus className="w-3 h-3 text-indigo-400" />
+                <Plus className="w-3 h-3 text-zinc-400" />
               </button>
             )}
           </div>
@@ -681,16 +681,16 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
             {/* Quick Attach GitHub Repo Button */}
             <button
               onClick={() => setIsAttachModalOpen(true)}
-              className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg bg-[#1c1c26] hover:bg-[#262635] text-xs font-medium text-[#ececec] border border-[#2e2e3f] transition-all cursor-pointer shadow-sm"
+              className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-xs font-medium text-zinc-200 border border-zinc-700/80 transition-all cursor-pointer shadow-sm"
             >
-              <GithubIcon className="w-3.5 h-3.5 text-sky-400" />
+              <GithubIcon className="w-3.5 h-3.5 text-zinc-300" />
               <span className="hidden sm:inline">Attach Repo</span>
             </button>
 
             {isConversational && (
               <button
                 onClick={handleReset}
-                className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg hover:bg-[#1c1c26] text-[#a1a1aa] hover:text-[#ececec] text-xs transition-colors cursor-pointer"
+                className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg hover:bg-zinc-900 text-zinc-400 hover:text-white text-xs transition-colors cursor-pointer"
                 title="New Chat"
               >
                 <SquarePen className="w-4 h-4" />
@@ -703,14 +703,14 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                 onClick={() => setShowSourcesPanel(!showSourcesPanel)}
                 className={`flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
                   showSourcesPanel
-                    ? 'bg-sky-500/20 text-sky-300 border border-sky-500/30'
-                    : 'hover:bg-[#1c1c26] text-[#a1a1aa] hover:text-[#ececec]'
+                    ? 'bg-zinc-800 text-white border border-zinc-600'
+                    : 'hover:bg-zinc-900 text-zinc-400 hover:text-white'
                 }`}
                 title="Toggle Sources"
               >
                 <Globe className="w-4 h-4" />
                 <span>Sources</span>
-                <span className="px-1.5 py-0.2 rounded-full bg-[#1c1c26] text-[10px] font-mono text-sky-400">
+                <span className="px-1.5 py-0.5 rounded-full bg-zinc-900 text-[10px] font-mono text-zinc-200 border border-zinc-700">
                   {activeSources.length}
                 </span>
               </button>
@@ -720,11 +720,11 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
 
         {/* Cloud AI Privacy Notice Banner (Active when Gemini provider is selected) */}
         {activeProvider === 'gemini' && selectedRepo && (
-          <div className="bg-sky-950/40 border-b border-sky-800/40 px-4 py-2 flex items-center justify-between text-xs text-sky-200 shrink-0">
+          <div className="bg-[#08080a] border-b border-[#18181b] px-4 py-2 flex items-center justify-between text-xs text-zinc-300 shrink-0">
             <div className="flex items-center space-x-2">
-              <ShieldCheck className="w-4 h-4 text-sky-400 shrink-0" />
+              <ShieldCheck className="w-4 h-4 text-zinc-400 shrink-0" />
               <span>
-                <strong>Cloud AI Notice:</strong> CodeLens is using Gemini Flash/Pro. Code context from <code className="text-white bg-sky-900/60 px-1 py-0.5 rounded font-mono">{selectedRepo}</code> will be processed by Google APIs.
+                <strong>Cloud AI Notice:</strong> CodeLens is using Gemini Flash/Pro. Code context from <code className="text-white bg-zinc-900 px-1 py-0.5 rounded font-mono border border-zinc-800">{selectedRepo}</code> will be processed by Google APIs.
               </span>
             </div>
             <div className="flex items-center space-x-2">
@@ -734,7 +734,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                   setActiveProvider('local');
                   setSelectedModel('Local ML Engine');
                 }}
-                className="px-2 py-0.5 rounded bg-sky-900/60 hover:bg-sky-800 text-sky-100 border border-sky-700/60 transition-colors cursor-pointer text-[11px]"
+                className="px-2 py-0.5 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-700/80 transition-colors cursor-pointer text-[11px]"
               >
                 Switch to Local
               </button>
@@ -752,24 +752,24 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
             !selectedRepo ? (
               /* ================= FRONT DOOR: NO REPO ATTACHED ================= */
               <div className="w-full max-w-4xl flex flex-col items-center text-center animate-in fade-in duration-300 pb-12">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center text-white mb-4 shadow-xl">
+                <div className="w-12 h-12 rounded-2xl bg-zinc-900 border border-zinc-700 flex items-center justify-center text-white mb-4 shadow-xl">
                   <Compass className="w-6 h-6" />
                 </div>
-                <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#ececec] mb-2 font-sans">
+                <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-2 font-sans">
                   CodeLens Intelligence
                 </h1>
-                <p className="text-sm text-[#a1a1aa] max-w-xl mb-8">
+                <p className="text-sm text-zinc-400 max-w-xl mb-8">
                   Attach any public GitHub repository to index code symbols, explore architectures, and ask questions with cited AST sources.
                 </p>
 
                 {/* Primary Front Door Input Card */}
-                <div className="w-full max-w-2xl bg-[#181820] border border-[#2e2e40] rounded-2xl p-5 mb-8 text-left shadow-2xl">
-                  <label className="block text-xs font-semibold text-[#a1a1aa] uppercase tracking-wider mb-2">
+                <div className="w-full max-w-2xl bg-[#08080a] border border-[#18181b] rounded-2xl p-5 mb-8 text-left shadow-2xl">
+                  <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
                     Attach GitHub Repository
                   </label>
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                     <div className="relative flex-1">
-                      <GithubIcon className="w-4 h-4 text-[#a1a1aa] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                      <GithubIcon className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                       <input
                         type="url"
                         value={frontDoorUrl}
@@ -779,22 +779,22 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                         }}
                         placeholder="https://github.com/owner/repository"
                         disabled={frontDoorAnalyzing}
-                        className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-[#121217] border border-[#2d2d3d] text-sm text-[#ececec] placeholder-[#71717a] focus:outline-none focus:border-sky-500"
+                        className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-[#000000] border border-[#1c1c21] text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 font-mono"
                       />
                     </div>
                     <button
                       onClick={() => handleFrontDoorAnalyze()}
                       disabled={!frontDoorUrl.trim() || frontDoorAnalyzing}
-                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 disabled:opacity-50 text-white text-sm font-semibold flex items-center justify-center space-x-2 shadow-md cursor-pointer disabled:cursor-not-allowed transition-all"
+                      className="px-5 py-2.5 rounded-xl bg-white hover:bg-zinc-200 disabled:opacity-50 text-black text-sm font-semibold flex items-center justify-center space-x-2 shadow-sm cursor-pointer disabled:cursor-not-allowed transition-all"
                     >
                       {frontDoorAnalyzing ? (
                         <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <Loader2 className="w-4 h-4 animate-spin text-black" />
                           <span>Analyzing...</span>
                         </>
                       ) : (
                         <>
-                          <Sparkles className="w-4 h-4" />
+                          <Sparkles className="w-4 h-4 text-black" />
                           <span>Analyze in CodeLens</span>
                         </>
                       )}
@@ -803,17 +803,17 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
 
                   {/* Progress Indicator */}
                   {frontDoorAnalyzing && (
-                    <div className="mt-4 pt-4 border-t border-[#2d2d3d] space-y-2">
+                    <div className="mt-4 pt-4 border-t border-[#18181b] space-y-2">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-sky-400 flex items-center space-x-1.5">
+                        <span className="text-white flex items-center space-x-1.5">
                           <Loader2 className="w-3.5 h-3.5 animate-spin" />
                           <span>{frontDoorStep}</span>
                         </span>
-                        <span className="font-mono text-[#a1a1aa]">{frontDoorProgress}%</span>
+                        <span className="font-mono text-zinc-400">{frontDoorProgress}%</span>
                       </div>
-                      <div className="h-2 w-full bg-[#121217] rounded-full overflow-hidden">
+                      <div className="h-2 w-full bg-[#000000] rounded-full overflow-hidden border border-[#18181b]">
                         <div
-                          className="h-full bg-gradient-to-r from-sky-500 to-indigo-500 transition-all duration-300"
+                          className="h-full bg-white transition-all duration-300"
                           style={{ width: `${frontDoorProgress}%` }}
                         />
                       </div>
@@ -822,14 +822,14 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
 
                   {/* Error Notification */}
                   {frontDoorError && (
-                    <div className="mt-3 p-3 rounded-xl bg-rose-950/40 border border-rose-800/40 text-rose-300 text-xs flex items-center justify-between">
+                    <div className="mt-3 p-3 rounded-xl bg-zinc-900 border border-zinc-700 text-rose-400 text-xs flex items-center justify-between">
                       <div className="flex items-center space-x-2">
                         <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
                         <span>{frontDoorError}</span>
                       </div>
                       <button
                         onClick={() => handleFrontDoorAnalyze()}
-                        className="px-2.5 py-1 bg-rose-900/60 hover:bg-rose-800 text-white rounded-lg text-xs font-semibold shrink-0 transition"
+                        className="px-2.5 py-1 bg-white hover:bg-zinc-200 text-black rounded-lg text-xs font-semibold shrink-0 transition"
                       >
                         Retry
                       </button>
@@ -837,8 +837,8 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                   )}
 
                   {/* Quick Presets */}
-                  <div className="mt-4 flex flex-wrap items-center gap-2 pt-3 border-t border-[#262635]">
-                    <span className="text-[11px] text-[#71717a]">Quick presets:</span>
+                  <div className="mt-4 flex flex-wrap items-center gap-2 pt-3 border-t border-[#18181b]">
+                    <span className="text-[11px] text-zinc-500">Quick presets:</span>
                     {presetRepos.map((p) => (
                       <button
                         key={p.name}
@@ -847,7 +847,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                           handleFrontDoorAnalyze(p.url);
                         }}
                         disabled={frontDoorAnalyzing}
-                        className="px-2.5 py-1 rounded-lg bg-[#20202d] hover:bg-[#28283a] border border-[#2f2f42] text-[11px] font-mono text-[#a1a1aa] hover:text-[#ececec] transition-colors cursor-pointer"
+                        className="px-2.5 py-1 rounded-lg bg-[#000000] hover:bg-zinc-900 border border-[#1c1c21] text-[11px] font-mono text-zinc-400 hover:text-white transition-colors cursor-pointer"
                       >
                         {p.name}
                       </button>
@@ -859,17 +859,17 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                 <div className="w-full text-left space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-lg font-semibold text-[#ececec]">
+                      <h2 className="text-lg font-semibold text-white">
                         Trending Repositories to Explore
                       </h2>
-                      <p className="text-xs text-[#a1a1aa]">
+                      <p className="text-xs text-zinc-400">
                         Pick any top open-source project to analyze its architecture and ask questions.
                       </p>
                     </div>
                     {onNavigateToTab && (
                       <button
                         onClick={() => onNavigateToTab('explore')}
-                        className="text-xs text-sky-400 hover:text-sky-300 flex items-center space-x-1 cursor-pointer"
+                        className="text-xs text-zinc-400 hover:text-white flex items-center space-x-1 cursor-pointer"
                       >
                         <span>View all in Explore</span>
                         <ChevronDown className="w-3.5 h-3.5 -rotate-90" />
@@ -880,7 +880,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                   {loadingExploreFeed ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
                       {[1, 2, 3, 4, 5, 6].map((i) => (
-                        <div key={i} className="h-36 rounded-xl bg-[#181820] animate-pulse border border-[#252535]" />
+                        <div key={i} className="h-36 rounded-xl bg-[#08080a] animate-pulse border border-[#18181b]" />
                       ))}
                     </div>
                   ) : (
@@ -888,27 +888,27 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                       {exploreFeedRepos.slice(0, 6).map((repo) => (
                         <div
                           key={repo.name}
-                          className="bg-[#181820] hover:bg-[#1d1d28] border border-[#262635] hover:border-[#38384d] rounded-xl p-4 flex flex-col justify-between transition-all group"
+                          className="bg-[#08080a] hover:bg-[#0c0c0e] border border-[#18181b] hover:border-[#27272a] rounded-xl p-4 flex flex-col justify-between transition-all group"
                         >
                           <div>
                             <div className="flex items-center justify-between mb-1.5">
-                              <span className="text-xs font-mono font-semibold text-white group-hover:text-sky-400 truncate">
+                              <span className="text-xs font-mono font-semibold text-white group-hover:text-zinc-200 truncate">
                                 {repo.name}
                               </span>
-                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 font-mono">
+                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#000000] border border-[#1c1c21] text-zinc-300 font-mono">
                                 {repo.readiness?.score || 85}/100
                               </span>
                             </div>
-                            <p className="text-xs text-[#a1a1aa] line-clamp-2 mb-3 leading-relaxed">
+                            <p className="text-xs text-zinc-400 line-clamp-2 mb-3 leading-relaxed">
                               {repo.description || 'No description provided.'}
                             </p>
                           </div>
 
-                          <div className="flex items-center justify-between pt-2 border-t border-[#222230] text-[11px] text-[#71717a]">
+                          <div className="flex items-center justify-between pt-2 border-t border-[#18181b] text-[11px] text-zinc-500">
                             <div className="flex items-center space-x-3">
-                              <span className="text-[#a1a1aa] font-medium">{repo.language}</span>
+                              <span className="text-zinc-400 font-medium">{repo.language}</span>
                               <span className="flex items-center space-x-1">
-                                <Star className="w-3 h-3 text-amber-400" />
+                                <Star className="w-3 h-3 text-zinc-400" />
                                 <span>{(repo.stars / 1000).toFixed(1)}k</span>
                               </span>
                             </div>
@@ -919,9 +919,9 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                                 handleFrontDoorAnalyze(repo.html_url);
                               }}
                               disabled={frontDoorAnalyzing}
-                              className="px-2.5 py-1 rounded-lg bg-sky-950/70 hover:bg-sky-900 border border-sky-700/50 text-sky-200 text-xs font-medium flex items-center space-x-1 transition-colors cursor-pointer"
+                              className="px-2.5 py-1 rounded-lg bg-white hover:bg-zinc-200 text-black text-xs font-semibold flex items-center space-x-1 transition-all cursor-pointer shadow-sm"
                             >
-                              <Sparkles className="w-3 h-3 text-sky-400" />
+                              <Sparkles className="w-3 h-3 text-black" />
                               <span>Analyze</span>
                             </button>
                           </div>
@@ -934,15 +934,15 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
             ) : (
               /* ================= REPO ATTACHED: HERO PROMPT VIEW ================= */
               <div className="w-full max-w-[768px] my-auto flex flex-col items-center text-center animate-in fade-in duration-300">
-                <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#ececec] mb-2 font-sans">
+                <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-2 font-sans">
                   What can I help with?
                 </h1>
-                <p className="text-xs font-mono text-sky-400/90 mb-8">
+                <p className="text-xs font-mono text-zinc-400 mb-8">
                   attached: <strong className="text-white">{selectedRepo}</strong>
                 </p>
 
                 {/* Signature Composer Capsule */}
-                <div className="w-full bg-[#1b1b22] hover:bg-[#202029] focus-within:bg-[#1b1b22] border border-[#2d2d3a] focus-within:border-[#4f4f66] focus-within:ring-1 focus-within:ring-[#4f4f66] rounded-[26px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all p-3.5 flex flex-col mb-5 text-left">
+                <div className="w-full bg-[#08080a] hover:bg-[#0c0c0e] focus-within:bg-[#08080a] border border-[#18181b] focus-within:border-zinc-700 focus-within:ring-1 focus-within:ring-zinc-700 rounded-[26px] shadow-2xl transition-all p-3.5 flex flex-col mb-5 text-left">
                   {/* Textarea */}
                   <textarea
                     ref={textareaRef}
@@ -955,7 +955,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                         ? 'Search code symbols, functions, or keywords (Fast BM25 + FAISS)...'
                         : `Ask CodeLens AI about ${selectedRepo}...`
                     }
-                    className="w-full bg-transparent text-[#ececec] placeholder-[#71717a] text-base resize-none focus:outline-none px-1.5 pt-0.5 pb-2 leading-relaxed font-sans min-h-[44px] max-h-48"
+                    className="w-full bg-transparent text-white placeholder-zinc-500 text-base resize-none focus:outline-none px-1.5 pt-0.5 pb-2 leading-relaxed font-sans min-h-[44px] max-h-48"
                   />
 
                   {/* Internal Composer Toolbar */}
@@ -966,7 +966,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                       <button
                         type="button"
                         onClick={() => setIsAttachModalOpen(true)}
-                        className="p-1.5 rounded-full hover:bg-[#2a2a38] text-[#a1a1aa] hover:text-[#ececec] transition-colors cursor-pointer group"
+                        className="p-1.5 rounded-full hover:bg-zinc-900 text-zinc-400 hover:text-white transition-colors cursor-pointer group"
                         title="Attach GitHub Repository"
                       >
                         <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-200" />
@@ -976,10 +976,10 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                       <button
                         type="button"
                         onClick={() => setIsAttachModalOpen(true)}
-                        className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer bg-sky-950/60 text-sky-400 border border-sky-800/60 hover:bg-sky-900/60"
+                        className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer bg-[#000000] text-zinc-200 border border-[#1c1c21] hover:bg-zinc-900"
                         title={`Attached: ${selectedRepo}`}
                       >
-                        <GithubIcon className="w-3.5 h-3.5 text-sky-400" />
+                        <GithubIcon className="w-3.5 h-3.5 text-zinc-400" />
                         <span>{selectedRepo}</span>
                       </button>
 
@@ -989,14 +989,14 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                         onClick={() => setIsSearchOnly(!isSearchOnly)}
                         className={`flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
                           isSearchOnly
-                            ? 'bg-amber-950/70 text-amber-300 border border-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.25)]'
-                            : 'bg-[#262635] text-[#a1a1aa] hover:text-[#ececec] border border-[#353548] hover:bg-[#303042]'
+                            ? 'bg-zinc-800 text-white border border-zinc-600'
+                            : 'bg-[#000000] text-zinc-400 hover:text-white border border-[#1c1c21] hover:bg-zinc-900'
                         }`}
                         title={isSearchOnly ? 'Search only mode is ON (no LLM generation, fast code chunk hits)' : 'Enable Search only mode'}
                       >
-                        <Search className={`w-3.5 h-3.5 ${isSearchOnly ? 'text-amber-400' : 'text-[#a1a1aa]'}`} />
+                        <Search className={`w-3.5 h-3.5 ${isSearchOnly ? 'text-white' : 'text-zinc-400'}`} />
                         <span>Search only</span>
-                        <span className={`w-1.5 h-1.5 rounded-full ${isSearchOnly ? 'bg-amber-400 animate-pulse' : 'bg-[#52525b]'}`} />
+                        <span className={`w-1.5 h-1.5 rounded-full ${isSearchOnly ? 'bg-white animate-pulse' : 'bg-zinc-600'}`} />
                       </button>
 
                       {/* Reason Toggle Pill */}
@@ -1005,8 +1005,8 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                         onClick={() => setIsReasonActive(!isReasonActive)}
                         className={`flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
                           isReasonActive
-                            ? 'bg-purple-950/60 text-purple-300 border border-purple-500/40 shadow-sm'
-                            : 'hover:bg-[#2a2a38] text-[#a1a1aa]'
+                            ? 'bg-zinc-800 text-white border border-zinc-600'
+                            : 'hover:bg-zinc-900 text-zinc-400'
                         }`}
                         title="Deep Reasoning Mode"
                       >
@@ -1018,11 +1018,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                       <button
                         type="button"
                         onClick={() => setExplanationMode(explanationMode === 'beginner' ? 'expert' : 'beginner')}
-                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
-                          explanationMode === 'beginner'
-                            ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-500/40'
-                            : 'bg-indigo-950/60 text-indigo-300 border border-indigo-500/40'
-                        }`}
+                        className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer bg-[#000000] text-zinc-300 border border-[#1c1c21] hover:bg-zinc-900"
                         title="Toggle explanation style between Beginner (student friendly) and Expert (architectural depth)"
                       >
                         <span>{explanationMode === 'beginner' ? '🎓 Beginner' : '⚡ Expert'}</span>
@@ -1034,8 +1030,8 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                       <button
                         type="button"
                         onClick={() => setIsListening(!isListening)}
-                        className={`p-1.5 rounded-full hover:bg-[#2a2a38] transition-colors cursor-pointer ${
-                          isListening ? 'text-rose-400 animate-pulse' : 'text-[#a1a1aa] hover:text-[#ececec]'
+                        className={`p-1.5 rounded-full hover:bg-zinc-900 transition-colors cursor-pointer ${
+                          isListening ? 'text-rose-400 animate-pulse' : 'text-zinc-400 hover:text-white'
                         }`}
                         title="Voice input"
                       >
@@ -1048,8 +1044,8 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                         disabled={!inputQuery.trim() || isAnyLoading}
                         className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
                           inputQuery.trim() && !isAnyLoading
-                            ? 'bg-white text-black hover:bg-[#e4e4e7] hover:scale-105 shadow-md cursor-pointer'
-                            : 'bg-[#323240] text-[#71717a] cursor-not-allowed'
+                            ? 'bg-white text-black hover:bg-zinc-200 hover:scale-105 shadow-md cursor-pointer'
+                            : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
                         }`}
                         title="Send message"
                       >
@@ -1076,11 +1072,11 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                         }}
                         className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs transition-all cursor-pointer ${
                           pill.isSpecial
-                            ? 'bg-gradient-to-r from-sky-950/80 to-indigo-950/80 hover:from-sky-900/90 hover:to-indigo-900/90 border border-sky-500/40 text-sky-200 font-medium shadow-sm'
-                            : 'bg-[#1b1b24] hover:bg-[#262635] border border-[#2e2e3f] text-[#a1a1aa] hover:text-[#ececec]'
+                            ? 'bg-[#08080a] hover:bg-zinc-900 border border-zinc-700 text-white font-medium shadow-sm'
+                            : 'bg-[#000000] hover:bg-zinc-900 border border-[#1c1c21] text-zinc-400 hover:text-white'
                         }`}
                       >
-                        <Icon className={`w-3.5 h-3.5 ${pill.isSpecial ? 'text-sky-400' : 'text-[#a1a1aa]'}`} />
+                        <Icon className={`w-3.5 h-3.5 ${pill.isSpecial ? 'text-zinc-200' : 'text-zinc-400'}`} />
                         <span>{pill.label}</span>
                       </button>
                     );
@@ -1088,7 +1084,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                 </div>
 
                 {/* Helper Note */}
-                <div className="text-[11px] text-[#71717a] mt-6">
+                <div className="text-[11px] text-zinc-500 mt-6">
                   Answers cite exact file paths and line ranges. Low retrieval confidence will report &ldquo;not found in this codebase&rdquo;.
                 </div>
               </div>
@@ -1112,26 +1108,26 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                     <div className="flex-1 min-w-0 space-y-3">
                       {/* Meta Pills (Search Only Mode vs Searched Sources vs General AI) */}
                       {turn.isSearchOnly ? (
-                        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-950/40 border border-amber-600/40 text-xs text-amber-300">
-                          <Search className="w-3.5 h-3.5 text-amber-400" />
+                        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-zinc-800 border border-zinc-600 text-xs text-zinc-200">
+                          <Search className="w-3.5 h-3.5 text-white" />
                           <span className="font-medium">Search Only Mode</span>
                           {turn.searchResponse && (
-                            <span className="text-[11px] text-amber-400/80">
+                            <span className="text-[11px] text-zinc-400">
                               • {turn.searchResponse.results.length} matches
                             </span>
                           )}
                           {turn.latencyMs !== undefined && (
-                            <span className="text-[10px] font-mono text-amber-400/70">
+                            <span className="text-[10px] font-mono text-zinc-500">
                               ({turn.latencyMs.toFixed(0)}ms)
                             </span>
                           )}
                         </div>
                       ) : turn.searchResponse && turn.searchResponse.results.length > 0 ? (
-                        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#1c1c26] border border-[#2e2e3f] text-xs text-[#a1a1aa]">
-                          <Globe className="w-3.5 h-3.5 text-sky-400" />
+                        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#08080a] border border-[#18181b] text-xs text-zinc-300">
+                          <Globe className="w-3.5 h-3.5 text-zinc-400" />
                           <span>Searched {turn.searchResponse.results.length} code sources</span>
                           {turn.latencyMs !== undefined && (
-                            <span className="text-[10px] font-mono text-[#71717a]">
+                            <span className="text-[10px] font-mono text-zinc-500">
                               ({turn.latencyMs.toFixed(0)}ms)
                             </span>
                           )}
@@ -1140,17 +1136,17 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                               setActiveSources(turn.searchResponse?.results || []);
                               setShowSourcesPanel(true);
                             }}
-                            className="text-sky-400 hover:underline font-medium cursor-pointer ml-1"
+                            className="text-white hover:underline font-medium cursor-pointer ml-1"
                           >
                             View sources →
                           </button>
                         </div>
                       ) : turn.isGeneralAi ? (
-                        <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded-full bg-indigo-950/40 border border-indigo-800/40 text-[11px] text-indigo-300">
-                          <Sparkles className="w-3 h-3 text-indigo-400" />
+                        <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded-full bg-zinc-900 border border-zinc-700 text-[11px] text-zinc-200">
+                          <Sparkles className="w-3 h-3 text-zinc-400" />
                           <span>CodeLens General AI</span>
                           {turn.latencyMs !== undefined && (
-                            <span className="text-[10px] font-mono text-indigo-400/70">
+                            <span className="text-[10px] font-mono text-zinc-500">
                               ({turn.latencyMs.toFixed(0)}ms)
                             </span>
                           )}
@@ -1159,8 +1155,8 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
 
                       {/* Thinking Pulse while loading */}
                       {turn.isLoading && (
-                        <div className="flex items-center space-x-2.5 text-sm text-[#a1a1aa] py-3">
-                          <div className={`w-3 h-3 rounded-full animate-pulse ${turn.isSearchOnly ? 'bg-amber-400' : 'bg-sky-400'}`} />
+                        <div className="flex items-center space-x-2.5 text-sm text-zinc-400 py-3">
+                          <div className="w-3 h-3 rounded-full animate-pulse bg-white" />
                           <span>
                             {turn.isSearchOnly
                               ? 'Searching AST chunks and BM25+FAISS vector index...'
@@ -1171,7 +1167,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
 
                       {/* Error message */}
                       {turn.error && (
-                        <div className="p-3 rounded-xl bg-rose-950/40 border border-rose-800/50 text-rose-300 text-xs flex items-center space-x-2">
+                        <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-700 text-rose-400 text-xs flex items-center space-x-2">
                           <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
                           <span>{turn.error}</span>
                         </div>
@@ -1181,7 +1177,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                       {turn.isSearchOnly && !turn.isLoading && turn.searchResponse && (
                         <div className="space-y-3.5 pt-1">
                           {turn.searchResponse.results.length === 0 ? (
-                            <div className="p-6 text-center text-xs text-[#a1a1aa] bg-[#161622] border border-[#2b2b3d] rounded-xl">
+                            <div className="p-6 text-center text-xs text-zinc-400 bg-[#08080a] border border-[#18181b] rounded-xl">
                               No matching code chunks found for &ldquo;{turn.query}&rdquo;. Try another symbol or search term.
                             </div>
                           ) : (
@@ -1190,32 +1186,32 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                               return (
                                 <div
                                   key={cardKey}
-                                  className="bg-[#14141d] border border-[#262638] hover:border-amber-500/40 rounded-xl overflow-hidden shadow-sm transition-all"
+                                  className="bg-[#08080a] border border-[#18181b] hover:border-zinc-700 rounded-xl overflow-hidden shadow-sm transition-all"
                                 >
                                   {/* Card Header */}
-                                  <div className="px-3.5 py-2.5 bg-[#191924] border-b border-[#262638] flex flex-wrap items-center justify-between gap-2">
+                                  <div className="px-3.5 py-2.5 bg-[#000000] border-b border-[#18181b] flex flex-wrap items-center justify-between gap-2">
                                     <div className="flex items-center space-x-2">
-                                      <span className="w-5 h-5 rounded-full bg-amber-950 text-amber-300 border border-amber-800/60 flex items-center justify-center text-[10px] font-bold font-mono">
+                                      <span className="w-5 h-5 rounded-full bg-zinc-800 text-white border border-zinc-600 flex items-center justify-center text-[10px] font-bold font-mono">
                                         #{item.rank || idx + 1}
                                       </span>
                                       <button
                                         onClick={() => onOpenFileInExplorer(item.file_path)}
-                                        className="font-mono text-xs font-semibold text-sky-400 hover:underline cursor-pointer"
+                                        className="font-mono text-xs font-semibold text-white hover:underline cursor-pointer"
                                       >
                                         {item.file_path.split('/').pop()}
                                       </button>
-                                      <span className="text-[11px] text-[#71717a] font-mono">
+                                      <span className="text-[11px] text-zinc-500 font-mono">
                                         (L{item.start_line}–{item.end_line})
                                       </span>
                                       {item.symbol && (
-                                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono bg-sky-950/40 text-sky-300 border border-sky-800/40">
+                                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-zinc-200 border border-zinc-700">
                                           {item.chunk_type}: {item.symbol}
                                         </span>
                                       )}
                                     </div>
 
                                     <div className="flex items-center space-x-2">
-                                      <span className="text-[10px] font-mono bg-[#1c1c28] border border-[#2c2c3d] px-2 py-0.5 rounded text-emerald-400">
+                                      <span className="text-[10px] font-mono bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded text-zinc-300">
                                         {(item.similarity * 100).toFixed(1)}% match
                                       </span>
                                       <button
@@ -1224,18 +1220,18 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                                           setCopiedId(cardKey);
                                           setTimeout(() => setCopiedId(null), 2000);
                                         }}
-                                        className="p-1 text-[#a1a1aa] hover:text-white rounded hover:bg-[#252535] transition-colors cursor-pointer"
+                                        className="p-1 text-zinc-400 hover:text-white rounded hover:bg-zinc-800 transition-colors cursor-pointer"
                                         title="Copy code snippet"
                                       >
                                         {copiedId === cardKey ? (
-                                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                                          <Check className="w-3.5 h-3.5 text-white" />
                                         ) : (
                                           <Copy className="w-3.5 h-3.5" />
                                         )}
                                       </button>
                                       <button
                                         onClick={() => onOpenFileInExplorer(item.file_path)}
-                                        className="flex items-center space-x-1 px-2 py-1 bg-[#222230] hover:bg-sky-950/60 hover:text-sky-300 text-[#ececec] rounded text-[11px] font-medium transition-colors cursor-pointer border border-[#323246]"
+                                        className="flex items-center space-x-1 px-2 py-1 bg-zinc-900 hover:bg-zinc-800 text-white rounded text-[11px] font-medium transition-colors cursor-pointer border border-zinc-700"
                                       >
                                         <span>Open in Explorer</span>
                                         <ExternalLink className="w-3 h-3" />
@@ -1244,23 +1240,23 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                                   </div>
 
                                   {/* File path sub-bar */}
-                                  <div className="px-3.5 py-1.5 bg-[#101017] border-b border-[#20202e] text-[11px] font-mono text-[#71717a] flex items-center justify-between">
+                                  <div className="px-3.5 py-1.5 bg-[#08080a] border-b border-[#18181b] text-[11px] font-mono text-zinc-500 flex items-center justify-between">
                                     <span className="truncate">{item.file_path}</span>
                                     {item.docstring && (
-                                      <span className="italic text-[#a1a1aa] truncate max-w-[50%]">
+                                      <span className="italic text-zinc-400 truncate max-w-[50%]">
                                         &ldquo;{item.docstring}&rdquo;
                                       </span>
                                     )}
                                   </div>
 
                                   {/* Code Block with Line Numbers */}
-                                  <div className="p-3.5 bg-[#0a0a0f] overflow-x-auto text-xs font-mono text-[#ececec] leading-relaxed max-h-72">
+                                  <div className="p-3.5 bg-[#000000] overflow-x-auto text-xs font-mono text-zinc-200 leading-relaxed max-h-72">
                                     <pre>
                                       {item.code.split('\n').map((line, lineIdx) => {
                                         const currentLineNum = item.start_line + lineIdx;
                                         return (
-                                          <div key={lineIdx} className="table-row hover:bg-[#161622]">
-                                            <span className="table-cell select-none text-[#52525b] pr-4 text-right opacity-60 w-8">
+                                          <div key={lineIdx} className="table-row hover:bg-zinc-900/60">
+                                            <span className="table-cell select-none text-zinc-600 pr-4 text-right opacity-60 w-8">
                                               {currentLineNum}
                                             </span>
                                             <span className="table-cell whitespace-pre">{line}</span>
@@ -1293,7 +1289,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                       {!turn.isSearchOnly && turn.sources && turn.sources.length > 0 && (
                         <div className="pt-2">
                           <div className="flex items-center justify-between mb-2">
-                            <span className="text-xs font-semibold text-[#a1a1aa] uppercase tracking-wider">
+                            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                               Referenced Code Files
                             </span>
                             {turn.searchResponse && (
@@ -1302,7 +1298,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                                   setActiveSources(turn.searchResponse?.results || []);
                                   setShowSourcesPanel(true);
                                 }}
-                                className="text-xs text-sky-400 hover:underline cursor-pointer"
+                                className="text-xs text-zinc-300 hover:text-white hover:underline cursor-pointer"
                               >
                                 See all sources
                               </button>
@@ -1314,17 +1310,17 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                               <button
                                 key={i}
                                 onClick={() => onOpenFileInExplorer(src.file_path)}
-                                className="p-3 rounded-xl bg-[#1b1b24] hover:bg-[#252535] border border-[#2e2e3f] text-left transition-colors cursor-pointer group flex flex-col justify-between"
+                                className="p-3 rounded-xl bg-[#08080a] hover:bg-zinc-900 border border-[#18181b] text-left transition-colors cursor-pointer group flex flex-col justify-between"
                               >
                                 <div className="flex items-center justify-between w-full mb-1">
-                                  <span className="text-xs font-mono font-medium text-[#ececec] truncate group-hover:text-sky-400">
+                                  <span className="text-xs font-mono font-medium text-white truncate group-hover:text-zinc-200">
                                     {src.file_path.split('/').pop()}
                                   </span>
-                                  <span className="text-[10px] font-mono text-sky-400 bg-sky-950/60 px-1.5 py-0.2 rounded">
+                                  <span className="text-[10px] font-mono text-zinc-300 bg-zinc-900 border border-zinc-700 px-1.5 py-0.5 rounded">
                                     {(src.similarity * 100).toFixed(0)}%
                                   </span>
                                 </div>
-                                <p className="text-[11px] text-[#71717a] truncate font-mono">
+                                <p className="text-[11px] text-zinc-500 truncate font-mono">
                                   {src.file_path} (L{src.start_line}–{src.end_line})
                                 </p>
                               </button>
@@ -1335,14 +1331,14 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
 
                       {/* Bottom Action Row (Copy, Thumbs, Share) */}
                       {!turn.isLoading && turn.answer && (
-                        <div className="flex items-center space-x-1 pt-2 text-[#a1a1aa]">
+                        <div className="flex items-center space-x-1 pt-2 text-zinc-400">
                           <button
                             onClick={() => handleCopyAnswer(turn.id, turn.answer)}
-                            className="p-1.5 rounded-lg hover:bg-[#252535] hover:text-[#ececec] transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg hover:bg-zinc-900 hover:text-white transition-colors cursor-pointer"
                             title="Copy answer"
                           >
                             {copiedId === turn.id ? (
-                              <Check className="w-4 h-4 text-emerald-400" />
+                              <Check className="w-4 h-4 text-white" />
                             ) : (
                               <Copy className="w-4 h-4" />
                             )}
@@ -1350,8 +1346,8 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
 
                           <button
                             onClick={() => toggleFeedback(turn.id, 'up')}
-                            className={`p-1.5 rounded-lg hover:bg-[#252535] transition-colors cursor-pointer ${
-                              turn.feedback === 'up' ? 'text-emerald-400 bg-[#252535]' : 'hover:text-[#ececec]'
+                            className={`p-1.5 rounded-lg hover:bg-zinc-900 transition-colors cursor-pointer ${
+                              turn.feedback === 'up' ? 'text-white bg-zinc-800' : 'hover:text-white'
                             }`}
                             title="Good response"
                           >
@@ -1360,8 +1356,8 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
 
                           <button
                             onClick={() => toggleFeedback(turn.id, 'down')}
-                            className={`p-1.5 rounded-lg hover:bg-[#252535] transition-colors cursor-pointer ${
-                              turn.feedback === 'down' ? 'text-rose-400 bg-[#252535]' : 'hover:text-[#ececec]'
+                            className={`p-1.5 rounded-lg hover:bg-zinc-900 transition-colors cursor-pointer ${
+                              turn.feedback === 'down' ? 'text-rose-400 bg-zinc-800' : 'hover:text-white'
                             }`}
                             title="Poor response"
                           >
@@ -1379,9 +1375,9 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
 
         {/* Sticky Bottom Composer when conversation is active */}
         {isConversational && (
-          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#121215] via-[#121215]/95 to-transparent z-20 flex flex-col items-center">
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#000000] via-[#000000]/95 to-transparent z-20 flex flex-col items-center">
             <div className="w-full max-w-[768px] flex flex-col">
-              <div className="w-full bg-[#1b1b24] hover:bg-[#20202d] focus-within:bg-[#1b1b24] border border-[#2e2e40] focus-within:border-[#4f4f66] focus-within:ring-1 focus-within:ring-[#4f4f66] rounded-[26px] shadow-2xl p-3 flex flex-col transition-all">
+              <div className="w-full bg-[#08080a] hover:bg-[#0c0c0e] focus-within:bg-[#08080a] border border-[#18181b] focus-within:border-zinc-700 focus-within:ring-1 focus-within:ring-zinc-700 rounded-[26px] shadow-2xl p-3 flex flex-col transition-all">
                 <textarea
                   ref={bottomTextareaRef}
                   value={inputQuery}
@@ -1393,7 +1389,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                       ? 'Search code symbols, functions, or keywords (Fast BM25 + FAISS)...'
                       : 'Ask CodeLens AI a follow-up or search code...'
                   }
-                  className="w-full bg-transparent text-[#ececec] placeholder-[#71717a] text-base resize-none focus:outline-none px-1.5 pt-0.5 pb-2 leading-relaxed font-sans min-h-[36px] max-h-36"
+                  className="w-full bg-transparent text-white placeholder-zinc-500 text-base resize-none focus:outline-none px-1.5 pt-0.5 pb-2 leading-relaxed font-sans min-h-[36px] max-h-36"
                 />
 
                 <div className="flex items-center justify-between pt-1">
@@ -1402,7 +1398,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                     <button
                       type="button"
                       onClick={() => setIsAttachModalOpen(true)}
-                      className="p-1.5 rounded-full hover:bg-[#2a2a38] text-[#a1a1aa] hover:text-[#ececec] transition-colors cursor-pointer group"
+                      className="p-1.5 rounded-full hover:bg-zinc-900 text-zinc-400 hover:text-white transition-colors cursor-pointer group"
                       title="Attach GitHub Repository"
                     >
                       <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-200" />
@@ -1414,11 +1410,11 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                       onClick={() => setIsAttachModalOpen(true)}
                       className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
                         selectedRepo
-                          ? 'bg-sky-950/60 text-sky-400 border border-sky-800/60'
-                          : 'bg-[#262635] text-[#b4b4c4] border border-[#353548]'
+                          ? 'bg-[#000000] text-zinc-200 border border-[#1c1c21]'
+                          : 'bg-zinc-900 text-zinc-400 border border-zinc-800'
                       }`}
                     >
-                      <GithubIcon className="w-3.5 h-3.5 text-sky-400" />
+                      <GithubIcon className="w-3.5 h-3.5 text-zinc-400" />
                       <span>{selectedRepo ? selectedRepo : 'Attach Repo'}</span>
                     </button>
 
@@ -1428,14 +1424,14 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                       onClick={() => setIsSearchOnly(!isSearchOnly)}
                       className={`flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
                         isSearchOnly
-                          ? 'bg-amber-950/70 text-amber-300 border border-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.25)]'
-                          : 'bg-[#262635] text-[#a1a1aa] hover:text-[#ececec] border border-[#353548]'
+                          ? 'bg-zinc-800 text-white border border-zinc-600'
+                          : 'bg-[#000000] text-zinc-400 hover:text-white border border-[#1c1c21]'
                       }`}
                       title={isSearchOnly ? 'Search only mode is ON (no LLM generation, fast code chunk hits)' : 'Enable Search only mode'}
                     >
-                      <Search className={`w-3.5 h-3.5 ${isSearchOnly ? 'text-amber-400' : 'text-[#a1a1aa]'}`} />
+                      <Search className={`w-3.5 h-3.5 ${isSearchOnly ? 'text-white' : 'text-zinc-400'}`} />
                       <span>Search only</span>
-                      <span className={`w-1.5 h-1.5 rounded-full ${isSearchOnly ? 'bg-amber-400 animate-pulse' : 'bg-[#52525b]'}`} />
+                      <span className={`w-1.5 h-1.5 rounded-full ${isSearchOnly ? 'bg-white animate-pulse' : 'bg-zinc-600'}`} />
                     </button>
 
                     {/* Reason Toggle Pill */}
@@ -1444,8 +1440,8 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                       onClick={() => setIsReasonActive(!isReasonActive)}
                       className={`flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
                         isReasonActive
-                          ? 'bg-purple-950/60 text-purple-300 border border-purple-500/40'
-                          : 'hover:bg-[#2a2a38] text-[#a1a1aa]'
+                          ? 'bg-zinc-800 text-white border border-zinc-600'
+                          : 'hover:bg-zinc-900 text-zinc-400'
                       }`}
                     >
                       <Brain className="w-3.5 h-3.5" />
@@ -1456,11 +1452,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                     <button
                       type="button"
                       onClick={() => setExplanationMode(explanationMode === 'beginner' ? 'expert' : 'beginner')}
-                      className={`flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
-                        explanationMode === 'beginner'
-                          ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-500/40'
-                          : 'bg-indigo-950/60 text-indigo-300 border border-indigo-500/40'
-                      }`}
+                      className="flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer bg-[#000000] text-zinc-300 border border-[#1c1c21] hover:bg-zinc-900"
                       title="Switch between student-friendly Beginner mode and architectural Expert mode"
                     >
                       <span>{explanationMode === 'beginner' ? '🎓 Beginner' : '⚡ Expert'}</span>
@@ -1474,8 +1466,8 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                       disabled={!inputQuery.trim() || isAnyLoading}
                       className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
                         inputQuery.trim() && !isAnyLoading
-                          ? 'bg-white text-black hover:bg-[#e4e4e7] hover:scale-105 shadow-md cursor-pointer'
-                          : 'bg-[#323240] text-[#71717a] cursor-not-allowed'
+                          ? 'bg-white text-black hover:bg-zinc-200 hover:scale-105 shadow-md cursor-pointer'
+                          : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
                       }`}
                       title="Send message"
                     >
@@ -1486,7 +1478,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
               </div>
 
               {/* Subtext Disclaimer */}
-              <div className="text-[11px] text-[#71717a] text-center mt-2">
+              <div className="text-[11px] text-zinc-500 text-center mt-2">
                 CodeLens AI can make mistakes. Always review code before deploying.
               </div>
             </div>
@@ -1496,18 +1488,18 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
 
       {/* Sources Side Panel Drawer (Right Rail) */}
       {showSourcesPanel && (
-        <aside className="w-80 border-l border-[#252532] bg-[#16161d] flex flex-col h-full z-30 shrink-0 animate-in slide-in-from-right duration-200">
-          <div className="h-12 px-4 flex items-center justify-between border-b border-[#252532] shrink-0">
+        <aside className="w-80 border-l border-[#18181b] bg-[#08080a] flex flex-col h-full z-30 shrink-0 animate-in slide-in-from-right duration-200">
+          <div className="h-12 px-4 flex items-center justify-between border-b border-[#18181b] shrink-0">
             <div className="flex items-center space-x-2">
-              <Globe className="w-4 h-4 text-sky-400" />
-              <h3 className="text-sm font-semibold text-[#ececec]">Sources</h3>
-              <span className="text-xs text-[#a1a1aa] font-mono">
+              <Globe className="w-4 h-4 text-zinc-400" />
+              <h3 className="text-sm font-semibold text-white">Sources</h3>
+              <span className="text-xs text-zinc-500 font-mono">
                 ({activeSources.length})
               </span>
             </div>
             <button
               onClick={() => setShowSourcesPanel(false)}
-              className="p-1 rounded-md hover:bg-[#252535] text-[#a1a1aa] hover:text-[#ececec] transition-colors cursor-pointer"
+              className="p-1 rounded-md hover:bg-zinc-900 text-zinc-400 hover:text-white transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -1518,36 +1510,36 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
               activeSources.map((item, idx) => (
                 <div
                   key={idx}
-                  className="p-3 rounded-xl bg-[#1e1e28] border border-[#2e2e40] hover:border-[#44445c] transition-all"
+                  className="p-3 rounded-xl bg-[#000000] border border-[#18181b] hover:border-zinc-700 transition-all"
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-mono font-semibold text-[#ececec] truncate">
+                    <span className="text-xs font-mono font-semibold text-white truncate">
                       {item.file_path.split('/').pop()}
                     </span>
-                    <span className="text-[10px] font-mono text-sky-400 bg-sky-950/60 px-1.5 py-0.2 rounded border border-sky-800/40">
+                    <span className="text-[10px] font-mono text-zinc-300 bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-700">
                       {(item.similarity * 100).toFixed(0)}%
                     </span>
                   </div>
 
-                  <p className="text-[11px] font-mono text-[#a1a1aa] truncate mb-2">
+                  <p className="text-[11px] font-mono text-zinc-400 truncate mb-2">
                     {item.file_path} {item.start_line && `(L${item.start_line}–${item.end_line})`}
                   </p>
 
-                  <pre className="p-2 text-[10px] font-mono text-[#ececec] bg-[#121217] rounded-lg overflow-x-auto max-h-28 border border-[#2a2a38]">
+                  <pre className="p-2 text-[10px] font-mono text-zinc-300 bg-[#08080a] rounded-lg overflow-x-auto max-h-28 border border-[#18181b]">
                     <code>{item.code}</code>
                   </pre>
 
                   <button
                     onClick={() => onOpenFileInExplorer(item.file_path)}
-                    className="w-full mt-2.5 flex items-center justify-center space-x-1.5 py-1 px-2 rounded-lg bg-[#272736] hover:bg-[#323245] text-[11px] text-[#ececec] font-medium transition-colors cursor-pointer"
+                    className="w-full mt-2.5 flex items-center justify-center space-x-1.5 py-1 px-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-[11px] text-white font-medium transition-colors cursor-pointer border border-zinc-700"
                   >
                     <span>Open in Code Explorer</span>
-                    <ExternalLink className="w-3 h-3 text-[#a1a1aa]" />
+                    <ExternalLink className="w-3 h-3 text-zinc-400" />
                   </button>
                 </div>
               ))
             ) : (
-              <div className="text-center py-12 text-xs text-[#a1a1aa]">
+              <div className="text-center py-12 text-xs text-zinc-500">
                 No sources loaded yet. Perform a query with an attached repo to inspect code chunks.
               </div>
             )}
@@ -1558,16 +1550,16 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
       {/* ================= ATTACH GITHUB REPOSITORY MODAL ================= */}
       {isAttachModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-xl bg-[#181822] border border-[#2e2e42] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+          <div className="w-full max-w-xl bg-[#08080a] border border-[#18181b] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
             {/* Modal Header */}
-            <div className="px-6 py-4 border-b border-[#29293b] flex items-center justify-between bg-[#15151e]">
+            <div className="px-6 py-4 border-b border-[#18181b] flex items-center justify-between bg-[#000000]">
               <div className="flex items-center space-x-2.5">
-                <div className="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400">
+                <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-700 flex items-center justify-center text-white">
                   <GithubIcon className="w-4 h-4" />
                 </div>
                 <div>
                   <h3 className="text-base font-semibold text-white">Attach GitHub Repository</h3>
-                  <p className="text-xs text-[#a1a1aa]">
+                  <p className="text-xs text-zinc-400">
                     Clone and index any public GitHub repo to ground CodeLens AI in your code.
                   </p>
                 </div>
@@ -1580,7 +1572,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                   }
                 }}
                 disabled={isIngesting}
-                className="p-1.5 rounded-lg hover:bg-[#252535] text-[#a1a1aa] hover:text-white transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg hover:bg-zinc-900 text-zinc-400 hover:text-white transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1590,7 +1582,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
             <div className="p-6 overflow-y-auto space-y-6">
               {/* Clone Remote Repository Section */}
               <div className="space-y-3">
-                <label className="text-xs font-semibold text-[#ececec] uppercase tracking-wider block">
+                <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider block">
                   GitHub Repository URL
                 </label>
                 <div className="flex items-center space-x-2">
@@ -1601,21 +1593,21 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                       onChange={(e) => setGitUrlInput(e.target.value)}
                       placeholder="https://github.com/pallets/click.git"
                       disabled={isIngesting}
-                      className="w-full px-3.5 py-2.5 bg-[#121218] border border-[#2e2e42] focus:border-sky-500 focus:ring-1 focus:ring-sky-500 rounded-xl text-sm text-white placeholder-[#71717a] focus:outline-none transition-all font-mono"
+                      className="w-full px-3.5 py-2.5 bg-[#000000] border border-[#1c1c21] focus:border-zinc-500 rounded-xl text-sm text-white placeholder-zinc-500 focus:outline-none transition-all font-mono"
                     />
                   </div>
                   <button
                     onClick={() => handleAttachGithubRepo()}
                     disabled={!gitUrlInput.trim() || isIngesting}
-                    className={`px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-1.5 transition-all ${
+                    className={`px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center space-x-1.5 transition-all ${
                       gitUrlInput.trim() && !isIngesting
-                        ? 'bg-sky-500 hover:bg-sky-400 text-white shadow-md cursor-pointer'
-                        : 'bg-[#282838] text-[#71717a] cursor-not-allowed'
+                        ? 'bg-white hover:bg-zinc-200 text-black shadow-sm cursor-pointer'
+                        : 'bg-zinc-900 text-zinc-600 border border-zinc-800 cursor-not-allowed'
                     }`}
                   >
                     {isIngesting ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin text-white" />
+                        <Loader2 className="w-4 h-4 animate-spin text-black" />
                         <span>Cloning...</span>
                       </>
                     ) : (
@@ -1629,7 +1621,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
 
                 {/* Quick Presets */}
                 <div className="pt-1">
-                  <span className="text-[11px] text-[#71717a] block mb-2">Or attach a popular open-source preset:</span>
+                  <span className="text-[11px] text-zinc-500 block mb-2">Or attach a popular open-source preset:</span>
                   <div className="flex flex-wrap gap-2">
                     {presetRepos.map((preset) => (
                       <button
@@ -1639,9 +1631,9 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                           handleAttachGithubRepo(preset.url);
                         }}
                         disabled={isIngesting}
-                        className="px-2.5 py-1 rounded-lg bg-[#20202d] hover:bg-[#28283a] border border-[#2e2e42] text-xs text-[#a1a1aa] hover:text-white transition-all cursor-pointer flex items-center space-x-1.5"
+                        className="px-2.5 py-1 rounded-lg bg-[#000000] hover:bg-zinc-900 border border-[#1c1c21] text-xs text-zinc-400 hover:text-white transition-all cursor-pointer flex items-center space-x-1.5"
                       >
-                        <GithubIcon className="w-3 h-3 text-sky-400" />
+                        <GithubIcon className="w-3 h-3 text-zinc-400" />
                         <span>{preset.name}</span>
                       </button>
                     ))}
@@ -1651,17 +1643,17 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
 
               {/* Ingestion Progress View */}
               {isIngesting && (
-                <div className="p-4 rounded-xl bg-[#14141e] border border-sky-900/40 space-y-3 animate-in fade-in">
+                <div className="p-4 rounded-xl bg-[#000000] border border-[#18181b] space-y-3 animate-in fade-in">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-medium text-sky-300 flex items-center space-x-2">
-                      <Loader2 className="w-3.5 h-3.5 animate-spin text-sky-400" />
+                    <span className="font-medium text-white flex items-center space-x-2">
+                      <Loader2 className="w-3.5 h-3.5 animate-spin text-white" />
                       <span>{ingestStatusStep}</span>
                     </span>
-                    <span className="font-mono text-sky-400 font-bold">{ingestProgress}%</span>
+                    <span className="font-mono text-zinc-400 font-bold">{ingestProgress}%</span>
                   </div>
-                  <div className="w-full h-2 bg-[#20202e] rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-[#08080a] rounded-full overflow-hidden border border-[#18181b]">
                     <div
-                      className="h-full bg-gradient-to-r from-sky-500 to-indigo-500 transition-all duration-300 rounded-full"
+                      className="h-full bg-white transition-all duration-300 rounded-full"
                       style={{ width: `${ingestProgress}%` }}
                     />
                   </div>
@@ -1670,8 +1662,8 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
 
               {/* Ingestion Success View */}
               {ingestSuccessRepo && (
-                <div className="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-800/50 text-emerald-300 text-xs flex items-center space-x-2 animate-in fade-in">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <div className="p-3.5 rounded-xl bg-zinc-900 border border-zinc-700 text-white text-xs flex items-center space-x-2 animate-in fade-in">
+                  <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
                   <span>
                     Successfully attached <strong>{ingestSuccessRepo}</strong>! Switching active context...
                   </span>
@@ -1680,22 +1672,22 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
 
               {/* Error Message */}
               {ingestError && (
-                <div className="p-3.5 rounded-xl bg-rose-950/40 border border-rose-800/50 text-rose-300 text-xs flex items-center space-x-2 animate-in fade-in">
+                <div className="p-3.5 rounded-xl bg-zinc-900 border border-zinc-700 text-rose-400 text-xs flex items-center space-x-2 animate-in fade-in">
                   <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
                   <span>{ingestError}</span>
                 </div>
               )}
 
               {/* Available / Already Indexed Repositories List */}
-              <div className="space-y-3 pt-2 border-t border-[#252538]">
+              <div className="space-y-3 pt-2 border-t border-[#18181b]">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-[#ececec] uppercase tracking-wider">
+                  <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                     Already Indexed Repositories ({repositories.length})
                   </label>
                   {onRefreshRepositories && (
                     <button
                       onClick={() => onRefreshRepositories()}
-                      className="text-xs text-sky-400 hover:underline cursor-pointer"
+                      className="text-xs text-zinc-300 hover:text-white hover:underline cursor-pointer"
                     >
                       Refresh
                     </button>
@@ -1711,22 +1703,22 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                           key={repo.repository_id}
                           className={`p-3 rounded-xl border flex items-center justify-between transition-all ${
                             isActive
-                              ? 'bg-sky-950/30 border-sky-700/50'
-                              : 'bg-[#1b1b26] border-[#29293d] hover:border-[#3d3d59]'
+                              ? 'bg-zinc-900 border-zinc-600'
+                              : 'bg-[#000000] border-[#1c1c21] hover:border-zinc-700'
                           }`}
                         >
                           <div className="flex items-center space-x-3">
-                            <FolderGit2 className={`w-4 h-4 ${isActive ? 'text-sky-400' : 'text-[#71717a]'}`} />
+                            <FolderGit2 className={`w-4 h-4 ${isActive ? 'text-white' : 'text-zinc-500'}`} />
                             <div>
                               <div className="text-sm font-semibold text-white flex items-center space-x-2">
                                 <span>{repo.repository_name}</span>
                                 {isActive && (
-                                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-white text-black font-semibold">
                                     Active
                                   </span>
                                 )}
                               </div>
-                              <div className="text-[11px] text-[#71717a] flex items-center space-x-2">
+                              <div className="text-[11px] text-zinc-500 flex items-center space-x-2">
                                 <span>{repo.total_files} files</span>
                                 <span>•</span>
                                 <span>{repo.total_chunks} code chunks</span>
@@ -1740,7 +1732,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                                 onSelectRepo(repo.repository_id);
                                 setIsAttachModalOpen(false);
                               }}
-                              className="px-3 py-1.5 rounded-lg bg-[#28283a] hover:bg-[#34344d] text-xs font-medium text-white transition-colors cursor-pointer"
+                              className="px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-xs font-medium text-white transition-colors cursor-pointer border border-zinc-700"
                             >
                               Attach
                             </button>
@@ -1750,7 +1742,7 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                     })}
                   </div>
                 ) : (
-                  <div className="text-center py-6 text-xs text-[#71717a]">
+                  <div className="text-center py-6 text-xs text-zinc-500">
                     No repositories indexed yet. Enter a GitHub URL above to clone one!
                   </div>
                 )}
@@ -1758,11 +1750,11 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
             </div>
 
             {/* Modal Footer */}
-            <div className="px-6 py-3.5 border-t border-[#252538] bg-[#14141e] flex items-center justify-end">
+            <div className="px-6 py-3.5 border-t border-[#18181b] bg-[#000000] flex items-center justify-end">
               <button
                 onClick={() => setIsAttachModalOpen(false)}
                 disabled={isIngesting}
-                className="px-4 py-2 rounded-xl bg-[#222230] hover:bg-[#2b2b3d] text-xs font-medium text-white transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-xs font-medium text-white transition-colors cursor-pointer border border-zinc-700"
               >
                 Close
               </button>
