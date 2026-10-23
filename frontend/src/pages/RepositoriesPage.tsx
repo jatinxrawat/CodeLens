@@ -9,6 +9,7 @@ import {
   Layers,
   Database,
   ArrowRight,
+  GitCompare,
 } from 'lucide-react';
 import { RepositorySummary, RepositoryStatus } from '../types';
 import {
@@ -23,6 +24,7 @@ interface RepositoriesPageProps {
   selectedRepo: string;
   onSelectRepo: (repo: string) => void;
   onRefreshRepositories: () => void;
+  onNavigateToTab?: (tab: string) => void;
 }
 
 export const RepositoriesPage: React.FC<RepositoriesPageProps> = ({
@@ -30,6 +32,7 @@ export const RepositoriesPage: React.FC<RepositoriesPageProps> = ({
   selectedRepo,
   onSelectRepo,
   onRefreshRepositories,
+  onNavigateToTab,
 }) => {
   const [gitUrl, setGitUrl] = useState('');
   const [localPath, setLocalPath] = useState('');
@@ -108,6 +111,29 @@ export const RepositoriesPage: React.FC<RepositoriesPageProps> = ({
           Ingest public GitHub repositories or local directory paths with 100% local AST parsing and FAISS indexing.
         </p>
       </div>
+
+      {onNavigateToTab && repositories.length >= 2 && (
+        <div className="bg-[#161b22] border border-[#30363d] hover:border-[#58a6ff]/50 rounded-xl p-4 flex items-center justify-between transition-colors shadow-sm">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center">
+              <GitCompare className="w-4 h-4" />
+            </div>
+            <div>
+              <h4 className="text-xs font-semibold text-white">Repository Comparison Studio</h4>
+              <p className="text-[11px] text-[#8b949e]">
+                Compare architectural layers, code metrics, and AST structures across indexed codebases.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => onNavigateToTab('comparison')}
+            className="flex items-center space-x-1.5 px-3 py-1.5 bg-[#21262d] hover:bg-[#30363d] text-white text-xs rounded-lg font-medium cursor-pointer border border-[#30363d] transition-colors"
+          >
+            <span>Open Comparison</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
       {error && (
         <div className="p-4 bg-red-950/40 border border-red-800/60 rounded-lg text-xs text-red-300 flex items-center space-x-2">

@@ -28,6 +28,7 @@ wheels/
 frontend/node_modules/
 frontend/dist/
 frontend/.vite/
+*.tsbuildinfo
 
 # Cloned repositories & data caches (keep directory structure)
 data/repositories/*
@@ -36,6 +37,8 @@ data/indexes/*
 !data/indexes/.gitkeep
 data/temp/*
 !data/temp/.gitkeep
+data/cache/*
+!data/cache/.gitkeep
 
 # Environment variables & Local configurations
 .env

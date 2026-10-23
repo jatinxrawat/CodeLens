@@ -2,7 +2,7 @@
 
 import os
 from pathlib import Path
-from typing import List, Set
+from typing import List, Set, Optional, Dict
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 
@@ -27,11 +27,35 @@ class Settings(BaseModel):
     MAINTAINABILITY_MODEL_PATH: Path = Path(os.getenv("MAINTAINABILITY_MODEL_PATH", str(MODELS_DIR / "maintainability" / "v1")))
     STATIC_DIR: Path = BASE_DIR / "frontend" / "dist"
 
-    # LLM Settings (100% Local Inference)
+    # Storage & Cache Paths
+    CACHE_DIR: Path = DATA_DIR / "cache"
+    CACHE_DB_PATH: Path = CACHE_DIR / "codelens_cache.db"
+
+    # LLM Settings & Provider Selection
+    LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "gemini").lower()  # "gemini" or "local"
+    GEMINI_API_KEY: Optional[str] = os.getenv("GEMINI_API_KEY", None)
+    GEMINI_FLASH_MODEL: str = os.getenv("GEMINI_FLASH_MODEL", "gemini-2.5-flash")
+    GEMINI_PRO_MODEL: str = os.getenv("GEMINI_PRO_MODEL", "gemini-2.5-pro")
+    GEMINI_EMBEDDING_MODEL: str = os.getenv("GEMINI_EMBEDDING_MODEL", "text-embedding-004")
+
+    # Local LLM Fallback (100% Offline)
     LLM_MODEL: str = os.getenv("LLM_MODEL", "Qwen/Qwen2.5-Coder-1.5B-Instruct")
     MAX_CONTEXT_TOKENS: int = int(os.getenv("MAX_CONTEXT_TOKENS", "2048"))
     MAX_SOURCES: int = int(os.getenv("MAX_SOURCES", "5"))
     MAX_LLM_OUTPUT_TOKENS: int = int(os.getenv("MAX_LLM_OUTPUT_TOKENS", "1024"))
+
+    # GitHub Service & OAuth Settings
+    GITHUB_TOKEN: Optional[str] = os.getenv("GITHUB_TOKEN", None)
+    GITHUB_CLIENT_ID: Optional[str] = os.getenv("GITHUB_CLIENT_ID", None)
+    GITHUB_CLIENT_SECRET: Optional[str] = os.getenv("GITHUB_CLIENT_SECRET", None)
+
+    # Seasonal Banner Slot
+    SEASONAL_BANNER_ENABLED: bool = os.getenv("SEASONAL_BANNER_ENABLED", "true").lower() in ("true", "1", "yes")
+    SEASONAL_BANNER_TITLE: str = os.getenv("SEASONAL_BANNER_TITLE", "Student Open Source Season 2026")
+    SEASONAL_BANNER_SUBTITLE: str = os.getenv("SEASONAL_BANNER_SUBTITLE", "Find beginner-friendly issues, earn badges, and contribute to top open-source projects!")
+
+    # Per-user Rate Limiting
+    RATE_LIMIT_PER_MINUTE: int = int(os.getenv("RATE_LIMIT_PER_MINUTE", "60"))
 
     # Embedding Model Settings
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", os.getenv("EMBEDDING_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2"))

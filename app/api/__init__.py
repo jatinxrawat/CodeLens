@@ -12,10 +12,20 @@ from app.api.reports import router as reports_router
 from app.api.comparison import router as comparison_router
 from app.api.incremental import router as incremental_router
 from app.api.ml import router as ml_router
+from app.api.explore import router as explore_router
+from app.api.contribute import router as contribute_router
+from app.api.repos import router as repos_router
+from app.api.user import router as user_router
+from app.api.auth import router as auth_router
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(health_router, tags=["Health"])
 api_router.include_router(repositories_router, prefix="/repositories", tags=["Repositories"])
+api_router.include_router(repos_router, tags=["Repos"])
+api_router.include_router(explore_router, tags=["Explore"])
+api_router.include_router(contribute_router, tags=["Contribute"])
+api_router.include_router(user_router, tags=["User & Contributions"])
+api_router.include_router(auth_router, tags=["Authentication"])
 api_router.include_router(search_router, tags=["Search"])
 api_router.include_router(stats_router, prefix="/repositories", tags=["Stats"])
 api_router.include_router(files_router, prefix="/repositories", tags=["Files"])

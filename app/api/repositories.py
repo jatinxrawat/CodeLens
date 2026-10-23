@@ -10,6 +10,7 @@ from app.schemas.repository import (
     RepositorySummary,
 )
 from app.services.repository_service import repository_service
+from app.ingestion.repository import RepositoryManager
 
 router = APIRouter()
 
@@ -21,41 +22,53 @@ async def list_repositories():
 
 
 @router.post("/ingest", response_model=IngestJobResponse, status_code=status.HTTP_202_ACCEPTED)
-async def ingest_remote_repository(request: IngestRequest):
-    """Spawns an asynchronous background ingestion job for a remote GitHub repository."""
+async def ingest_remote_repository(request: IngestRequest, background_tasks: BackgroundTasks):
+    """Spawns an asynchronous background ingestion job for a remote Git repository."""
     if not request.git_url or not request.git_url.strip():
         raise HTTPException(status_code=400, detail="Invalid GitHub URL provided.")
 
-    if not request.git_url.startswith(("http://", "https://", "git@", "ssh://")):
-        raise HTTPException(status_code=400, detail="URL must start with http://, https://, or git@")
+    try:
+        normalized_url = RepositoryManager.normalize_clone_url(request.git_url)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
     try:
-        job = repository_service.start_remote_ingestion_job(request.git_url, force=request.force)
+        job = repository_service.start_remote_ingestion_job(
+            normalized_url, force=request.force, background_tasks=background_tasks
+        )
         return IngestJobResponse(
             job_id=job.job_id,
             repository_id=job.repository_id,
             repository_name=job.repository_name,
             status=job.status,
-            message=f"Ingestion job started for {request.git_url}",
+            stage=job.stage,
+            current_step=job.current_step,
+            progress_pct=job.progress_pct,
+            message=job.message or f"Ingestion job started for {normalized_url}",
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to start ingestion job: {e}")
 
 
 @router.post("/ingest-local", response_model=IngestJobResponse, status_code=status.HTTP_202_ACCEPTED)
-async def ingest_local_repository(request: IngestLocalRequest):
+async def ingest_local_repository(request: IngestLocalRequest, background_tasks: BackgroundTasks):
     """Spawns an asynchronous background ingestion job for a local directory."""
     if not request.repo_path or not request.repo_path.strip():
         raise HTTPException(status_code=400, detail="Repository path cannot be empty.")
 
     try:
-        job = repository_service.start_local_ingestion_job(request.repo_path)
+        job = repository_service.start_local_ingestion_job(
+            request.repo_path, background_tasks=background_tasks
+        )
         return IngestJobResponse(
             job_id=job.job_id,
             repository_id=job.repository_id,
             repository_name=job.repository_name,
             status=job.status,
-            message=f"Ingestion job started for {request.repo_path}",
+            stage=job.stage,
+            current_step=job.current_step,
+            progress_pct=job.progress_pct,
+            message=job.message or f"Ingestion job started for {request.repo_path}",
         )
     except FileNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))

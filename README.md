@@ -278,7 +278,150 @@ Open your browser at **[http://localhost:5173](http://localhost:5173)** (or **[h
 
 ---
 
-## 💻 CLI Operations
+## 🎓 CodeLens for Students: Architecture & New Features
+
+CodeLens has been restructured as an intuitive code-intelligence platform that any student or aspiring open-source contributor can immediately use:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                              STUDENT NAVIGATION STRUCTURE                              │
+├───────────────────────────────┬────────────────────────────────────────────────────────┤
+│ 1. Chat                       │ Ask anything with Beginner/Expert modes or toggle      │
+│                               │ "Search only" for instant AST chunk hits.              │
+├───────────────────────────────┼────────────────────────────────────────────────────────┤
+│ 2. Overview                   │ High-level codebase summary, file breakdown & metrics. │
+├───────────────────────────────┼────────────────────────────────────────────────────────┤
+│ 3. Architecture               │ Subsystem layers & interactive NetworkX import graph.  │
+├───────────────────────────────┼────────────────────────────────────────────────────────┤
+│ 4. Impact Analysis            │ Blast radius simulator for refactoring without breaking│
+├───────────────────────────────┼────────────────────────────────────────────────────────┤
+│ 5. Explorer                   │ Polyglot AST syntax tree + 1-click caller/callee flow. │
+├───────────────────────────────┼────────────────────────────────────────────────────────┤
+│ 6. Health                     │ Two tabs: Maintainability & smells + Security audit.   │
+├───────────────────────────────┼────────────────────────────────────────────────────────┤
+│ 7. Explore                    │ Trending open-source repos with 6-factor readiness     │
+│                               │ scores (0-100) and 1-click "Analyze in CodeLens".      │
+├───────────────────────────────┼────────────────────────────────────────────────────────┤
+│ 8. Contribute                 │ Beginner issues ("good first issue", "help wanted")    │
+│                               │ with Gemini skill summaries and difficulty badges.     │
+├───────────────────────────────┼────────────────────────────────────────────────────────┤
+│ 9. Reports                    │ Exportable architectural and quality audit reports.    │
+├───────────────────────────────┼────────────────────────────────────────────────────────┤
+│ 10. Repositories              │ Repository catalog, repo comparison studio, & ingest.  │
+└───────────────────────────────┴────────────────────────────────────────────────────────┘
+```
+
+### 🌟 Explore & Contribute Features
+- **Explore Repositories (`/explore`):** Browse top open-source projects across Python, TypeScript, Go, Rust, C++, and Java. Filter by domain (`AI/ML`, `Web`, `DevOps`, `Systems`, `Mobile`) or stars.
+- **Contribution-Readiness Score (0-100):** Every repository displays an explainable letter grade (`A+` to `D`) computed from:
+  1. *Recent commit activity (20%)*
+  2. *Median PR merge time (20%)*
+  3. *Maintainer response time on issues (20%)*
+  4. *Presence of CONTRIBUTING.md (15%)*
+  5. *Ratio of labeled beginner issues (15%)*
+  6. *Open PR backlog (10%)*
+- **Contribute Issues (`/contribute`):** Discover unassigned "good first issue" items. CodeLens runs Gemini to automatically extract:
+  - **Difficulty rating:** `easy`, `medium`, or `hard`
+  - **Required skills:** e.g., `["python", "fastapi", "pytest"]`
+  - **Likely files to edit:** e.g., `["app/routers/auth.py"]`
+  - **Student-friendly issue summary:** plain English overview of what needs fixing.
+- **Bookmarks & "Working on this":** Save issues you want to tackle, or mark yourself as actively working on an issue.
+- **1-Click "Analyze in CodeLens":** Found an intriguing repo or issue? Hit *Analyze in CodeLens* on any card to clone, index AST symbols, build vector embeddings, and immediately start exploring its architecture!
+
+---
+
+## ⚡ LLM Provider: Google Gemini vs 100% Offline Local Mode
+
+CodeLens supports an extensible `LLMProvider` layer with runtime switching between **Google Gemini** (default cloud provider) and **Local ML Engine** (100% offline Qwen + SentenceTransformers).
+
+### 1. Google Gemini Mode (Default)
+- **Fast, High-Quality Answers:** Powered by the official Google GenAI SDK.
+- **Two Tiers:**
+  - `Flash-Tier` (`gemini-2.5-flash`): Used for standard conversational answers and fast RAG.
+  - `Pro-Tier` (`gemini-2.5-pro`): Used when "Deep Reason" mode is toggled for complex AST call graph tracing.
+- **Embeddings:** Cloud vector indexing via `text-embedding-004`.
+- **Privacy Notice:** When analyzing a private or proprietary repository, CodeLens displays a clear banner before sending code snippets to Google GenAI, allowing 1-click fallback to Local Mode.
+
+### 2. Local ML Engine Mode (100% Offline)
+- Runs completely on your device without internet access or external APIs.
+- Uses local `Qwen/Qwen2.5-Coder-1.5B-Instruct` and `sentence-transformers/all-MiniLM-L6-v2`.
+- Ideal for airplane mode, air-gapped environments, or strict company data policies.
+
+### Switching Between Providers
+You can switch providers at any time:
+1. **Via UI:** Click the Provider Indicator in the bottom-left of the sidebar (shows **Gemini** or **Local**) and choose your engine.
+2. **Via REST API:**
+   ```bash
+   # Switch to local offline mode
+   curl -X POST http://localhost:8000/api/reasoning/provider -H "Content-Type: application/json" -d '{"provider": "local"}'
+   
+   # Switch back to Gemini cloud mode
+   curl -X POST http://localhost:8000/api/reasoning/provider -H "Content-Type: application/json" -d '{"provider": "gemini"}'
+   ```
+3. **Via Environment Variable:** Set `LLM_PROVIDER=gemini` or `LLM_PROVIDER=local` in `.env`.
+
+---
+
+## ⚙️ Environment Variables & Setup Guide
+
+Create a `.env` file in the project root (see `.env.example`):
+
+```bash
+cp .env.example .env
+```
+
+### Essential Settings
+| Variable | Description | Default |
+|---|---|---|
+| `LLM_PROVIDER` | Active LLM engine (`gemini` or `local`) | `gemini` |
+| `GEMINI_API_KEY` | Your Google Gemini API Key from [AI Studio](https://aistudio.google.com/) | *(None - falls back to local if missing)* |
+| `GEMINI_FLASH_MODEL` | Flash model for fast generation | `gemini-2.5-flash` |
+| `GEMINI_PRO_MODEL` | Pro model for deep reasoning | `gemini-2.5-pro` |
+| `GEMINI_EMBEDDING_MODEL` | Cloud embedding model | `text-embedding-004` |
+| `GITHUB_TOKEN` | GitHub Personal Access Token (PAT) for Explore & Contribute API | *(Optional, increases rate limit to 5,000 req/hr)* |
+| `GITHUB_CLIENT_ID` | Optional GitHub OAuth client ID | *(Optional)* |
+| `GITHUB_CLIENT_SECRET` | Optional GitHub OAuth client secret | *(Optional)* |
+| `SEASONAL_BANNER_ENABLED` | Displays seasonal event banner on Contribute page | `true` |
+| `RATE_LIMIT_PER_MINUTE` | Per-client sliding window rate limiter | `30` |
+
+### Getting a Gemini API Key
+1. Visit [Google AI Studio](https://aistudio.google.com/).
+2. Click **Get API key** and create a free key.
+3. Add it to your `.env`:
+   ```bash
+   GEMINI_API_KEY=AIzaSy...
+   ```
+*(Note: Your API key is read purely server-side in FastAPI and is NEVER leaked to the client or frontend).*
+
+### Getting a GitHub Token (Recommended)
+Without a token, GitHub REST API allows 60 unauthenticated requests per hour. With a token, you get 5,000 requests per hour:
+1. Go to [GitHub Settings -> Tokens (Classic)](https://github.com/settings/tokens).
+2. Generate new token (classic) with `public_repo` scope.
+3. Add it to `.env`:
+   ```bash
+   GITHUB_TOKEN=ghp_...
+   ```
+
+### Setting Up GitHub OAuth (Optional)
+To enable student language personalization and GitHub login:
+1. Go to [GitHub Developer Settings -> OAuth Apps](https://github.com/settings/developers).
+2. Register a new OAuth application:
+   - Homepage URL: `http://localhost:5173`
+   - Authorization callback URL: `http://localhost:8000/api/auth/github/callback`
+3. Copy the Client ID and Client Secret into `.env`:
+   ```bash
+   GITHUB_CLIENT_ID=your_client_id
+   GITHUB_CLIENT_SECRET=your_client_secret
+   ```
+
+---
+
+## 💻 CLI & Admin Operations
+
+### Hidden Admin Suite (`/admin`)
+The ML Training Studio and IR Benchmark pages have been relocated from the main navigation to a dedicated `/admin` route:
+- Access via: **[http://localhost:5173/?tab=admin](http://localhost:5173/?tab=admin)** or **[http://localhost:5173/admin](http://localhost:5173/admin)**.
+- Allows running GBDT ranker re-training, maintainability model calibration, and IR NDCG@k evaluation benchmarks.
 
 ### Ingest Any Local Repository
 ```bash
@@ -290,23 +433,9 @@ python -m app.cli ingest-local /path/to/target/repo --name my_project
 python -m app.cli ingest-remote https://github.com/pallets/click.git
 ```
 
-### Build ML Training Dataset
+### Run Automated Pytest Suite
 ```bash
-python -m app.ml.cli dataset build
-```
-
-### Train Custom ML Models
-```bash
-# Train Relevance Ranking GBDT Model
-python -m app.ml.cli train ranker --n-estimators 100 --learning-rate 0.05
-
-# Train Maintainability Risk Classifier
-python -m app.ml.cli train maintainability --n-estimators 100 --learning-rate 0.05
-```
-
-### Run Automated Pytest Suite (58 Tests)
-```bash
-pytest -v
+PYTHONPATH=. ./.venv/bin/pytest tests/test_readiness_scorer.py tests/test_github_service.py tests/test_llm_provider.py tests/test_api_explore_contribute.py
 ```
 
 ---
@@ -315,8 +444,8 @@ pytest -v
 
 1. **Passive Text Ingestion:** Target repository source files are parsed purely as static data syntax trees. CodeLens **never executes arbitrary repository code**.
 2. **Prompt Injection Defense:** Untrusted repository comments or override instructions are sandboxed as passive data blocks and cannot alter system roles.
-3. **Strict Resource Quotas:** Hard limits enforced on repository size (max 200MB), file count (max 5,000 files), and file size (max 500KB).
-4. **Zero Cloud Telemetry:** 100% offline inference; no tokens, code snippets, or embeddings are transmitted to external servers.
+3. **Cloud AI Transparency:** Clear UI notices are shown when private code context is processed via Gemini, with an instant toggle to switch to 100% offline local models.
+4. **Per-Client Rate Limiting:** Sliding-window rate limiting prevents API abuse and quota exhaustion.
 
 ---
 

@@ -16,7 +16,9 @@ export interface RepositoryStatus {
   source: string;
   status: 'ready' | 'ingesting' | 'failed' | 'not_found';
   current_step?: string;
+  stage?: string;
   progress_pct?: number;
+  message?: string;
   total_files: number;
   total_chunks: number;
   languages: Record<string, number>;
@@ -435,4 +437,128 @@ export interface MLDatasetStatsResponse {
     test: string[];
   };
 }
+
+// ================= Part 2 & Part 3 Types =================
+
+export interface ReadinessBreakdown {
+  recent_commit_activity: number;
+  pr_merge_time: number;
+  maintainer_response_time: number;
+  contributing_guidelines: number;
+  beginner_issue_ratio: number;
+  open_pr_backlog: number;
+}
+
+export interface ReadinessScore {
+  score: number;
+  grade: string;
+  breakdown: ReadinessBreakdown;
+  weights: Record<string, number>;
+  details: Record<string, any>;
+}
+
+export interface ExploreRepoItem {
+  id: string;
+  name: string;
+  full_name: string;
+  html_url: string;
+  description: string;
+  stars: number;
+  forks: number;
+  open_issues_count: number;
+  language: string;
+  topics: string[];
+  pushed_at: string;
+  created_at: string;
+  owner: {
+    login: string;
+    avatar_url: string;
+  };
+  readiness: ReadinessScore;
+}
+
+export interface ExploreReposResponse {
+  total_count: number;
+  page: number;
+  per_page: number;
+  repos: ExploreRepoItem[];
+  cached_at: string;
+}
+
+export interface ContributeIssueItem {
+  id: string;
+  number: number;
+  title: string;
+  html_url: string;
+  repository: string;
+  repository_url: string;
+  labels: string[];
+  comments_count: number;
+  created_at: string;
+  updated_at: string;
+  user: {
+    login: string;
+    avatar_url: string;
+  };
+  difficulty: 'easy' | 'medium' | 'hard';
+  skills: string[];
+  likely_files: string[];
+  summary: string;
+  readiness?: ReadinessScore;
+}
+
+export interface ContributeIssuesResponse {
+  total_count: number;
+  page: number;
+  per_page: number;
+  issues: ContributeIssueItem[];
+  cached_at: string;
+}
+
+export interface BookmarkItem {
+  issue_id: string;
+  repo_name: string;
+  title: string;
+  url: string;
+  created_at: number;
+}
+
+export interface WorkingItem {
+  issue_id: string;
+  repo_name: string;
+  title: string;
+  url: string;
+  status: string;
+  created_at: number;
+}
+
+export interface UserProfile {
+  user_id: string;
+  username: string;
+  avatar_url: string;
+  top_languages: string[];
+  bookmarks: BookmarkItem[];
+  working: WorkingItem[];
+}
+
+export interface LLMProviderStatus {
+  active_provider: 'gemini' | 'local';
+  gemini_available: boolean;
+  gemini_flash_model: string;
+  gemini_pro_model: string;
+  gemini_embedding_model: string;
+  local_model: string;
+  local_embedding_model: string;
+}
+
+export interface AnalyzeRepoResponse {
+  repo_id: string;
+  job_id: string;
+  status: string;
+  stage?: string;
+  current_step?: string;
+  message: string;
+  progress_pct: number;
+}
+
 

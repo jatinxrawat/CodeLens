@@ -77,7 +77,43 @@ class IngestionPipeline:
         console.print(f"Found [bold green]{len(discovered_files)}[/bold green] source files matching supported languages.")
 
         if not discovered_files:
-            raise ValueError(f"No supported source code files found in repository: {repo_path}")
+            console.print(f"[yellow]No supported code files found in repository: {repo_path}. Initializing empty index.[/yellow]")
+            empty_metadata = IndexMetadata(
+                repo_name=repo_name,
+                repo_source=source_descriptor,
+                indexed_at=datetime.now(timezone.utc).isoformat(),
+                total_files=0,
+                total_chunks=0,
+                languages={},
+                chunk_types={},
+                embedding_model="none",
+                embedding_dimension=0,
+                ingestion_time_sec=round(ingestion_time_sec, 3),
+                parsing_time_sec=0.0,
+                embedding_time_sec=0.0,
+                indexing_time_sec=0.0,
+                total_time_sec=round(time.perf_counter() - total_start + ingestion_time_sec, 3),
+            )
+            index_dir = settings.INDEXES_DIR / repo_name
+            index_dir.mkdir(parents=True, exist_ok=True)
+            with open(index_dir / "metadata.json", "w", encoding="utf-8") as f:
+                f.write(empty_metadata.model_dump_json(indent=2))
+            with open(index_dir / "chunks.json", "w", encoding="utf-8") as f:
+                f.write("[]")
+            return empty_metadata
+
+        # Compute and cache file hashes for incremental indexing
+        import hashlib
+        from app.services.cache_service import cache_service
+        file_hashes = {}
+        for f in discovered_files:
+            try:
+                content = f.read_bytes()
+                rel_path = str(f.relative_to(repo_path))
+                file_hashes[rel_path] = hashlib.sha256(content).hexdigest()
+            except Exception:
+                pass
+        cache_service.update_file_hashes(repo_name, file_hashes)
 
         # 2. Parse files into AST Code Chunks
         t_parse_start = time.perf_counter()
@@ -87,7 +123,30 @@ class IngestionPipeline:
         console.print(f"Extracted [bold green]{len(chunks)}[/bold green] code chunks in {parsing_time_sec:.2f}s.")
 
         if not chunks:
-            raise ValueError(f"Failed to extract any code chunks from {repo_path}")
+            console.print(f"[yellow]No parseable code chunks extracted from {repo_path}. Initializing empty index.[/yellow]")
+            empty_metadata = IndexMetadata(
+                repo_name=repo_name,
+                repo_source=source_descriptor,
+                indexed_at=datetime.now(timezone.utc).isoformat(),
+                total_files=len(discovered_files),
+                total_chunks=0,
+                languages={},
+                chunk_types={},
+                embedding_model="none",
+                embedding_dimension=0,
+                ingestion_time_sec=round(ingestion_time_sec, 3),
+                parsing_time_sec=round(parsing_time_sec, 3),
+                embedding_time_sec=0.0,
+                indexing_time_sec=0.0,
+                total_time_sec=round(time.perf_counter() - total_start + ingestion_time_sec, 3),
+            )
+            index_dir = settings.INDEXES_DIR / repo_name
+            index_dir.mkdir(parents=True, exist_ok=True)
+            with open(index_dir / "metadata.json", "w", encoding="utf-8") as f:
+                f.write(empty_metadata.model_dump_json(indent=2))
+            with open(index_dir / "chunks.json", "w", encoding="utf-8") as f:
+                f.write("[]")
+            return empty_metadata
 
         # Compute stats
         lang_counts = Counter(chunk.language for chunk in chunks)

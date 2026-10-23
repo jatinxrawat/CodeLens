@@ -10,6 +10,9 @@ class AskRequest(BaseModel):
     query: str = Field(..., description="User question (e.g. 'How is authentication handled?' or general coding questions)")
     top_k: int = Field(default=5, ge=1, le=20)
     alpha: float = Field(default=0.6, ge=0.0, le=1.0)
+    mode: str = Field(default="beginner", description="Explanation style: 'beginner' for student-friendly walk-throughs, 'expert' for deep architecture insights")
+    provider: Optional[str] = Field(default=None, description="Optional provider override ('gemini' or 'local')")
+    model_tier: str = Field(default="flash", description="Model tier ('flash' for fast Q&A, 'pro' for deep reasoning)")
 
 
 class AskResponse(BaseModel):

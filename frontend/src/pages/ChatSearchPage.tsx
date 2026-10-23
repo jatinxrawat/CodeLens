@@ -27,9 +27,33 @@ import {
   AlertCircle,
   Loader2,
   CheckCircle2,
+  Compass,
+  ShieldCheck,
+  Cpu,
+  Star,
+  GitFork,
 } from 'lucide-react';
-import type { SearchResponse, SearchMode, SearchResultItem, AskResponse, RepositorySummary, CitationSource } from '../types';
-import { executeSearch, askCodebase, ingestRemoteRepository, fetchRepositoryStatus } from '../services/api';
+import type {
+  SearchResponse,
+  SearchMode,
+  SearchResultItem,
+  AskResponse,
+  RepositorySummary,
+  CitationSource,
+  ExploreRepoItem,
+  LLMProviderStatus,
+} from '../types';
+import {
+  executeSearch,
+  askCodebase,
+  ingestRemoteRepository,
+  fetchRepositoryStatus,
+  fetchExploreRepos,
+  analyzeRepository,
+  fetchRepoStatus,
+  fetchProviderStatus,
+  setLLMProvider,
+} from '../services/api';
 
 interface ChatSearchPageProps {
   selectedRepo: string;
@@ -140,10 +164,21 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
   const [isReasonActive, setIsReasonActive] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [modelDropdownOpen, setModelDropdownOpen] = useState(false);
-  const [selectedModel, setSelectedModel] = useState('CodeLens AI');
+  const [selectedModel, setSelectedModel] = useState('Gemini 2.5 Flash');
+  const [activeProvider, setActiveProvider] = useState<'gemini' | 'local'>('gemini');
+  const [explanationMode, setExplanationMode] = useState<'beginner' | 'expert'>('beginner');
   const [showSourcesPanel, setShowSourcesPanel] = useState(false);
   const [activeSources, setActiveSources] = useState<SearchResultItem[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  // Front Door & Explore Feed State (when no repo is attached)
+  const [exploreFeedRepos, setExploreFeedRepos] = useState<ExploreRepoItem[]>([]);
+  const [loadingExploreFeed, setLoadingExploreFeed] = useState(false);
+  const [frontDoorUrl, setFrontDoorUrl] = useState('');
+  const [frontDoorAnalyzing, setFrontDoorAnalyzing] = useState(false);
+  const [frontDoorProgress, setFrontDoorProgress] = useState(0);
+  const [frontDoorStep, setFrontDoorStep] = useState('Initiating analysis...');
+  const [frontDoorError, setFrontDoorError] = useState<string | null>(null);
 
   // Sync prop changes
   useEffect(() => {
@@ -157,6 +192,116 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
       setInputQuery(initialQuery);
     }
   }, [initialQuery]);
+
+  // Load Provider status & Explore feed when no repo attached
+  useEffect(() => {
+    fetchProviderStatus()
+      .then((s) => {
+        setActiveProvider(s.active_provider);
+        setSelectedModel(s.active_provider === 'gemini' ? 'Gemini 2.5 Flash' : 'Local ML Engine');
+      })
+      .catch(() => {});
+
+    if (!selectedRepo) {
+      setLoadingExploreFeed(true);
+      fetchExploreRepos({ min_stars: 100, page: 1, per_page: 6 })
+        .then((res) => setExploreFeedRepos(res.repos))
+        .catch(() => {})
+        .finally(() => setLoadingExploreFeed(false));
+    }
+  }, [selectedRepo]);
+
+  const frontDoorIntervalRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (frontDoorIntervalRef.current) {
+        clearInterval(frontDoorIntervalRef.current);
+        frontDoorIntervalRef.current = null;
+      }
+    };
+  }, []);
+
+  const handleFrontDoorAnalyze = async (urlToAnalyze?: string) => {
+    const targetUrl = (urlToAnalyze || frontDoorUrl).trim();
+    if (!targetUrl) return;
+
+    if (frontDoorIntervalRef.current) {
+      clearInterval(frontDoorIntervalRef.current);
+      frontDoorIntervalRef.current = null;
+    }
+
+    try {
+      setFrontDoorAnalyzing(true);
+      setFrontDoorProgress(5);
+      setFrontDoorStep('Job queued for analysis...');
+      setFrontDoorError(null);
+
+      const jobResp = await analyzeRepository(targetUrl);
+      const targetRepoId = jobResp.repo_id;
+      if (jobResp.message) setFrontDoorStep(jobResp.message);
+      if (typeof jobResp.progress_pct === 'number') setFrontDoorProgress(jobResp.progress_pct);
+
+      let attempts = 0;
+      const maxAttempts = 150;
+
+      frontDoorIntervalRef.current = window.setInterval(async () => {
+        attempts += 1;
+        if (attempts > maxAttempts) {
+          if (frontDoorIntervalRef.current) {
+            clearInterval(frontDoorIntervalRef.current);
+            frontDoorIntervalRef.current = null;
+          }
+          setFrontDoorError('Analysis timed out. Please try again.');
+          setFrontDoorAnalyzing(false);
+          return;
+        }
+
+        try {
+          const status = await fetchRepoStatus(targetRepoId);
+          if (typeof status.progress_pct === 'number') setFrontDoorProgress(status.progress_pct);
+          if (status.message) {
+            setFrontDoorStep(status.message);
+          } else if (status.stage) {
+            setFrontDoorStep(`Stage: ${status.stage}`);
+          } else if (status.current_step) {
+            setFrontDoorStep(status.current_step);
+          }
+
+          if (status.status === 'ready' || status.progress_pct === 100) {
+            if (frontDoorIntervalRef.current) {
+              clearInterval(frontDoorIntervalRef.current);
+              frontDoorIntervalRef.current = null;
+            }
+            setFrontDoorProgress(100);
+            setFrontDoorStep(status.message || 'Ready! Opening repository overview...');
+            if (onRefreshRepositories) await onRefreshRepositories();
+            setTimeout(() => {
+              if (onSelectRepo) onSelectRepo(targetRepoId);
+              if (onNavigateToTab) onNavigateToTab('dashboard');
+              setFrontDoorAnalyzing(false);
+            }, 1000);
+          } else if (status.status === 'failed') {
+            if (frontDoorIntervalRef.current) {
+              clearInterval(frontDoorIntervalRef.current);
+              frontDoorIntervalRef.current = null;
+            }
+            setFrontDoorError(status.error || status.message || 'Analysis failed');
+            setFrontDoorAnalyzing(false);
+          }
+        } catch {
+          // ignore transient poll error
+        }
+      }, 1500);
+    } catch (err: any) {
+      if (frontDoorIntervalRef.current) {
+        clearInterval(frontDoorIntervalRef.current);
+        frontDoorIntervalRef.current = null;
+      }
+      setFrontDoorError(err.message || 'Failed to start ingestion');
+      setFrontDoorAnalyzing(false);
+    }
+  };
 
   // GitHub Attachment Modal State
   const [isAttachModalOpen, setIsAttachModalOpen] = useState(false);
@@ -277,7 +422,15 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
       }
 
       // 2. Ask CodeLens AI reasoning engine (works with or without repo!)
-      const ansRes = await askCodebase(selectedRepo || '', q, 5, 0.6);
+      const ansRes = await askCodebase(
+        selectedRepo || '',
+        q,
+        5,
+        0.6,
+        explanationMode,
+        activeProvider,
+        isReasonActive ? 'pro' : 'flash'
+      );
 
       setTurns((prev) =>
         prev.map((turn) => {
@@ -432,6 +585,23 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
       icon: GithubIcon,
       onClick: () => setIsAttachModalOpen(true),
     },
+    {
+      label: 'Explain this repo',
+      icon: Sparkles,
+      query: selectedRepo
+        ? `Explain what ${selectedRepo} does, its core purpose, and its high-level architecture.`
+        : 'Explain the high-level architecture of this codebase.',
+    },
+    {
+      label: 'Where is authentication handled?',
+      icon: ShieldCheck,
+      query: 'Where is authentication or authorization handled in this codebase? List key files and functions.',
+    },
+    {
+      label: 'Which files should I read first?',
+      icon: FileCode,
+      query: 'Which files should a new contributor read first to understand how this project works?',
+    },
   ];
 
   const isConversational = turns.length > 0;
@@ -460,9 +630,8 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                     Model Engine
                   </div>
                   {[
-                    { id: 'CodeLens AI', desc: 'Fastest for general coding, Q&A, and codebase exploration' },
-                    { id: 'CodeLens AI (Deep Reason)', desc: 'Multi-step architectural logic & AST call graph tracing' },
-                    { id: 'CodeLens AI (Hybrid BM25+FAISS)', desc: 'Trained GBDT ranker + local dense vectors' },
+                    { id: 'CodeLens AI (Gemini)', desc: 'Google Gemini 2.5 Flash / Pro cloud provider' },
+                    { id: 'CodeLens AI (Local Qwen)', desc: '100% offline local embeddings + LLM' },
                   ].map((m) => (
                     <button
                       key={m.id}
@@ -549,160 +718,381 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
           </div>
         </header>
 
+        {/* Cloud AI Privacy Notice Banner (Active when Gemini provider is selected) */}
+        {activeProvider === 'gemini' && selectedRepo && (
+          <div className="bg-sky-950/40 border-b border-sky-800/40 px-4 py-2 flex items-center justify-between text-xs text-sky-200 shrink-0">
+            <div className="flex items-center space-x-2">
+              <ShieldCheck className="w-4 h-4 text-sky-400 shrink-0" />
+              <span>
+                <strong>Cloud AI Notice:</strong> CodeLens is using Gemini Flash/Pro. Code context from <code className="text-white bg-sky-900/60 px-1 py-0.5 rounded font-mono">{selectedRepo}</code> will be processed by Google APIs.
+              </span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={async () => {
+                  await setLLMProvider('local');
+                  setActiveProvider('local');
+                  setSelectedModel('Local ML Engine');
+                }}
+                className="px-2 py-0.5 rounded bg-sky-900/60 hover:bg-sky-800 text-sky-100 border border-sky-700/60 transition-colors cursor-pointer text-[11px]"
+              >
+                Switch to Local
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Scrollable Viewport */}
         <div
           ref={chatScrollContainerRef}
           className="flex-1 overflow-y-auto px-4 py-8 flex flex-col items-center"
         >
           {!isConversational ? (
-            /* ================= INITIAL CHATGPT HOME SEARCH VIEW ================= */
-            <div className="w-full max-w-[768px] my-auto flex flex-col items-center text-center animate-in fade-in duration-300">
-              {/* ChatGPT Headline */}
-              <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#ececec] mb-8 font-sans">
-                What can I help with?
-              </h1>
+            /* ================= INITIAL HOME VIEW ================= */
+            !selectedRepo ? (
+              /* ================= FRONT DOOR: NO REPO ATTACHED ================= */
+              <div className="w-full max-w-4xl flex flex-col items-center text-center animate-in fade-in duration-300 pb-12">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center text-white mb-4 shadow-xl">
+                  <Compass className="w-6 h-6" />
+                </div>
+                <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#ececec] mb-2 font-sans">
+                  CodeLens Intelligence
+                </h1>
+                <p className="text-sm text-[#a1a1aa] max-w-xl mb-8">
+                  Attach any public GitHub repository to index code symbols, explore architectures, and ask questions with cited AST sources.
+                </p>
 
-              {/* Signature Composer Capsule */}
-              <div className="w-full bg-[#1b1b22] hover:bg-[#202029] focus-within:bg-[#1b1b22] border border-[#2d2d3a] focus-within:border-[#4f4f66] focus-within:ring-1 focus-within:ring-[#4f4f66] rounded-[26px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all p-3.5 flex flex-col mb-5 text-left">
-                {/* Textarea */}
-                <textarea
-                  ref={textareaRef}
-                  value={inputQuery}
-                  onChange={(e) => setInputQuery(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  rows={1}
-                  placeholder={
-                    isSearchOnly
-                      ? 'Search code symbols, functions, or keywords (Fast BM25 + FAISS)...'
-                      : 'Ask CodeLens AI anything, or search attached codebase...'
-                  }
-                  className="w-full bg-transparent text-[#ececec] placeholder-[#71717a] text-base resize-none focus:outline-none px-1.5 pt-0.5 pb-2 leading-relaxed font-sans min-h-[44px] max-h-48"
-                />
-
-                {/* Internal Composer Toolbar */}
-                <div className="flex items-center justify-between pt-1">
-                  {/* Left: Search Only toggle, Attach Repo, Reason toggle */}
-                  <div className="flex items-center space-x-1.5">
-                    {/* Attach GitHub Repo button (+) */}
+                {/* Primary Front Door Input Card */}
+                <div className="w-full max-w-2xl bg-[#181820] border border-[#2e2e40] rounded-2xl p-5 mb-8 text-left shadow-2xl">
+                  <label className="block text-xs font-semibold text-[#a1a1aa] uppercase tracking-wider mb-2">
+                    Attach GitHub Repository
+                  </label>
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <div className="relative flex-1">
+                      <GithubIcon className="w-4 h-4 text-[#a1a1aa] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="url"
+                        value={frontDoorUrl}
+                        onChange={(e) => setFrontDoorUrl(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleFrontDoorAnalyze();
+                        }}
+                        placeholder="https://github.com/owner/repository"
+                        disabled={frontDoorAnalyzing}
+                        className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-[#121217] border border-[#2d2d3d] text-sm text-[#ececec] placeholder-[#71717a] focus:outline-none focus:border-sky-500"
+                      />
+                    </div>
                     <button
-                      type="button"
-                      onClick={() => setIsAttachModalOpen(true)}
-                      className="p-1.5 rounded-full hover:bg-[#2a2a38] text-[#a1a1aa] hover:text-[#ececec] transition-colors cursor-pointer group"
-                      title="Attach GitHub Repository"
+                      onClick={() => handleFrontDoorAnalyze()}
+                      disabled={!frontDoorUrl.trim() || frontDoorAnalyzing}
+                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 disabled:opacity-50 text-white text-sm font-semibold flex items-center justify-center space-x-2 shadow-md cursor-pointer disabled:cursor-not-allowed transition-all"
                     >
-                      <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-200" />
-                    </button>
-
-                    {/* Dedicated Attach Repo Pill */}
-                    <button
-                      type="button"
-                      onClick={() => setIsAttachModalOpen(true)}
-                      className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
-                        selectedRepo
-                          ? 'bg-sky-950/60 text-sky-400 border border-sky-800/60 hover:bg-sky-900/60'
-                          : 'bg-[#262635] text-[#b4b4c4] hover:text-[#ececec] border border-[#353548] hover:bg-[#303042]'
-                      }`}
-                      title={selectedRepo ? `Attached: ${selectedRepo}` : 'Attach GitHub Repository'}
-                    >
-                      <GithubIcon className="w-3.5 h-3.5 text-sky-400" />
-                      <span>{selectedRepo ? selectedRepo : 'Attach Repo'}</span>
-                    </button>
-
-                    {/* Search Only Toggle Pill */}
-                    <button
-                      type="button"
-                      onClick={() => setIsSearchOnly(!isSearchOnly)}
-                      className={`flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
-                        isSearchOnly
-                          ? 'bg-amber-950/70 text-amber-300 border border-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.25)]'
-                          : 'bg-[#262635] text-[#a1a1aa] hover:text-[#ececec] border border-[#353548] hover:bg-[#303042]'
-                      }`}
-                      title={isSearchOnly ? 'Search only mode is ON (no LLM generation, fast code chunk hits)' : 'Enable Search only mode'}
-                    >
-                      <Search className={`w-3.5 h-3.5 ${isSearchOnly ? 'text-amber-400' : 'text-[#a1a1aa]'}`} />
-                      <span>Search only</span>
-                      <span className={`w-1.5 h-1.5 rounded-full ${isSearchOnly ? 'bg-amber-400 animate-pulse' : 'bg-[#52525b]'}`} />
-                    </button>
-
-                    {/* Reason Toggle Pill */}
-                    <button
-                      type="button"
-                      onClick={() => setIsReasonActive(!isReasonActive)}
-                      className={`flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
-                        isReasonActive
-                          ? 'bg-purple-950/60 text-purple-300 border border-purple-500/40 shadow-sm'
-                          : 'hover:bg-[#2a2a38] text-[#a1a1aa]'
-                      }`}
-                      title="Deep Reasoning Mode"
-                    >
-                      <Brain className="w-3.5 h-3.5" />
-                      <span>Reason</span>
+                      {frontDoorAnalyzing ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Analyzing...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-4 h-4" />
+                          <span>Analyze in CodeLens</span>
+                        </>
+                      )}
                     </button>
                   </div>
 
-                  {/* Right: Mic & Circular Up Arrow Send Button */}
-                  <div className="flex items-center space-x-2">
-                    <button
-                      type="button"
-                      onClick={() => setIsListening(!isListening)}
-                      className={`p-1.5 rounded-full hover:bg-[#2a2a38] transition-colors cursor-pointer ${
-                        isListening ? 'text-rose-400 animate-pulse' : 'text-[#a1a1aa] hover:text-[#ececec]'
-                      }`}
-                      title="Voice input"
-                    >
-                      {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                    </button>
+                  {/* Progress Indicator */}
+                  {frontDoorAnalyzing && (
+                    <div className="mt-4 pt-4 border-t border-[#2d2d3d] space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-sky-400 flex items-center space-x-1.5">
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          <span>{frontDoorStep}</span>
+                        </span>
+                        <span className="font-mono text-[#a1a1aa]">{frontDoorProgress}%</span>
+                      </div>
+                      <div className="h-2 w-full bg-[#121217] rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-sky-500 to-indigo-500 transition-all duration-300"
+                          style={{ width: `${frontDoorProgress}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
 
-                    <button
-                      type="button"
-                      onClick={() => handleSearch()}
-                      disabled={!inputQuery.trim() || isAnyLoading}
-                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
-                        inputQuery.trim() && !isAnyLoading
-                          ? 'bg-white text-black hover:bg-[#e4e4e7] hover:scale-105 shadow-md cursor-pointer'
-                          : 'bg-[#323240] text-[#71717a] cursor-not-allowed'
-                      }`}
-                      title="Send message"
-                    >
-                      <ArrowUp className="w-4 h-4 stroke-[2.5]" />
-                    </button>
+                  {/* Error Notification */}
+                  {frontDoorError && (
+                    <div className="mt-3 p-3 rounded-xl bg-rose-950/40 border border-rose-800/40 text-rose-300 text-xs flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+                        <span>{frontDoorError}</span>
+                      </div>
+                      <button
+                        onClick={() => handleFrontDoorAnalyze()}
+                        className="px-2.5 py-1 bg-rose-900/60 hover:bg-rose-800 text-white rounded-lg text-xs font-semibold shrink-0 transition"
+                      >
+                        Retry
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Quick Presets */}
+                  <div className="mt-4 flex flex-wrap items-center gap-2 pt-3 border-t border-[#262635]">
+                    <span className="text-[11px] text-[#71717a]">Quick presets:</span>
+                    {presetRepos.map((p) => (
+                      <button
+                        key={p.name}
+                        onClick={() => {
+                          setFrontDoorUrl(p.url);
+                          handleFrontDoorAnalyze(p.url);
+                        }}
+                        disabled={frontDoorAnalyzing}
+                        className="px-2.5 py-1 rounded-lg bg-[#20202d] hover:bg-[#28283a] border border-[#2f2f42] text-[11px] font-mono text-[#a1a1aa] hover:text-[#ececec] transition-colors cursor-pointer"
+                      >
+                        {p.name}
+                      </button>
+                    ))}
                   </div>
                 </div>
-              </div>
 
-              {/* Action Pills Underneath Search Bar */}
-              <div className="flex flex-wrap items-center justify-center gap-2 max-w-xl">
-                {actionPills.map((pill, i) => {
-                  const Icon = pill.icon;
-                  return (
-                    <button
-                      key={i}
-                      onClick={() => {
-                        if (pill.onClick) {
-                          pill.onClick();
-                        } else if (pill.query) {
-                          setInputQuery(pill.query);
-                          handleSearch(pill.query);
-                        }
-                      }}
-                      className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs transition-all cursor-pointer ${
-                        pill.isSpecial
-                          ? 'bg-gradient-to-r from-sky-950/80 to-indigo-950/80 hover:from-sky-900/90 hover:to-indigo-900/90 border border-sky-500/40 text-sky-200 font-medium shadow-sm'
-                          : 'bg-[#1b1b24] hover:bg-[#262635] border border-[#2e2e3f] text-[#a1a1aa] hover:text-[#ececec]'
-                      }`}
-                    >
-                      <Icon className={`w-3.5 h-3.5 ${pill.isSpecial ? 'text-sky-400' : 'text-[#a1a1aa]'}`} />
-                      <span>{pill.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+                {/* Explore Feed Preview */}
+                <div className="w-full text-left space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-lg font-semibold text-[#ececec]">
+                        Trending Repositories to Explore
+                      </h2>
+                      <p className="text-xs text-[#a1a1aa]">
+                        Pick any top open-source project to analyze its architecture and ask questions.
+                      </p>
+                    </div>
+                    {onNavigateToTab && (
+                      <button
+                        onClick={() => onNavigateToTab('explore')}
+                        className="text-xs text-sky-400 hover:text-sky-300 flex items-center space-x-1 cursor-pointer"
+                      >
+                        <span>View all in Explore</span>
+                        <ChevronDown className="w-3.5 h-3.5 -rotate-90" />
+                      </button>
+                    )}
+                  </div>
 
-              {/* Clean Helper Note */}
-              <div className="text-[11px] text-[#71717a] mt-6">
-                Ask any general coding question like ChatGPT, or attach a GitHub repository to ground answers with AST citations.
+                  {loadingExploreFeed ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                      {[1, 2, 3, 4, 5, 6].map((i) => (
+                        <div key={i} className="h-36 rounded-xl bg-[#181820] animate-pulse border border-[#252535]" />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                      {exploreFeedRepos.slice(0, 6).map((repo) => (
+                        <div
+                          key={repo.name}
+                          className="bg-[#181820] hover:bg-[#1d1d28] border border-[#262635] hover:border-[#38384d] rounded-xl p-4 flex flex-col justify-between transition-all group"
+                        >
+                          <div>
+                            <div className="flex items-center justify-between mb-1.5">
+                              <span className="text-xs font-mono font-semibold text-white group-hover:text-sky-400 truncate">
+                                {repo.name}
+                              </span>
+                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 font-mono">
+                                {repo.readiness?.score || 85}/100
+                              </span>
+                            </div>
+                            <p className="text-xs text-[#a1a1aa] line-clamp-2 mb-3 leading-relaxed">
+                              {repo.description || 'No description provided.'}
+                            </p>
+                          </div>
+
+                          <div className="flex items-center justify-between pt-2 border-t border-[#222230] text-[11px] text-[#71717a]">
+                            <div className="flex items-center space-x-3">
+                              <span className="text-[#a1a1aa] font-medium">{repo.language}</span>
+                              <span className="flex items-center space-x-1">
+                                <Star className="w-3 h-3 text-amber-400" />
+                                <span>{(repo.stars / 1000).toFixed(1)}k</span>
+                              </span>
+                            </div>
+
+                            <button
+                              onClick={() => {
+                                setFrontDoorUrl(repo.html_url);
+                                handleFrontDoorAnalyze(repo.html_url);
+                              }}
+                              disabled={frontDoorAnalyzing}
+                              className="px-2.5 py-1 rounded-lg bg-sky-950/70 hover:bg-sky-900 border border-sky-700/50 text-sky-200 text-xs font-medium flex items-center space-x-1 transition-colors cursor-pointer"
+                            >
+                              <Sparkles className="w-3 h-3 text-sky-400" />
+                              <span>Analyze</span>
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            ) : (
+              /* ================= REPO ATTACHED: HERO PROMPT VIEW ================= */
+              <div className="w-full max-w-[768px] my-auto flex flex-col items-center text-center animate-in fade-in duration-300">
+                <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#ececec] mb-2 font-sans">
+                  What can I help with?
+                </h1>
+                <p className="text-xs font-mono text-sky-400/90 mb-8">
+                  attached: <strong className="text-white">{selectedRepo}</strong>
+                </p>
+
+                {/* Signature Composer Capsule */}
+                <div className="w-full bg-[#1b1b22] hover:bg-[#202029] focus-within:bg-[#1b1b22] border border-[#2d2d3a] focus-within:border-[#4f4f66] focus-within:ring-1 focus-within:ring-[#4f4f66] rounded-[26px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all p-3.5 flex flex-col mb-5 text-left">
+                  {/* Textarea */}
+                  <textarea
+                    ref={textareaRef}
+                    value={inputQuery}
+                    onChange={(e) => setInputQuery(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    rows={1}
+                    placeholder={
+                      isSearchOnly
+                        ? 'Search code symbols, functions, or keywords (Fast BM25 + FAISS)...'
+                        : `Ask CodeLens AI about ${selectedRepo}...`
+                    }
+                    className="w-full bg-transparent text-[#ececec] placeholder-[#71717a] text-base resize-none focus:outline-none px-1.5 pt-0.5 pb-2 leading-relaxed font-sans min-h-[44px] max-h-48"
+                  />
+
+                  {/* Internal Composer Toolbar */}
+                  <div className="flex items-center justify-between pt-1">
+                    {/* Left: Search Only toggle, Attach Repo, Reason toggle, Mode toggle */}
+                    <div className="flex items-center space-x-1.5">
+                      {/* Attach GitHub Repo button (+) */}
+                      <button
+                        type="button"
+                        onClick={() => setIsAttachModalOpen(true)}
+                        className="p-1.5 rounded-full hover:bg-[#2a2a38] text-[#a1a1aa] hover:text-[#ececec] transition-colors cursor-pointer group"
+                        title="Attach GitHub Repository"
+                      >
+                        <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-200" />
+                      </button>
+
+                      {/* Dedicated Attach Repo Pill */}
+                      <button
+                        type="button"
+                        onClick={() => setIsAttachModalOpen(true)}
+                        className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer bg-sky-950/60 text-sky-400 border border-sky-800/60 hover:bg-sky-900/60"
+                        title={`Attached: ${selectedRepo}`}
+                      >
+                        <GithubIcon className="w-3.5 h-3.5 text-sky-400" />
+                        <span>{selectedRepo}</span>
+                      </button>
+
+                      {/* Search Only Toggle Pill */}
+                      <button
+                        type="button"
+                        onClick={() => setIsSearchOnly(!isSearchOnly)}
+                        className={`flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
+                          isSearchOnly
+                            ? 'bg-amber-950/70 text-amber-300 border border-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.25)]'
+                            : 'bg-[#262635] text-[#a1a1aa] hover:text-[#ececec] border border-[#353548] hover:bg-[#303042]'
+                        }`}
+                        title={isSearchOnly ? 'Search only mode is ON (no LLM generation, fast code chunk hits)' : 'Enable Search only mode'}
+                      >
+                        <Search className={`w-3.5 h-3.5 ${isSearchOnly ? 'text-amber-400' : 'text-[#a1a1aa]'}`} />
+                        <span>Search only</span>
+                        <span className={`w-1.5 h-1.5 rounded-full ${isSearchOnly ? 'bg-amber-400 animate-pulse' : 'bg-[#52525b]'}`} />
+                      </button>
+
+                      {/* Reason Toggle Pill */}
+                      <button
+                        type="button"
+                        onClick={() => setIsReasonActive(!isReasonActive)}
+                        className={`flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
+                          isReasonActive
+                            ? 'bg-purple-950/60 text-purple-300 border border-purple-500/40 shadow-sm'
+                            : 'hover:bg-[#2a2a38] text-[#a1a1aa]'
+                        }`}
+                        title="Deep Reasoning Mode"
+                      >
+                        <Brain className="w-3.5 h-3.5" />
+                        <span>Reason</span>
+                      </button>
+
+                      {/* Explanation Mode Toggle Pill (Beginner vs Expert) */}
+                      <button
+                        type="button"
+                        onClick={() => setExplanationMode(explanationMode === 'beginner' ? 'expert' : 'beginner')}
+                        className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
+                          explanationMode === 'beginner'
+                            ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-500/40'
+                            : 'bg-indigo-950/60 text-indigo-300 border border-indigo-500/40'
+                        }`}
+                        title="Toggle explanation style between Beginner (student friendly) and Expert (architectural depth)"
+                      >
+                        <span>{explanationMode === 'beginner' ? '🎓 Beginner' : '⚡ Expert'}</span>
+                      </button>
+                    </div>
+
+                    {/* Right: Mic & Circular Up Arrow Send Button */}
+                    <div className="flex items-center space-x-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsListening(!isListening)}
+                        className={`p-1.5 rounded-full hover:bg-[#2a2a38] transition-colors cursor-pointer ${
+                          isListening ? 'text-rose-400 animate-pulse' : 'text-[#a1a1aa] hover:text-[#ececec]'
+                        }`}
+                        title="Voice input"
+                      >
+                        {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleSearch()}
+                        disabled={!inputQuery.trim() || isAnyLoading}
+                        className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                          inputQuery.trim() && !isAnyLoading
+                            ? 'bg-white text-black hover:bg-[#e4e4e7] hover:scale-105 shadow-md cursor-pointer'
+                            : 'bg-[#323240] text-[#71717a] cursor-not-allowed'
+                        }`}
+                        title="Send message"
+                      >
+                        <ArrowUp className="w-4 h-4 stroke-[2.5]" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Repo-Specific Action Pills Underneath Search Bar */}
+                <div className="flex flex-wrap items-center justify-center gap-2 max-w-xl">
+                  {actionPills.map((pill, i) => {
+                    const Icon = pill.icon;
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => {
+                          if (pill.onClick) {
+                            pill.onClick();
+                          } else if (pill.query) {
+                            setInputQuery(pill.query);
+                            handleSearch(pill.query);
+                          }
+                        }}
+                        className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs transition-all cursor-pointer ${
+                          pill.isSpecial
+                            ? 'bg-gradient-to-r from-sky-950/80 to-indigo-950/80 hover:from-sky-900/90 hover:to-indigo-900/90 border border-sky-500/40 text-sky-200 font-medium shadow-sm'
+                            : 'bg-[#1b1b24] hover:bg-[#262635] border border-[#2e2e3f] text-[#a1a1aa] hover:text-[#ececec]'
+                        }`}
+                      >
+                        <Icon className={`w-3.5 h-3.5 ${pill.isSpecial ? 'text-sky-400' : 'text-[#a1a1aa]'}`} />
+                        <span>{pill.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Helper Note */}
+                <div className="text-[11px] text-[#71717a] mt-6">
+                  Answers cite exact file paths and line ranges. Low retrieval confidence will report &ldquo;not found in this codebase&rdquo;.
+                </div>
+              </div>
+            )
           ) : (
             /* ================= CONVERSATIONAL STREAM VIEW ================= */
             <div className="w-full max-w-[768px] flex flex-col space-y-8 pb-36 animate-in fade-in duration-200">
@@ -1060,6 +1450,20 @@ export const ChatSearchPage: React.FC<ChatSearchPageProps> = ({
                     >
                       <Brain className="w-3.5 h-3.5" />
                       <span>Reason</span>
+                    </button>
+
+                    {/* Explanation Mode Toggle Pill (Beginner vs Expert) */}
+                    <button
+                      type="button"
+                      onClick={() => setExplanationMode(explanationMode === 'beginner' ? 'expert' : 'beginner')}
+                      className={`flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer ${
+                        explanationMode === 'beginner'
+                          ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-500/40'
+                          : 'bg-indigo-950/60 text-indigo-300 border border-indigo-500/40'
+                      }`}
+                      title="Switch between student-friendly Beginner mode and architectural Expert mode"
+                    >
+                      <span>{explanationMode === 'beginner' ? '🎓 Beginner' : '⚡ Expert'}</span>
                     </button>
                   </div>
 

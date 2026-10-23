@@ -10,11 +10,19 @@ import { ExplorerPage } from './pages/ExplorerPage';
 import { ReportsPage } from './pages/ReportsPage';
 import { ComparisonPage } from './pages/ComparisonPage';
 import { RepositoriesPage } from './pages/RepositoriesPage';
+import { ExplorePage } from './pages/ExplorePage';
+import { ContributePage } from './pages/ContributePage';
+import { AdminPage } from './pages/AdminPage';
 import type { RepositorySummary } from './types';
 import { fetchRepositories } from './services/api';
 
 export const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState(() => {
+    const path = window.location.pathname.replace(/^\//, '').toLowerCase();
+    if (path === 'admin') return 'admin';
+    if (path === 'explore') return 'explore';
+    if (path === 'contribute') return 'contribute';
+    if (path === 'landing') return 'landing';
     const params = new URLSearchParams(window.location.search);
     return params.get('tab') || 'chat';
   });
@@ -160,6 +168,24 @@ export const App: React.FC = () => {
             />
           )}
 
+          {/* 5. Explore Open-Source Repositories */}
+          {currentTab === 'explore' && (
+            <ExplorePage
+              onSelectRepo={setSelectedRepo}
+              onNavigateToTab={setCurrentTab}
+              onRefreshRepositories={loadRepositories}
+            />
+          )}
+
+          {/* 6. Contribute to Good First Issues */}
+          {currentTab === 'contribute' && (
+            <ContributePage
+              onSelectRepo={setSelectedRepo}
+              onNavigateToTab={setCurrentTab}
+              onRefreshRepositories={loadRepositories}
+            />
+          )}
+
           {currentTab === 'reports' && (
             <ReportsPage selectedRepo={selectedRepo} />
           )}
@@ -175,6 +201,11 @@ export const App: React.FC = () => {
               onSelectRepo={setSelectedRepo}
               onRefreshRepositories={loadRepositories}
             />
+          )}
+
+          {/* 7. Hidden Admin Route (ML Training Studio + IR Benchmark) */}
+          {currentTab === 'admin' && (
+            <AdminPage selectedRepo={selectedRepo} />
           )}
         </main>
       </div>

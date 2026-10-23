@@ -127,7 +127,10 @@ export async function askCodebase(
   repoId: string,
   query: string,
   topK: number = 5,
-  alpha: number = 0.6
+  alpha: number = 0.6,
+  mode: 'beginner' | 'expert' = 'beginner',
+  provider?: 'gemini' | 'local',
+  modelTier: 'flash' | 'pro' = 'flash'
 ): Promise<AskResponse> {
   const res = await fetch(`${API_BASE}/reasoning/ask`, {
     method: 'POST',
@@ -137,6 +140,9 @@ export async function askCodebase(
       query,
       top_k: topK,
       alpha,
+      mode,
+      provider,
+      model_tier: modelTier,
     }),
   });
   if (!res.ok) {
@@ -277,4 +283,161 @@ export async function fetchMLFailures(): Promise<import('../types').MLFailureAna
   if (!res.ok) throw new Error('Failed to load ML failure analysis');
   return res.json();
 }
+
+/* --- Part 2 & Part 3 Explore, Contribute, and Provider APIs --- */
+
+import type {
+  ExploreReposResponse,
+  ContributeIssuesResponse,
+  AnalyzeRepoResponse,
+  LLMProviderStatus,
+  UserProfile,
+} from '../types';
+
+export async function fetchExploreRepos(params: {
+  language?: string;
+  topic?: string;
+  min_stars?: number;
+  recently_active?: boolean;
+  q?: string;
+  page?: number;
+  per_page?: number;
+  refresh?: boolean;
+} = {}): Promise<ExploreReposResponse> {
+  const query = new URLSearchParams();
+  if (params.language) query.set('language', params.language);
+  if (params.topic) query.set('topic', params.topic);
+  if (params.min_stars !== undefined) query.set('min_stars', String(params.min_stars));
+  if (params.recently_active !== undefined) query.set('recently_active', String(params.recently_active));
+  if (params.q) query.set('q', params.q);
+  if (params.page) query.set('page', String(params.page));
+  if (params.per_page) query.set('per_page', String(params.per_page));
+  if (params.refresh) query.set('refresh', 'true');
+
+  const res = await fetch(`${API_BASE}/explore/repos?${query.toString()}`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || 'Failed to fetch explore repositories');
+  }
+  return res.json();
+}
+
+export async function fetchContributeIssues(params: {
+  language?: string;
+  domain?: string;
+  difficulty?: string;
+  q?: string;
+  page?: number;
+  per_page?: number;
+  refresh?: boolean;
+} = {}): Promise<ContributeIssuesResponse> {
+  const query = new URLSearchParams();
+  if (params.language) query.set('language', params.language);
+  if (params.domain) query.set('domain', params.domain);
+  if (params.difficulty) query.set('difficulty', params.difficulty);
+  if (params.q) query.set('q', params.q);
+  if (params.page) query.set('page', String(params.page));
+  if (params.per_page) query.set('per_page', String(params.per_page));
+  if (params.refresh) query.set('refresh', 'true');
+
+  const res = await fetch(`${API_BASE}/contribute/issues?${query.toString()}`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || 'Failed to fetch contribution issues');
+  }
+  return res.json();
+}
+
+export async function fetchContributeRepos(params: {
+  language?: string;
+  domain?: string;
+  page?: number;
+  per_page?: number;
+} = {}): Promise<{ total_count: number; repos: any[] }> {
+  const query = new URLSearchParams();
+  if (params.language) query.set('language', params.language);
+  if (params.domain) query.set('domain', params.domain);
+  if (params.page) query.set('page', String(params.page));
+  if (params.per_page) query.set('per_page', String(params.per_page));
+
+  const res = await fetch(`${API_BASE}/contribute/repos?${query.toString()}`);
+  if (!res.ok) throw new Error('Failed to fetch contribution-friendly repos');
+  return res.json();
+}
+
+export async function analyzeRepository(url: string, force: boolean = false): Promise<AnalyzeRepoResponse> {
+  const res = await fetch(`${API_BASE}/repos/analyze`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url, force }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || 'Failed to start repository analysis');
+  }
+  return res.json();
+}
+
+export async function fetchRepoStatus(repoId: string): Promise<any> {
+  const res = await fetch(`${API_BASE}/repos/${encodeURIComponent(repoId)}/status`);
+  if (!res.ok) throw new Error('Failed to poll repository status');
+  return res.json();
+}
+
+export async function fetchProviderStatus(): Promise<LLMProviderStatus> {
+  const res = await fetch(`${API_BASE}/reasoning/provider`);
+  if (!res.ok) throw new Error('Failed to fetch provider status');
+  return res.json();
+}
+
+export async function setLLMProvider(provider: 'gemini' | 'local'): Promise<any> {
+  const res = await fetch(`${API_BASE}/reasoning/provider`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ provider }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || 'Failed to set provider');
+  }
+  return res.json();
+}
+
+export async function fetchUserProfile(): Promise<UserProfile> {
+  const res = await fetch(`${API_BASE}/user/profile`);
+  if (!res.ok) throw new Error('Failed to fetch user profile');
+  return res.json();
+}
+
+export async function toggleBookmark(data: {
+  issue_id: string;
+  repo_name: string;
+  title: string;
+  url: string;
+}): Promise<{ issue_id: string; is_bookmarked: boolean; message: string }> {
+  const res = await fetch(`${API_BASE}/user/bookmarks`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to toggle bookmark');
+  return res.json();
+}
+
+export async function toggleWorking(data: {
+  issue_id: string;
+  repo_name: string;
+  title: string;
+  url: string;
+  status?: string;
+}): Promise<{ issue_id: string; is_working: boolean; message: string }> {
+  const res = await fetch(`${API_BASE}/user/working`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to toggle working status');
+  return res.json();
+}
+
 
